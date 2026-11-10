@@ -80,9 +80,27 @@ dans IntelliJ, ou installe [GitHub CLI](https://cli.github.com/) et lance `gh au
 - Dans la description : ce qui change, et comment le vérifier.
 - Un autre membre relit. Toutes les remarques doivent être traitées.
 - Si GitHub signale un conflit, clique sur **Update branch**, ou demande de l'aide.
-- Fusion avec **Squash and merge**, puis **Delete branch**.
+- Fusion avec le bouton **Merge pull request**.
 
-**6. Recommence à l'étape 1** pour la suite.
+
+**6. Après la fusion, fais le ménage**
+ 
+Sur GitHub, clique sur **Delete branch** dans la pull request : la branche est supprimée sur GitHub.
+ 
+Puis, sur ton ordinateur :
+ 
+```bash
+git switch main
+git pull
+git branch -d feature/fiche-adaptation-cv
+git fetch --prune
+```
+ 
+- `git switch main` : tu reviens sur `main` (on ne peut pas supprimer la branche sur laquelle on se trouve) ;
+- `git pull` : tu récupères `main` à jour, avec ton travail fusionné ;
+- `git branch -d …` : tu supprimes ta branche sur ton ordinateur ;
+- `git fetch --prune` : tu effaces la trace de la branche supprimée sur GitHub.
+**7. Recommence à l'étape 1** pour la suite.
 
 ---
 
