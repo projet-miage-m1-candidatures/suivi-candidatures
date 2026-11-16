@@ -1,4 +1,4 @@
-# Fichiers générés par make (et par GitHub Actions) : on ne les versionne pas
-dossier.pdf
+# Fichiers générés par make : on ne les versionne pas
+# (doc/dossier.pdf est versionné : on le commite au moment de chaque rendu)
 diagrammes/*.png
 plantuml.jar
