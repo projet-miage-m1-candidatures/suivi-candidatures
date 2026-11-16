@@ -1,0 +1,35 @@
+name: Dossier PDF
+
+# Compile doc/dossier.md en PDF à chaque modification de doc/,
+# et le met à disposition dans l'onglet Actions (rubrique « Artifacts »).
+on:
+  push:
+    paths: ['doc/**', '.github/workflows/doc.yml']
+  pull_request:
+    paths: ['doc/**', '.github/workflows/doc.yml']
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installation de pandoc, WeasyPrint et PlantUML
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc libpango-1.0-0 libpangoft2-1.0-0 graphviz fonts-inter
+          pip install weasyprint
+          curl -sSL -o doc/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2025.4/plantuml-1.2025.4.jar
+
+      - name: Compilation du dossier
+        run: make -B -C doc
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dossier
+          path: doc/dossier.pdf

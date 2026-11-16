@@ -1,0 +1,30 @@
+@startuml
+' Architecture générale : front, API REST, back, base de données et services externes
+!include style.puml
+left to right direction
+skinparam RectangleFontStyle plain
+skinparam RectangleFontColor #1c1f3a
+skinparam RectangleFontSize 13
+skinparam RectangleBorderColor #c9c0f4
+skinparam DatabaseBorderColor #c9c0f4
+skinparam DatabaseBackgroundColor #ffffff
+skinparam ArrowFontColor #7a8094
+skinparam ArrowFontSize 11
+
+actor "Candidat" as U
+rectangle "<color:#5b45d6><b>APPLICATION</b></color>" as APP #f7f8fb;line:e3e5ec {
+  rectangle "<b>Front</b>\nHTML, CSS, JS" as F
+  rectangle "<b>API REST</b>\nSpring MVC" as A
+  rectangle "<b>Back</b>\nJava 21, Spring Boot" as B
+  database "<b>BD</b>\nPostgreSQL" as D
+}
+rectangle "API de sites d'offres" <<externe>> as LBA
+rectangle "IA (API ou modèle local)" <<externe>> as IA
+
+U --> F : navigateur
+F --> A : HTTP / JSON
+A --> B
+B --> D : JPA
+B --> LBA : HTTP
+B --> IA : HTTP
+@enduml

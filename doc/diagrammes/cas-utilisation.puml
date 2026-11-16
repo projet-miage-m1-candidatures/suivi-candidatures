@@ -1,0 +1,60 @@
+@startuml
+!include style.puml
+top to bottom direction
+
+actor "Candidat" as C
+
+rectangle "COMPTE" as G1 {
+  usecase "Créer son compte\n(parcours d'accueil)" as CREA
+  usecase "S'identifier" as ID
+  usecase "Gérer son profil" as PROF
+}
+rectangle "OFFRES" as G2 {
+  usecase "Rechercher des offres" as RECH
+  usecase "Importer une offre\ndepuis un lien" as IMP
+  usecase "Évaluer une offre" as EVAL
+}
+rectangle "CV" as G3 {
+  usecase "Analyser son CV" as ANA
+  usecase "Améliorer et adapter\nson CV à une offre" as ADAPT
+  usecase "Créer une lettre\nde motivation" as LM
+  usecase "Créer un CV à partir\nd'un questionnaire" as QCV
+}
+rectangle "CANDIDATURES" as G4 {
+  usecase "Gérer ses candidatures" as GER
+  usecase "Suivre le statut" as SUIV
+  usecase "Consulter les statistiques" as STAT
+}
+
+rectangle "API de sites d'offres" <<externe>> as LBA
+rectangle "IA (API ou modèle local)" <<externe>> as IA
+
+' empile les cas d'utilisation de chaque groupe
+CREA -[hidden]-> ID
+ID -[hidden]-> PROF
+RECH -[hidden]-> IMP
+IMP -[hidden]-> EVAL
+ANA -[hidden]-> ADAPT
+ADAPT -[hidden]-> LM
+LM -[hidden]-> QCV
+GER -[hidden]-> SUIV
+SUIV -[hidden]-> STAT
+' ordre des groupes, de gauche à droite
+G1 -[hidden]right-> G2
+G2 -[hidden]right-> G3
+G3 -[hidden]right-> G4
+
+' le candidat accède à chaque groupe de cas d'utilisation
+C --> G1
+C --> G2
+C --> G3
+C --> G4
+
+EVAL --> IA
+ADAPT --> IA
+ANA --> IA
+LM --> IA
+QCV --> IA
+EVAL -[hidden]-> LBA
+RECH --> LBA
+@enduml

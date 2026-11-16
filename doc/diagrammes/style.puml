@@ -1,0 +1,32 @@
+' Style commun aux diagrammes du dossier : couleurs du dossier, rendu épuré
+skinparam {
+  BackgroundColor #f7f8fb
+  DefaultFontName Inter
+  DefaultFontSize 13
+  DefaultFontColor #1c1f3a
+  Shadowing false
+  RoundCorner 16
+  ArrowColor #a99cf0
+  ArrowThickness 1
+  Nodesep 30
+  Ranksep 35
+  actorStyle awesome
+  ActorBorderColor #5b45d6
+  ActorBackgroundColor #5b45d6
+  ActorFontStyle bold
+  UsecaseBorderColor #c9c0f4
+  UsecaseBackgroundColor #ffffff
+  RectangleBorderColor #e3e5ec
+  RectangleBackgroundColor #ffffff
+  RectangleFontColor #5b45d6
+  RectangleFontStyle bold
+  RectangleFontSize 12
+  StereotypeFontSize 1
+}
+skinparam rectangle<<externe>> {
+  BorderColor #5b45d6
+  BackgroundColor #efecfd
+  FontColor #5b45d6
+  BorderStyle dashed
+}
+hide stereotype
