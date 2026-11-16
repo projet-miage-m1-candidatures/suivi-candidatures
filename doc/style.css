@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Mise en page du dossier : Markdown -> HTML (pandoc) -> PDF (WeasyPrint)
+   Style clair, accent violet. Chaîne de compilation inspirée du template
+   https://github.com/pascalpoizat/template-projet-m1-miage (licence Apache 2.0).
+   Polices incluses dans doc/fonts/ (licence SIL OFL) : aucune connexion
+   internet n'est nécessaire, le rendu est identique sur tous les ordinateurs.
+   ========================================================================== */
+
+/* ---------- Polices ---------- */
+@font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("fonts/space-grotesk-latin-500-normal.woff"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("fonts/space-grotesk-latin-700-normal.woff"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; src: url("fonts/ibm-plex-sans-latin-400-normal.woff"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: italic; src: url("fonts/ibm-plex-sans-latin-400-italic.woff"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 600; src: url("fonts/ibm-plex-sans-latin-600-normal.woff"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; src: url("fonts/ibm-plex-mono-latin-400-normal.woff"); }
+
+/* ---------- Couleurs : à changer ici pour tout le document ---------- */
+:root {
+  --encre: #1c1f3a;        /* titres */
+  --texte: #3a4052;        /* texte courant */
+  --discret: #7a8094;      /* légendes, en-têtes de page */
+  --violet: #5b45d6;       /* accent principal : numéros, liens */
+  --violet-clair: #efecfd;
+  --filet: #e3e5ec;        /* bordures fines */
+  --fond-doux: #f7f8fb;    /* lignes alternées, blocs de code */
+  --ambre: #a86a00;        /* « À compléter » */
+  --ambre-clair: #fff5dc;
+}
+
+/* ---------- Page ---------- */
+@page {
+  size: A4;
+  margin: 20mm 17mm 18mm 17mm;
+  @top-left {
+    content: string(projet);
+    font: 700 7.5pt "Space Grotesk", sans-serif;
+    color: var(--violet);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  @top-right {
+    content: "Dossier de lancement · M1 MIAGE";
+    font: 500 7.5pt "Space Grotesk", sans-serif;
+    color: var(--discret);
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font: 500 7.5pt "Space Grotesk", sans-serif;
+    color: var(--discret);
+  }
+  @bottom-left {
+    content: "";
+    width: 12mm;
+    height: 0.8mm;
+    margin-top: 3.5mm;
+    background: var(--violet);
+  }
+}
+@page :first {
+  @top-left { content: none; }
+  @top-right { content: none; }
+}
+
+/* Neutralise le style par défaut de pandoc */
+html { background: white; }
+body {
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  font-family: "IBM Plex Sans", "Inter", sans-serif;
+  font-size: 9.6pt;
+  line-height: 1.55;
+  color: var(--texte);
+  hyphens: auto;
+  counter-reset: section;
+}
+
+/* ---------- Couverture (titre, sous-titre, auteurs, date) ---------- */
+#title-block-header {
+  position: relative;
+  margin: 0 0 9mm;
+  padding: 11mm 10mm 8mm;
+  text-align: left;
+  background: linear-gradient(120deg, var(--violet-clair) 0%, #f8f7ff 100%);
+  border-radius: 3mm;
+  border-top: 1.4mm solid var(--violet);
+}
+#title-block-header .title {
+  string-set: projet content();
+  margin: 0 0 2mm;
+  font: 700 26pt/1.05 "Space Grotesk", sans-serif;
+  letter-spacing: -0.02em;
+  color: var(--encre);
+}
+#title-block-header .subtitle {
+  margin: 0 0 7mm;
+  font: 500 10.5pt "Space Grotesk", sans-serif;
+  color: var(--violet);
+}
+#title-block-header .author {
+  display: inline-block;
+  margin: 0 2mm 0 0;
+  padding: 0.6mm 2.8mm;
+  background: white;
+  border: 0.25mm solid #cfc8f5;
+  border-radius: 10mm;
+  font: 500 8.5pt "Space Grotesk", sans-serif;
+  color: var(--encre);
+}
+#title-block-header .date {
+  position: absolute;
+  top: 7mm;
+  right: 10mm;
+  margin: 0;
+  font: 500 8pt "Space Grotesk", sans-serif;
+  color: var(--violet);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Titres de sections, numérotés automatiquement ---------- */
+h1:not(.title) {
+  counter-increment: section;
+  margin: 8mm 0 3mm;
+  padding-bottom: 1.6mm;
+  border-bottom: 0.3mm solid var(--filet);
+  font: 700 14.5pt/1.2 "Space Grotesk", sans-serif;
+  color: var(--encre);
+  break-after: avoid;
+}
+h1:not(.title)::before {
+  content: counter(section, decimal-leading-zero);
+  display: inline-block;
+  min-width: 10mm;
+  color: var(--violet);
+}
+h2 {
+  margin: 5mm 0 2mm;
+  font: 700 11pt "Space Grotesk", sans-serif;
+  color: var(--encre);
+  break-after: avoid;
+}
+h3 {
+  margin: 4mm 0 1.5mm;
+  font: 500 10pt "Space Grotesk", sans-serif;
+  color: var(--violet);
+  break-after: avoid;
+}
+
+/* ---------- Texte ---------- */
+p { margin: 0 0 2.6mm; orphans: 3; widows: 3; }
+strong { font-weight: 600; color: var(--encre); }
+a { color: var(--violet); text-decoration: none; }
+ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+ul li::marker { color: var(--violet); }
+
+/* Encadré : une citation Markdown (> …) devient une note mise en valeur */
+blockquote {
+  margin: 3mm 0 4mm;
+  padding: 3mm 4.5mm;
+  background: var(--violet-clair);
+  border-left: 1mm solid var(--violet);
+  border-radius: 0 2mm 2mm 0;
+  color: var(--encre);
+  break-inside: avoid;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---------- Tableaux ---------- */
+table {
+  display: table;                               /* pandoc impose display: block */
+  width: 100%;
+  margin: 2mm 0 4.5mm;
+  border-collapse: collapse;
+  font-size: 8.8pt;
+  break-inside: auto;
+  break-before: avoid;                          /* le tableau reste avec son paragraphe d'introduction */
+}
+table, thead, tbody { border-top: none; border-bottom: none; }   /* retire les filets noirs de pandoc */
+thead { border-bottom: 0.4mm solid var(--violet); }
+tbody tr:last-child td { border-bottom: 0.3mm solid #cfd3de; }
+thead tr { background: var(--violet-clair); }   /* comble les interstices entre cellules */
+thead th {
+  border: none;
+  padding: 2mm 2.5mm;
+  background: var(--violet-clair);
+  color: var(--violet);
+  font: 700 7.6pt "Space Grotesk", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+td {
+  padding: 1.8mm 2.5mm;
+  border-bottom: 0.25mm solid var(--filet);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) td { background: var(--fond-doux); }
+tr { break-inside: avoid; }
+col { width: auto !important; }                 /* ignore les largeurs imposées par pandoc */
+th, td { hyphens: manual; border-left: none; border-right: none; }
+thead code { background: none; color: var(--violet); padding: 0; }
+td a { white-space: nowrap; }                    /* un lien ne se coupe pas en fin de ligne */
+
+/* ---------- Code et schémas en texte ---------- */
+code {
+  font-family: "IBM Plex Mono", "DejaVu Sans Mono", monospace;
+  font-size: 0.88em;
+  padding: 0.2mm 1mm;
+  background: var(--fond-doux);
+  border: 0.2mm solid var(--filet);
+  border-radius: 0.8mm;
+  color: var(--encre);
+}
+pre {
+  margin: 2mm 0 4mm;
+  padding: 3.5mm 4.5mm;
+  background: var(--fond-doux);
+  border: 0.25mm solid var(--filet);
+  border-left: 1mm solid var(--violet);
+  border-radius: 0 2mm 2mm 0;
+  break-inside: avoid;
+  white-space: pre;
+}
+pre code { white-space: pre; padding: 0; border: none; background: none; color: var(--encre); font-size: 8.2pt; line-height: 1.5; }
+a code { color: var(--violet); }
+
+/* ---------- Images et schémas (diagrammes Mermaid compilés en SVG) ---------- */
+img { max-width: 100%; }
+figure {
+  margin: 3mm 0 4.5mm;
+  padding: 4mm;
+  background: var(--fond-doux);
+  border: 0.25mm solid var(--filet);
+  border-radius: 2mm;
+  text-align: center;
+  break-inside: avoid;
+}
+figure img { max-height: 72mm; }
+figcaption {
+  margin-top: 2mm;
+  font: 500 8pt "Space Grotesk", sans-serif;
+  color: var(--discret);
+}
+
+/* ---------- Étiquette de feature : [F1]{.tag} dans le Markdown ---------- */
+.tag {
+  display: inline-block;
+  min-width: 6mm;
+  margin-right: 1mm;
+  padding: 0.2mm 1.6mm;
+  border-radius: 1mm;
+  background: var(--violet);
+  color: white;
+  font: 700 7.4pt "Space Grotesk", sans-serif;
+  text-align: center;
+}
+
+/* ---------- Marqueur « À compléter » : [texte]{.todo} dans le Markdown ---------- */
+.todo {
+  display: inline-block;
+  padding: 0.5mm 2.4mm;
+  border: 0.3mm dashed var(--ambre);
+  border-radius: 10mm;
+  background: var(--ambre-clair);
+  color: var(--ambre);
+  font: 500 7.6pt "Space Grotesk", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
