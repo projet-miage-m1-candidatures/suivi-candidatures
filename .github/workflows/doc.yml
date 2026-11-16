@@ -1,21 +1,27 @@
 name: Dossier PDF
 
-# Compile doc/dossier.md en PDF à chaque modification de doc/,
-# et le met à disposition dans l'onglet Actions (rubrique « Artifacts »).
+# À chaque push sur une branche de travail qui modifie doc/, compile doc/dossier.md en PDF
+# et commite doc/dossier.pdf dans cette même branche. Le PDF arrive ainsi sur main avec la pull request.
+# (Les pushs faits par ce workflow ne relancent pas de workflow : pas de boucle.)
 on:
   push:
-    paths: ['doc/**', '.github/workflows/doc.yml']
-  pull_request:
-    paths: ['doc/**', '.github/workflows/doc.yml']
+    branches-ignore: [main]          # main est protégée : tout passe par une pull request
+    paths:
+      - 'doc/**'
+      - '!doc/dossier.pdf'
+      - '.github/workflows/doc.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write                    # nécessaire pour commiter le PDF
 
 jobs:
   pdf:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -29,7 +35,10 @@ jobs:
       - name: Compilation du dossier
         run: make -B -C doc
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dossier
-          path: doc/dossier.pdf
+      - name: Commit du PDF dans la branche
+        if: github.ref != 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add doc/dossier.pdf
+          git diff --cached --quiet || { git commit -m "docs: régénère le PDF du dossier"; git push; }
