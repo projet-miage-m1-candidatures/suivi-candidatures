@@ -5,6 +5,7 @@
 # Secrets : jamais sur GitHub (dépôt public)
 .env
 .env.*
+!.env.example
 
 ### Java template
 # Compiled class file
