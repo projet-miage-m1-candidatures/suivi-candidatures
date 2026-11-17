@@ -1,0 +1,36 @@
+name: Release
+
+# Se déclenche quand on pousse un tag de version (ex. v0.1.0).
+# Crée une release GitHub avec le dossier PDF et, si l'application existe, son .jar.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Compiler l'application
+        if: hashFiles('pom.xml') != ''
+        run: mvn -B package -DskipTests
+
+      - name: Créer la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files="doc/dossier.pdf"
+          for jar in target/*.jar; do
+            [ -e "$jar" ] && files="$files $jar"
+          done
+          gh release create "$GITHUB_REF_NAME" $files \
+            --title "$GITHUB_REF_NAME" --prerelease --generate-notes
