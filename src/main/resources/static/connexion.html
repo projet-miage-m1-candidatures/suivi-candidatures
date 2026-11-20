@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion · Suivi Candidatures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;background:#2a64cc}
+a{text-decoration:none;color:inherit}
+a:hover{opacity:.88}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
+input{font-family:inherit}
+</style>
+</head>
+<body>
+<div style="position:relative;overflow:hidden;width:100%;min-height:1000px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:96px 24px 64px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 58%,#bcd6f5 88%,#f1f6fd 100%);font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+
+<!-- décor : nuages et avions en papier -->
+<div aria-hidden="true" style="position:absolute;left:-180px;top:120px;width:560px;height:250px;background:radial-gradient(closest-side,#fff 0%,#fff 42%,rgba(255,255,255,0) 100%);opacity:.9"></div>
+<div aria-hidden="true" style="position:absolute;right:-200px;top:380px;width:560px;height:250px;background:radial-gradient(closest-side,#fff 0%,#fff 40%,rgba(255,255,255,0) 100%);opacity:.8"></div>
+<div aria-hidden="true" style="position:absolute;left:50%;bottom:-120px;width:1500px;height:380px;margin-left:-750px;background:radial-gradient(closest-side,#ffe3da 0%,#ffe9e2 45%,rgba(255,233,226,0) 100%);opacity:.9"></div>
+<div aria-hidden="true" style="position:absolute;left:-200px;bottom:-90px;width:720px;height:300px;background:radial-gradient(closest-side,#fff 0%,#fff 45%,rgba(255,255,255,0) 100%)"></div>
+<div aria-hidden="true" style="position:absolute;right:-220px;bottom:-110px;width:760px;height:320px;background:radial-gradient(closest-side,#fff 0%,#fff 45%,rgba(255,255,255,0) 100%)"></div>
+<svg aria-hidden="true" viewBox="0 0 120 70" style="position:absolute;left:9%;top:560px;width:120px;transform:rotate(-8deg)"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#fff"/><path d="M2 38 L60 46 L118 2 Z" fill="#dbe8fb"/><path d="M60 46 L82 68 L66 40 Z" fill="#b5ccf0"/></svg>
+<svg aria-hidden="true" viewBox="0 0 120 70" style="position:absolute;right:11%;top:150px;width:96px;transform:rotate(14deg)"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#fff"/><path d="M2 38 L60 46 L118 2 Z" fill="#dbe8fb"/><path d="M60 46 L82 68 L66 40 Z" fill="#b5ccf0"/></svg>
+
+<a href="index.html" style="position:absolute;top:28px;left:max(24px,env(safe-area-inset-left,0px));display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;box-shadow:0 6px 20px rgba(15,42,92,.16)">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0f2a5c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+<span>Retour à l'accueil</span>
+</a>
+
+<section aria-labelledby="titre-connexion" style="position:relative;width:100%;max-width:440px;box-sizing:border-box;padding:38px 34px 34px;background:#fff;border-radius:32px;box-shadow:0 30px 70px rgba(15,42,92,.28);display:flex;flex-direction:column;gap:22px">
+
+<div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:-.01em">
+<span style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#2a64cc">
+<svg aria-hidden="true" viewBox="0 0 120 70" style="width:23px"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#fff"/><path d="M2 38 L60 46 L118 2 Z" fill="#c9dcfa"/></svg>
+</span>
+<span>Suivi Candidatures</span>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<h1 id="titre-connexion" style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em">Connexion</h1>
+<p style="margin:0;font-size:16px;color:#4a5f86">Retrouvez vos candidatures, vos CV et vos lettres.</p>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<label for="email" style="font-size:14px;font-weight:600">Adresse e-mail</label>
+<input id="email" type="email" value="candidat@exemple.fr" style="box-sizing:border-box;width:100%;min-height:50px;padding:0 16px;border-radius:16px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:500">
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label for="mdp" style="font-size:14px;font-weight:600">Mot de passe</label>
+<input id="mdp" type="password" value="motdepasse" style="box-sizing:border-box;width:100%;min-height:50px;padding:0 16px;border-radius:16px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:500">
+</div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px">
+<div style="display:flex;align-items:center;gap:10px">
+<input id="rester" type="checkbox" checked style="width:20px;height:20px;margin:0;accent-color:#2a64cc">
+<label for="rester" style="font-size:14.5px">Rester connecté</label>
+</div>
+<a href="#" style="display:inline-flex;align-items:center;min-height:44px;font-size:14.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:3px">Mot de passe oublié ?</a>
+</div>
+</div>
+
+<a href="tableau-de-bord.html" style="display:flex;align-items:center;justify-content:center;gap:12px;min-height:54px;box-sizing:border-box;border-radius:999px;background:#ffc933;color:#0f2a5c;font-size:16.5px;font-weight:700;box-shadow:0 10px 26px rgba(15,42,92,.2)">
+<span>Se connecter</span>
+<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0f2a5c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+</a>
+
+<div style="padding-top:18px;border-top:1px solid #e3edfc;text-align:center;font-size:15px;color:#4a5f86">
+Pas encore de compte ? <a href="#" style="display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:#1d4fa8;text-decoration:underline;text-underline-offset:3px">Créer un compte</a>
+</div>
+
+</section>
+</div>
+</body>
+</html>
