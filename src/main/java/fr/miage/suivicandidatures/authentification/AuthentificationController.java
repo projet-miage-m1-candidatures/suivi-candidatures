@@ -1,5 +1,6 @@
 package fr.miage.suivicandidatures.authentification;
 
+import fr.miage.suivicandidatures.commun.CandidatCourant;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 class AuthentificationController {
 
 	private final InscriptionService inscriptionService;
+	private final CandidatCourant candidatCourant;
 
-	AuthentificationController(InscriptionService inscriptionService) {
+	AuthentificationController(InscriptionService inscriptionService, CandidatCourant candidatCourant) {
 		this.inscriptionService = inscriptionService;
+		this.candidatCourant = candidatCourant;
 	}
 
 	@GetMapping("/csrf")
@@ -37,7 +40,7 @@ class AuthentificationController {
 
 	@GetMapping("/moi")
 	ProfilCandidat profil(@AuthenticationPrincipal CandidatAuthentifie candidat) {
-		return new ProfilCandidat(candidat.id(), candidat.getUsername(), candidat.prenom(), candidat.nom());
+		return new ProfilCandidat(candidatCourant.id(), candidat.getUsername(), candidat.prenom(), candidat.nom());
 	}
 
 	record ProfilCandidat(Long id, String email, String prenom, String nom) {

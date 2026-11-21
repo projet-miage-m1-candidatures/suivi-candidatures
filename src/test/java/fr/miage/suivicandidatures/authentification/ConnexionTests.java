@@ -51,6 +51,7 @@ class ConnexionTests {
 	@Test
 	void ouvreUneSessionRenouvelleLesJetonsEtInvalideLeCookieALaDeconnexion() throws Exception {
 		inscrireAlex(motDePasse);
+		Long idAlex = utilisateurs.findByEmail(email).orElseThrow().getId();
 		assertThat(lireProfil().statusCode()).isEqualTo(401);
 		String jetonInitial = obtenirJetonCsrf();
 
@@ -64,7 +65,7 @@ class ConnexionTests {
 		assertThat(reponseProfil.statusCode()).isEqualTo(200);
 		JsonNode profil = json.readTree(reponseProfil.body());
 		assertThat(profil.size()).isEqualTo(4);
-		assertThat(profil.path("id").asLong()).isPositive();
+		assertThat(profil.path("id").asLong()).isEqualTo(idAlex);
 		assertThat(profil.path("prenom").asString()).isEqualTo("Alex");
 		assertThat(profil.path("nom").asString()).isEqualTo("Martin");
 		assertThat(profil.path("email").asString()).isEqualTo(email);
