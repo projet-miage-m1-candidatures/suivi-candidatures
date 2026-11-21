@@ -13,6 +13,7 @@ a:hover{opacity:.88}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
 button{font-family:inherit}
 </style>
+<script type="module" src="/authentification.js"></script>
 </head>
 <body>
 <div style="width:100%;min-height:900px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
@@ -39,11 +40,12 @@ button{font-family:inherit}
 <a href="mes-lettres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes lettres</a>
 </div>
 </nav>
-<div style="margin-top:auto;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#fff;color:#0f2a5c">
-<span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#ffc933;font-size:14px;font-weight:700">CT</span>
+<div data-compte-candidat style="margin-top:auto;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#fff;color:#0f2a5c">
+<span data-initiales-candidat aria-hidden="true" style="display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:#ffc933;font-size:14px;font-weight:700"></span>
 <div style="min-width:0">
-<div style="font-size:14.5px;font-weight:700;line-height:1.25">Candidat de test</div>
-<a href="connexion.html" style="display:inline-block;font-size:12.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:2px">Se déconnecter</a>
+<div data-nom-candidat style="font-size:14.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
+<button type="button" data-deconnexion style="padding:0;border:0;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:2px;cursor:pointer">Se déconnecter</button>
+<p data-erreur-auth role="alert" hidden style="margin:4px 0 0;color:#a02738;font-size:12.5px"></p>
 </div>
 </div>
 </aside>

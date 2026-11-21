@@ -3,6 +3,7 @@ package fr.miage.suivicandidatures.authentification;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,5 +33,13 @@ class AuthentificationController {
 	@ResponseStatus(HttpStatus.CREATED)
 	void inscrire(@Valid @RequestBody DemandeInscription demande) {
 		inscriptionService.inscrire(demande);
+	}
+
+	@GetMapping("/moi")
+	ProfilCandidat profil(@AuthenticationPrincipal CandidatAuthentifie candidat) {
+		return new ProfilCandidat(candidat.id(), candidat.getUsername(), candidat.prenom(), candidat.nom());
+	}
+
+	record ProfilCandidat(Long id, String email, String prenom, String nom) {
 	}
 }

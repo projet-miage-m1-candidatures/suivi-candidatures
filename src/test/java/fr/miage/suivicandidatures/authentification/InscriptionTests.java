@@ -104,6 +104,7 @@ class InscriptionTests {
 	void conserveLesPagesPubliquesEtProtegeLesAutresRoutesApi() throws Exception {
 		mvc.perform(get("/")).andExpect(status().isOk());
 		mvc.perform(get("/connexion.html")).andExpect(status().isOk());
+		mvc.perform(get("/inscription.html")).andExpect(status().isOk());
 		mvc.perform(get("/actuator/health")).andExpect(status().isOk());
 		mvc.perform(get("/api/v1/auth/moi"))
 				.andExpect(status().isUnauthorized())

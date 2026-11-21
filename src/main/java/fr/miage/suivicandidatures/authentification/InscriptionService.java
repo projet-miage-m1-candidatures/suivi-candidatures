@@ -1,7 +1,5 @@
 package fr.miage.suivicandidatures.authentification;
 
-import java.nio.charset.StandardCharsets;
-
 import fr.miage.suivicandidatures.commun.Utilisateur;
 import fr.miage.suivicandidatures.commun.UtilisateurRepository;
 
@@ -26,7 +24,7 @@ class InscriptionService {
 	void inscrire(DemandeInscription demande) {
 		String motDePasse = demande.motDePasse();
 		if (motDePasse.codePointCount(0, motDePasse.length()) < 15
-				|| motDePasse.getBytes(StandardCharsets.UTF_8).length > 72) {
+				|| !BcryptCandidat.longueurCompatible(motDePasse)) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
 					"Le mot de passe doit contenir au moins 15 caractères et au plus 72 octets en UTF-8");
 		}
