@@ -1,28 +1,7 @@
+import { appelerApi } from "./api.js";
+
 const apiAuth = "/api/v1/auth";
 const messageIndisponible = "La demande a échoué. Réessayez dans un instant.";
-
-async function obtenirJetonCsrf() {
-	const reponse = await fetch(`${apiAuth}/csrf`, { cache: "no-store" });
-	if (!reponse.ok) {
-		throw new Error("Le jeton CSRF est indisponible.");
-	}
-
-	const prefixe = "XSRF-TOKEN=";
-	const cookie = document.cookie.split(";").map(valeur => valeur.trim())
-		.find(valeur => valeur.startsWith(prefixe));
-	if (!cookie) {
-		throw new Error("Le cookie CSRF est absent.");
-	}
-	return cookie.slice(prefixe.length);
-}
-
-async function envoyerFormulaire(route, corps, type) {
-	return fetch(`${apiAuth}/${route}`, {
-		method: "POST",
-		headers: { "Content-Type": type, "X-XSRF-TOKEN": await obtenirJetonCsrf() },
-		body: corps,
-	});
-}
 
 function afficherErreur(zone, message) {
 	zone.textContent = message;
@@ -31,7 +10,7 @@ function afficherErreur(zone, message) {
 
 async function ouvrirApresRenouvellement(page) {
 	// Le prochain POST demandera lui aussi un jeton si le réseau est indisponible ici.
-	await obtenirJetonCsrf().catch(() => {});
+	await appelerApi("GET", `${apiAuth}/csrf`, undefined, { redirigerSur401: false }).catch(() => {});
 	window.location.replace(page);
 }
 
@@ -49,11 +28,10 @@ if (formulaire) {
 		bouton.disabled = true;
 		afficherErreur(erreur, "");
 		const champs = new FormData(formulaire);
-		const corps = connexion ? new URLSearchParams(champs) : JSON.stringify(Object.fromEntries(champs));
-		const type = connexion ? "application/x-www-form-urlencoded" : "application/json";
+		const corps = connexion ? new URLSearchParams(champs) : Object.fromEntries(champs);
 
 		try {
-			const reponse = await envoyerFormulaire(route, corps, type);
+			const reponse = await appelerApi("POST", `${apiAuth}/${route}`, corps, { redirigerSur401: false });
 			if (connexion && reponse.status === 200) {
 				await ouvrirApresRenouvellement("/tableau-de-bord.html");
 			} else if (!connexion && reponse.status === 201) {
@@ -82,11 +60,8 @@ if (compte) {
 
 	async function chargerProfil() {
 		try {
-			const reponse = await fetch(`${apiAuth}/moi`, { cache: "no-store" });
-			if (reponse.status === 401) {
-				window.location.replace("/connexion.html");
-				return;
-			}
+			const reponse = await appelerApi("GET", `${apiAuth}/moi`);
+			if (reponse.status === 401) return;
 			if (!reponse.ok) throw new Error("Le profil est indisponible.");
 
 			const { prenom, nom } = await reponse.json();
@@ -104,11 +79,8 @@ if (compte) {
 		deconnexion.disabled = true;
 		afficherErreur(erreur, "");
 		try {
-			const jeton = await obtenirJetonCsrf();
-			const reponse = await fetch(`${apiAuth}/deconnexion`, {
-				method: "POST",
-				headers: { "X-XSRF-TOKEN": jeton },
-			});
+			const reponse = await appelerApi("POST", `${apiAuth}/deconnexion`);
+			if (reponse.status === 401) return;
 			if (!reponse.ok) throw new Error("La déconnexion a échoué.");
 			await ouvrirApresRenouvellement("/connexion.html");
 		} catch {
