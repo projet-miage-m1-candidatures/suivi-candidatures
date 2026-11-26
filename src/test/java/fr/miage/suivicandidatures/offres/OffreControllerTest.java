@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ class OffreControllerTest {
     private OffreRepository offreRepository;
 
     @Test
+    @WithMockUser
     void renvoie_le_detail_d_une_offre() throws Exception {
         Offre offre = offreRepository.save(Offre.builder(SourceOffre.FRANCE_TRAVAIL, "FT-1", "Développeur Java")
                 .entreprise("ACME")
@@ -46,14 +48,25 @@ class OffreControllerTest {
     }
 
     @Test
+    @WithMockUser
     void renvoie_404_pour_une_offre_inexistante() throws Exception {
         mockMvc.perform(get("/api/v1/offres/{id}", 999_999))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser
     void renvoie_400_pour_un_identifiant_qui_n_est_pas_un_nombre() throws Exception {
         mockMvc.perform(get("/api/v1/offres/{id}", "abc"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void renvoie_401_sans_utilisateur_connecte() throws Exception {
+        Offre offre = offreRepository.save(Offre.builder(SourceOffre.FRANCE_TRAVAIL, "FT-2", "Développeur web").build());
+
+        // Les filtres de sécurité restent actifs : sans @WithMockUser, l'API exige une connexion
+        mockMvc.perform(get("/api/v1/offres/{id}", offre.getId()))
+                .andExpect(status().isUnauthorized());
     }
 }
