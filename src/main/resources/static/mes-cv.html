@@ -12,11 +12,55 @@ a{text-decoration:none;color:inherit}
 a:hover{opacity:.88}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
 button{font-family:inherit}
+[hidden]{display:none!important}
+main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+.page-tete{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:56px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
+.page-tete p{margin:10px 0 0;max-width:560px;font-size:17px;color:#4a5f86}
+.bouton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;box-sizing:border-box;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer;text-decoration:none}
+.bouton:disabled{opacity:.5;cursor:default}
+.bouton-principal{min-height:50px;padding:0 24px;border:0;background:#ffc933;font-size:15.5px;font-weight:700;box-shadow:0 8px 22px rgba(15,42,92,.14)}
+.filtres{display:flex;flex-wrap:wrap;gap:10px}
+.filtres button{min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer}
+.filtres button[aria-pressed="true"]{border-color:#0f2a5c;background:#0f2a5c;color:#fff}
+.grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+@media (max-width:1380px){.grille{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.grille{grid-template-columns:minmax(0,1fr)}}
+.carte{position:relative;display:flex;flex-direction:column;gap:14px;min-width:0;padding:22px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
+.carte-tete{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.carte-tete h2{margin:0;font-size:21px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.carte-tete .date{margin:4px 0 0;font-size:13.5px;color:#4a5f86}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.statut-complet{background:#d9f2e8;color:#14573f}
+.statut-incomplet{background:#fdebd3;color:#8a4b08;text-decoration:underline;text-underline-offset:3px}
+.badge{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:13px;font-weight:600}
+.miniature{display:block;position:relative;height:300px;overflow:hidden;border-radius:14px;border:1px solid #dbe6f7;background:#eef3fb}
+.miniature:hover{opacity:1;border-color:#9dbbea}
+.miniature-page{position:absolute;top:0;left:0;width:794px;transform-origin:top left;pointer-events:none}
+.miniature:after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff)}
+.lien{padding:4px 0;border:0;background:transparent;color:#1d4fa8;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.carte-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:14px;border-top:1px solid #e3edfc}
+.menu{position:relative}
+.bouton-menu{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#0f2a5c;font-size:20px;font-weight:700;line-height:1;cursor:pointer}
+.bouton-menu:hover{background:#f1f6fd}
+.menu-liste{position:absolute;right:0;top:44px;z-index:5;min-width:210px;padding:6px;border-radius:14px;background:#fff;box-shadow:0 12px 32px rgba(15,42,92,.18)}
+.menu-liste button{display:block;width:100%;min-height:40px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#0f2a5c;font-size:14.5px;font-weight:600;text-align:left;cursor:pointer}
+.menu-liste button:hover{background:#f1f6fd}
+.menu-liste .danger{color:#a02738}
+.carte-nouveau{align-items:center;justify-content:center;text-align:center;box-sizing:border-box;border:2px dashed #9dbbea;background:rgba(255,255,255,.55);box-shadow:none}
+.carte-nouveau p{margin:0;max-width:250px;font-size:14.5px;color:#4a5f86}
+.plus{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#e3edfc}
+.vide{padding:40px;border-radius:24px;background:#fff;text-align:center;color:#4a5f86}
+.demo{margin:0;font-size:13px;color:#4a5f86}
+.notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
+@media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:44px}}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lato:wght@400;700&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/cv-modeles.css">
 <script type="module" src="/authentification.js"></script>
 </head>
 <body>
-<div style="width:100%;min-height:900px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+<div style="width:100%;min-height:100vh;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
 
 <!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
 <aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
@@ -50,113 +94,182 @@ button{font-family:inherit}
 </div>
 </aside>
 
-<!-- ===== Page : Mes CV ===== -->
-<main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:40px 44px 56px;display:flex;flex-direction:column;gap:28px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+<main class="page" style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:40px 44px 56px;display:flex;flex-direction:column;gap:24px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
 
-<div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px">
-<div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:10px">
-<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:56px;line-height:1;letter-spacing:-.015em;color:#0f2a5c">Mes CV</h1>
-<p style="margin:0;max-width:560px;font-size:17px;color:#4a5f86">Créez un CV, gardez plusieurs versions et vérifiez qu'il est lisible par les logiciels de tri.</p>
+<div class="page-tete">
+<div style="flex:1 1 380px;min-width:0">
+<h1>Mes CV</h1>
+<p>Créez plusieurs versions de votre CV, choisissez leur mise en page et téléchargez-les en PDF.</p>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:12px">
-<button type="button" style="min-height:48px;padding:0 24px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:600;cursor:pointer">Importer un CV</button>
-<a href="creer-cv.html" style="display:inline-flex;align-items:center;gap:10px;min-height:48px;box-sizing:border-box;padding:0 26px;border-radius:999px;background:#ffc933;color:#0f2a5c;font-size:15.5px;font-weight:700;box-shadow:0 8px 22px rgba(15,42,92,.16)">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0f2a5c" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-<span>Créer un CV</span>
-</a>
-</div>
+<a class="bouton bouton-principal" href="creer-cv.html">+ Créer un CV</a>
 </div>
 
-<div role="group" aria-label="Filtrer par langue" style="display:flex;flex-wrap:wrap;gap:10px">
-<button type="button" aria-pressed="true" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #0f2a5c;background:#0f2a5c;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer">Tous (2)</button>
-<button type="button" aria-pressed="false" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Français (2)</button>
-<button type="button" aria-pressed="false" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Anglais (0)</button>
-</div>
+<div class="filtres" role="group" aria-label="Filtrer par langue" data-filtres></div>
 
-<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:20px">
+<div class="grille" data-grille></div>
 
-<!-- CV 1 -->
-<article style="flex:1 1 280px;min-width:0;max-width:460px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;border:2px solid #9dbbea;box-shadow:0 14px 40px rgba(15,42,92,.10);display:flex;flex-direction:column;gap:16px">
-<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-<div style="min-width:0">
-<h2 style="margin:0;font-size:21px;font-weight:700;line-height:1.2">Data engineer</h2>
-<div style="font-size:14px;color:#4a5f86">Modifié le 18 nov. 2026</div>
-</div>
-<button type="button" aria-label="Plus d'actions pour Data engineer" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px -8px 0 0;border-radius:50%;border:0;background:transparent;color:#0f2a5c;cursor:pointer">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#0f2a5c"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
-</button>
-</div>
-<div style="display:flex;flex-wrap:wrap;gap:8px">
-<span style="padding:4px 12px;border-radius:999px;background:#ffe08a;font-size:12.5px;font-weight:700">Principal</span>
-<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">FR</span>
-<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">Créé avec le formulaire</span>
-</div>
-<div aria-hidden="true" style="height:118px;box-sizing:border-box;padding:16px;border-radius:16px;background:#f1f6fd;border:1px solid #e3edfc;display:flex;flex-direction:column;gap:8px">
-<div style="height:7px;width:42%;border-radius:4px;background:#9dbbea"></div>
-<div style="height:6px;width:70%;border-radius:4px;background:#d3e1f6"></div>
-<div style="height:6px;width:24%;border-radius:4px;background:#bcd3f5;margin-top:6px"></div>
-<div style="height:6px;width:92%;border-radius:4px;background:#d3e1f6"></div>
-<div style="height:6px;width:78%;border-radius:4px;background:#d3e1f6"></div>
-</div>
-<div style="display:flex;align-items:center;gap:14px">
-<div role="img" aria-label="Score de 86 sur 100" style="flex:1;height:10px;border-radius:999px;background:#e3edfc;overflow:hidden"><div style="width:86%;height:100%;border-radius:999px;background:#2fa77a"></div></div>
-<div style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#14573f;white-space:nowrap">86 <span style="font-family:'Instrument Sans',system-ui,sans-serif;font-size:14px;color:#4a5f86">/ 100</span></div>
-</div>
-<p style="margin:0;font-size:14px;line-height:1.45;color:#4a5f86"><strong style="color:#0f2a5c">1 conseil</strong> · Ajoutez des résultats chiffrés à l'expérience SARL Vira</p>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:16px;border-top:1px solid #e3edfc">
-<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;font-size:14px;font-weight:600">Modifier</a>
-<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Exporter en PDF</button>
-<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Dupliquer</button>
-</div>
-</article>
+<p class="demo">Données de démonstration (candidat fictif Alex Moreau). <button type="button" class="lien" data-reinitialiser>Réinitialiser les exemples</button></p>
 
-<!-- CV 2 -->
-<article style="flex:1 1 280px;min-width:0;max-width:460px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;border:2px solid #e3edfc;box-shadow:0 10px 30px rgba(15,42,92,.06);display:flex;flex-direction:column;gap:16px">
-<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-<div style="min-width:0">
-<h2 style="margin:0;font-size:21px;font-weight:700;line-height:1.2">Data analyst</h2>
-<div style="font-size:14px;color:#4a5f86">Modifié le 12 nov. 2026</div>
-</div>
-<button type="button" aria-label="Plus d'actions pour Data analyst" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px -8px 0 0;border-radius:50%;border:0;background:transparent;color:#0f2a5c;cursor:pointer">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#0f2a5c"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
-</button>
-</div>
-<div style="display:flex;flex-wrap:wrap;gap:8px">
-<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">FR</span>
-<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">Créé avec le formulaire</span>
-</div>
-<div aria-hidden="true" style="height:118px;box-sizing:border-box;padding:16px;border-radius:16px;background:#f1f6fd;border:1px solid #e3edfc;display:flex;flex-direction:column;gap:8px">
-<div style="height:7px;width:42%;border-radius:4px;background:#9dbbea"></div>
-<div style="height:6px;width:70%;border-radius:4px;background:#d3e1f6"></div>
-<div style="height:6px;width:24%;border-radius:4px;background:#bcd3f5;margin-top:6px"></div>
-<div style="height:6px;width:86%;border-radius:4px;background:#d3e1f6"></div>
-<div style="height:6px;width:64%;border-radius:4px;background:#d3e1f6"></div>
-</div>
-<div style="display:flex;align-items:center;gap:14px">
-<div role="img" aria-label="Score de 61 sur 100" style="flex:1;height:10px;border-radius:999px;background:#e3edfc;overflow:hidden"><div style="width:61%;height:100%;border-radius:999px;background:#e08a00"></div></div>
-<div style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#8a5a00;white-space:nowrap">61 <span style="font-family:'Instrument Sans',system-ui,sans-serif;font-size:14px;color:#4a5f86">/ 100</span></div>
-</div>
-<p style="margin:0;font-size:14px;line-height:1.45;color:#4a5f86"><strong style="color:#0f2a5c">3 conseils</strong> · Dates incohérentes dans « Expériences », section « Compétences » manquante…</p>
-<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:16px;border-top:1px solid #e3edfc">
-<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;font-size:14px;font-weight:600">Modifier</a>
-<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Exporter en PDF</button>
-<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Dupliquer</button>
-</div>
-</article>
-
-<!-- Nouveau CV -->
-<div style="flex:1 1 280px;min-width:0;max-width:460px;min-height:340px;box-sizing:border-box;padding:24px;border-radius:28px;border:2px dashed #9dbbea;background:rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center">
-<span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#dfeafb">
-<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1d4fa8" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-</span>
-<h2 style="margin:0;font-size:19px;font-weight:700">Créer un nouveau CV</h2>
-<p style="margin:0;max-width:240px;font-size:14.5px;line-height:1.5;color:#4a5f86">Un formulaire guidé, étape par étape : identité, expériences, formation, compétences, langues.</p>
-<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 24px;border-radius:999px;background:#2a64cc;color:#fff;font-size:15px;font-weight:600">Commencer</a>
-</div>
-
-</div>
 </main>
+<div class="notification" role="status" data-notification hidden></div>
 
 </div>
+<script type="module">
+import { listerCv, supprimerCv, dupliquerCv, reinitialiserDemo } from "./cv-api.js";
+import { MODELES, POLICES, afficherCv, evaluerCv, echapper } from "./cv-rendu.js";
+
+const grille = document.querySelector("[data-grille]");
+const zoneFiltres = document.querySelector("[data-filtres]");
+const notification = document.querySelector("[data-notification]");
+let cvs = [];
+let filtre = "TOUS";
+let minuteur;
+
+const formatDate = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", year: "numeric" });
+
+function notifier(message) {
+	notification.textContent = message;
+	notification.hidden = false;
+	clearTimeout(minuteur);
+	minuteur = setTimeout(() => { notification.hidden = true; }, 4500);
+}
+
+function carte(cv) {
+	const { aCompleter } = evaluerCv(cv.contenu);
+	const modele = MODELES[cv.modele]?.nom ?? cv.modele;
+	const police = POLICES[cv.police]?.nom ?? cv.police;
+	const lienModifier = `creer-cv.html?id=${cv.id}`;
+	const titre = echapper(cv.titre);
+	const statut = aCompleter.length
+		? `<a class="badge statut-incomplet" href="${lienModifier}&etape=verification" title="Voir ce qu'il reste à compléter">À compléter (${aCompleter.length})</a>`
+		: `<span class="badge statut-complet">Complet</span>`;
+	return `<article class="carte" data-id="${cv.id}">
+<div class="carte-tete">
+<div style="min-width:0"><h2>${titre}</h2><p class="date">Modifié le ${formatDate.format(new Date(cv.dateModification))}</p><p class="date" style="margin-top:2px">${echapper(modele)} · ${echapper(police)}</p></div>
+<div class="menu">
+<button type="button" class="bouton-menu" aria-haspopup="true" aria-expanded="false" aria-label="Autres actions pour ${titre}" data-action="menu">&#8943;</button>
+<div class="menu-liste" hidden>
+<button type="button" data-action="dupliquer">Dupliquer</button>
+<button type="button" class="danger" data-action="supprimer">Supprimer</button>
+</div>
+</div>
+</div>
+<div class="badges">${statut}<span class="badge">${cv.langue === "EN" ? "Anglais" : "Français"}</span></div>
+<a class="miniature" href="${lienModifier}" aria-label="Ouvrir le CV ${titre}"><div class="miniature-page" aria-hidden="true"><article></article></div></a>
+<div class="carte-actions">
+<a class="bouton" href="${lienModifier}">Modifier</a>
+<button type="button" class="bouton" data-action="pdf">Télécharger en PDF</button>
+</div>
+</article>`;
+}
+
+function carteNouveau() {
+	return `<div class="carte carte-nouveau">
+<span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1d4fa8" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+<h2 style="margin:0;font-size:19px;font-weight:700">Créer un nouveau CV</h2>
+<p>Un formulaire guidé en six étapes, avec l'aperçu en direct et le choix du modèle et de la police.</p>
+<a class="bouton" style="background:#2a64cc;border-color:#2a64cc;color:#fff" href="creer-cv.html">Commencer</a>
+</div>`;
+}
+
+function ajusterMiniatures() {
+	grille.querySelectorAll(".miniature").forEach(cadre => {
+		const page = cadre.querySelector(".miniature-page");
+		page.style.transform = `scale(${cadre.clientWidth / 794})`;
+	});
+}
+
+function afficher() {
+	const compte = langue => cvs.filter(cv => langue === "TOUS" || cv.langue === langue).length;
+	zoneFiltres.innerHTML = [["TOUS", "Tous"], ["FR", "Français"], ["EN", "Anglais"]].map(([valeur, libelle]) =>
+		`<button type="button" data-filtre="${valeur}" aria-pressed="${valeur === filtre}">${libelle} (${compte(valeur)})</button>`).join("");
+
+	const visibles = cvs.filter(cv => filtre === "TOUS" || cv.langue === filtre);
+	if (!cvs.length) {
+		grille.innerHTML = `<div class="vide" style="grid-column:1/-1">Vous n'avez pas encore de CV.</div>` + carteNouveau();
+		return;
+	}
+	grille.innerHTML = visibles.map(carte).join("") + carteNouveau();
+	visibles.forEach(cv => afficherCv(grille.querySelector(`[data-id="${cv.id}"] .miniature-page article`), cv));
+	ajusterMiniatures();
+}
+
+async function charger() {
+	cvs = await listerCv();
+	afficher();
+}
+
+function fermerMenus(sauf) {
+	grille.querySelectorAll(".menu-liste").forEach(liste => {
+		if (liste === sauf) return;
+		liste.hidden = true;
+		liste.previousElementSibling.setAttribute("aria-expanded", "false");
+		const suppression = liste.querySelector("[data-action=supprimer]");
+		suppression.textContent = "Supprimer";
+		delete suppression.dataset.confirmer;
+	});
+}
+
+zoneFiltres.addEventListener("click", evenement => {
+	const bouton = evenement.target.closest("[data-filtre]");
+	if (!bouton) return;
+	filtre = bouton.dataset.filtre;
+	afficher();
+});
+
+grille.addEventListener("click", async evenement => {
+	const bouton = evenement.target.closest("[data-action]");
+	if (!bouton) return;
+	const carteCv = bouton.closest("[data-id]");
+	const id = Number(carteCv?.dataset.id);
+
+	switch (bouton.dataset.action) {
+		case "menu": {
+			const liste = bouton.nextElementSibling;
+			fermerMenus(liste);
+			liste.hidden = !liste.hidden;
+			bouton.setAttribute("aria-expanded", String(!liste.hidden));
+			break;
+		}
+		case "dupliquer": {
+			const copie = await dupliquerCv(id);
+			notifier(`« ${copie.titre} » a été créé.`);
+			await charger();
+			break;
+		}
+		case "supprimer": {
+			if (!bouton.dataset.confirmer) {
+				bouton.dataset.confirmer = "oui";
+				bouton.textContent = "Confirmer la suppression";
+				return;
+			}
+			await supprimerCv(id);
+			notifier("Le CV a été supprimé.");
+			await charger();
+			break;
+		}
+		case "pdf":
+			notifier("Le téléchargement en PDF arrive avec la génération par le serveur (étape PDF).");
+			break;
+	}
+});
+
+document.addEventListener("click", evenement => {
+	if (!evenement.target.closest(".menu")) fermerMenus();
+});
+
+document.querySelector("[data-reinitialiser]").addEventListener("click", async () => {
+	await reinitialiserDemo();
+	filtre = "TOUS";
+	await charger();
+	notifier("Les CV d'exemple ont été remis.");
+});
+
+if ("ResizeObserver" in window) new ResizeObserver(ajusterMiniatures).observe(grille);
+else window.addEventListener("resize", ajusterMiniatures);
+document.fonts?.ready.then(ajusterMiniatures);
+
+charger();
+</script>
 </body>
 </html>

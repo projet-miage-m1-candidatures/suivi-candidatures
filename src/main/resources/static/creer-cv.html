@@ -12,12 +12,85 @@ a{text-decoration:none;color:inherit}
 a:hover{opacity:.88}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
 button{font-family:inherit}
-input{font-family:inherit}
+[hidden]{display:none!important}
+main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+.fil{display:flex;flex-wrap:wrap;gap:8px;font-size:13.5px;color:#4a5f86}
+.fil a{color:#1d4fa8;text-decoration:underline;text-underline-offset:3px}
+.page-tete{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.actions-tete{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.actions-tete .boutons{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.contenu-panneau{display:flex;flex-direction:column;gap:16px;min-width:0}
+.ia{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:16px;background:#fff8e0;border:1.5px solid #ffd970}
+.page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
+.page-tete p{margin:10px 0 0;max-width:600px;font-size:16.5px;color:#4a5f86}
+.etapes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
+.etapes button{display:block;width:100%;min-width:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit;font-size:13.5px;color:#4a5f86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etapes button:before{content:"";display:block;height:6px;margin-bottom:8px;border-radius:999px;background:#d3e1f6}
+.etapes .remplie button:before{background:#3a9a6a}
+.etapes [aria-current=step] button:before{background:#2a64cc}
+.etapes [aria-current=step] button{color:#0f2a5c;font-weight:700}
+.colonnes{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:28px;align-items:start}
+.panneau{display:flex;flex-direction:column;gap:16px;min-width:0;padding:26px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
+.panneau h2{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1}
+.aide{margin:-8px 0 0;font-size:13.5px;color:#4a5f86}
+.champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px}
+.champ{display:flex;flex-direction:column;gap:6px;min-width:0}
+.champ span{font-size:14px;font-weight:700}
+.champ input,.champ textarea,.champ select{width:100%;min-height:46px;box-sizing:border-box;padding:10px 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-family:inherit;font-size:15px}
+.champ textarea{min-height:96px;resize:vertical;line-height:1.5}
+.champ [aria-invalid=true]{border-color:#c4534f}
+.erreur{margin:0;font-size:13px;color:#a02738}
+.resume{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:16px;background:#f1f6fd}
+.resume strong{display:block;font-size:15px}
+.resume span{font-size:13.5px;color:#4a5f86}
+.resume-actions{display:flex;gap:8px;flex:none}
+.editeur{display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:18px;border:1.5px solid #bcd3f5}
+.editeur h3{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:24px}
+.ligne-liste{display:flex;gap:10px;align-items:center}
+.ligne-liste input{flex:1;min-width:0;min-height:44px;box-sizing:border-box;padding:10px 14px;border-radius:14px;border:1.5px solid #bcd3f5;font-family:inherit;font-size:15px;color:#0f2a5c}
+.rangee{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:10px;align-items:end}
+.rangee-langue{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.bouton{display:inline-flex;align-items:center;justify-content:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;text-decoration:none}
+.bouton-petit{min-height:38px;padding:0 14px;font-size:13.5px}
+.bouton-jaune{border:0;background:#ffc933;font-weight:700;box-shadow:0 8px 22px rgba(15,42,92,.14)}
+.lien{align-self:flex-start;padding:4px 0;border:0;background:transparent;color:#1d4fa8;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+.retirer{padding:4px 6px;border:0;background:transparent;color:#a02738;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.conseil{margin:0;padding:12px 16px;border-radius:14px;background:#e3edfc;font-size:14px;line-height:1.5}
+.navigation{display:flex;align-items:center;gap:10px;padding-top:18px;border-top:1px solid #e3edfc}
+.navigation [data-suivant]{margin-left:auto}
+.navigation .espace{flex:1}
+.statut{font-size:13px;color:#4a5f86}
+.apercu{position:sticky;top:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.apercu-tete{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.apercu-tete h2{margin:0;font-size:15px;font-weight:700}
+.puce-ats{padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700}
+.outils{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;padding:14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.outils .titre-outil{display:block;margin-bottom:6px;font-size:12.5px;font-weight:700;color:#4a5f86}
+.segments{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;border-radius:999px;border:1.5px solid #bcd3f5}
+.segments button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#4a5f86;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.segments button[aria-pressed=true]{background:#0f2a5c;color:#fff}
+.outils select{min-height:42px;padding:0 12px;border-radius:12px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px}
+.outils .pousser{margin-left:auto}
+.description-modele{margin:0;font-size:13px;color:#4a5f86}
+.bureau{padding:16px;border-radius:20px;background:#dfe8f6}
+.cadre-feuille{position:relative;width:100%}
+.feuille{position:absolute;top:0;left:0;width:794px;min-height:1123px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.16);transform-origin:top left}
+.recap{margin:0;padding:0;list-style:none}
+.a-completer{margin:0;padding:0;list-style:none}
+.a-completer li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e3edfc;font-size:14.5px}
+.a-completer-titre{margin:4px 0 0;font-size:16px;font-weight:700}
+.recap li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e3edfc}
+.recap span{font-size:14px;color:#4a5f86}
+.notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
+@media (max-width:1100px){.colonnes{grid-template-columns:minmax(0,1fr)}.apercu{position:static}}
+@media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:42px}.etapes button{font-size:11px}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lato:wght@400;700&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/cv-modeles.css">
 <script type="module" src="/authentification.js"></script>
 </head>
 <body>
-<div style="width:100%;min-height:900px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+<div style="width:100%;min-height:100vh;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
 
 <!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
 <aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
@@ -51,150 +124,419 @@ input{font-family:inherit}
 </div>
 </aside>
 
-<!-- ===== Page : Créer un CV ===== -->
-<main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:36px 44px 56px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+<main class="page" style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:36px 44px 56px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
 
-<nav aria-label="Fil d'Ariane" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:#4a5f86">
-<a href="mes-cv.html" style="color:#4a5f86;text-decoration:underline;text-underline-offset:3px">Mes CV</a>
-<span aria-hidden="true">›</span>
-<span style="font-weight:600;color:#0f2a5c">Nouveau CV</span>
-</nav>
+<nav class="fil" aria-label="Fil d'Ariane"><a href="mes-cv.html">Mes CV</a><span aria-hidden="true">›</span><span data-fil>Nouveau CV</span></nav>
 
-<div style="display:flex;flex-direction:column;gap:8px">
-<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em;color:#0f2a5c">Créer un CV</h1>
-<p style="margin:0;max-width:600px;font-size:16.5px;color:#4a5f86">Remplissez les étapes dans l'ordre. L'aperçu se met à jour pendant que vous écrivez.</p>
+<div class="page-tete">
+<div style="flex:1 1 420px;min-width:0">
+<h1 data-titre-page>Créer un CV</h1>
+<p>Écrivez tout ce que vous pouvez, même sans mise en forme : à la fin, vous pourrez améliorer votre CV avec l'IA. L'aperçu se met à jour pendant que vous écrivez.</p>
 </div>
-
-<!-- Progression -->
-<ol style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 8px">
-<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#2a64cc"></span><span style="font-size:13px;color:#4a5f86">1. Identité</span></li>
-<li aria-current="step" style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#2a64cc"></span><span style="font-size:13px;font-weight:700;color:#0f2a5c">2. Expériences</span></li>
-<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">3. Formation</span></li>
-<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">4. Compétences</span></li>
-<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">5. Langues</span></li>
-<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">6. Vérification</span></li>
-</ol>
-
-<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px">
-
-<!-- Formulaire -->
-<div style="flex:3 1 440px;min-width:0;display:flex;flex-direction:column;gap:16px">
-
-<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;padding:16px 20px;background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(15,42,92,.06)">
-<div style="min-width:0">
-<div style="font-size:15.5px;font-weight:700">Directeur technique · SARL Vira</div>
-<div style="font-size:13.5px;color:#4a5f86">2015 – 2023 · 3 réalisations</div>
-</div>
-<button type="button" style="flex:none;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Modifier</button>
-</div>
-
-<section style="box-sizing:border-box;padding:26px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:18px">
-<div>
-<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:28px;line-height:1.1">Nouvelle expérience</h2>
-<div style="font-size:13.5px;color:#4a5f86">Les champs marqués d'un astérisque sont obligatoires.</div>
-</div>
-
-<div style="display:flex;flex-wrap:wrap;gap:14px">
-<div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<label for="poste" style="font-size:13.5px;font-weight:600">Poste *</label>
-<input id="poste" type="text" value="Data engineer (stage)" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
-</div>
-<div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<label for="entreprise" style="font-size:13.5px;font-weight:600">Entreprise *</label>
-<input id="entreprise" type="text" value="Projet personnel" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+<div class="actions-tete">
+<div class="boutons"><button type="button" class="bouton" data-brouillon>Enregistrer le brouillon</button><button type="button" class="bouton bouton-jaune" data-pdf>Télécharger en PDF</button></div>
+<span class="statut" data-statut></span>
 </div>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:14px">
-<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<label for="debut" style="font-size:13.5px;font-weight:600">Début *</label>
-<input id="debut" type="text" value="03 / 2025" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
-</div>
-<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<label for="fin" style="font-size:13.5px;font-weight:600">Fin</label>
-<input id="fin" type="text" value="En cours" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
-</div>
-<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<label for="lieu" style="font-size:13.5px;font-weight:600">Lieu</label>
-<input id="lieu" type="text" value="Paris" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
-</div>
-</div>
+<ol class="etapes" data-etapes aria-label="Étapes"></ol>
 
-<div style="display:flex;flex-direction:column;gap:8px">
-<div style="font-size:13.5px;font-weight:600">Réalisations</div>
-<div style="display:flex;align-items:center;gap:8px">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#9dbbea" style="flex:none"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>
-<label for="real-1" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Réalisation 1</label>
-<input id="real-1" type="text" value="Conçu un pipeline ELT YouTube → PostgreSQL orchestré avec Airflow" style="box-sizing:border-box;flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+<div class="colonnes">
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<section class="panneau">
+<div class="contenu-panneau" data-panneau aria-live="polite"></div>
+<div class="navigation">
+<button type="button" class="bouton" data-precedent></button>
+<button type="button" class="bouton bouton-jaune" data-suivant></button>
 </div>
-<div style="display:flex;align-items:center;gap:8px">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#9dbbea" style="flex:none"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>
-<label for="real-2" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Réalisation 2</label>
-<input id="real-2" type="text" value="Mis en place des tests de qualité des données" style="box-sizing:border-box;flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:14px;border:2px solid #2a64cc;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500;box-shadow:0 0 0 4px rgba(42,100,204,.16)">
-</div>
-<button type="button" style="align-self:flex-start;min-height:44px;padding:0 4px;border:0;background:transparent;color:#1d4fa8;font-size:14.5px;font-weight:700;cursor:pointer">+ Ajouter une réalisation</button>
-</div>
-
-<div style="box-sizing:border-box;padding:14px 16px;border-radius:16px;background:#e3edfc;font-size:14.5px;line-height:1.5;color:#1b2f57"><strong style="color:#1d4fa8">Conseil</strong> Commencez par un verbe d'action et ajoutez un résultat chiffré : « Mis en place 40 tests de qualité, 0 donnée en double en production ».</div>
 </section>
-
-<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
-<button type="button" style="min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15px;font-weight:600;cursor:pointer">← Identité</button>
-<div style="display:flex;flex-wrap:wrap;gap:12px">
-<button type="button" style="min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15px;font-weight:600;cursor:pointer">Enregistrer le brouillon</button>
-<button type="button" style="display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;border:0;background:#ffc933;color:#0f2a5c;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(15,42,92,.16)">Formation →</button>
-</div>
-</div>
 </div>
 
-<!-- Aperçu PDF -->
-<aside aria-label="Aperçu du PDF" style="flex:2 1 320px;min-width:0;display:flex;flex-direction:column;gap:10px">
-<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px">
-<div style="font-size:14px;font-weight:600;color:#4a5f86">Aperçu du PDF</div>
-<span style="padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700">Une colonne · lisible par les logiciels de tri</span>
+<aside class="apercu" aria-label="Aperçu du CV">
+<div class="apercu-tete"><h2>Aperçu du PDF</h2><span class="puce-ats">Une colonne · lisible par les logiciels de tri</span></div>
+<div class="outils">
+<div><span class="titre-outil">Modèle</span><div class="segments" role="group" aria-label="Modèle du CV" data-modeles></div></div>
+<label><span class="titre-outil">Police</span><select data-police></select></label>
 </div>
-<div style="box-sizing:border-box;padding:28px 26px 36px;background:#fff;border-radius:20px;box-shadow:0 18px 50px rgba(15,42,92,.12);display:flex;flex-direction:column;gap:14px;color:#1b2f57">
-<div>
-<div style="font-size:21px;font-weight:700;color:#0f2a5c">Kyrylo NEBYLYTSIA</div>
-<div style="font-size:13.5px;font-weight:600;color:#2a64cc">Data engineer</div>
-<div style="font-size:11.5px;color:#4a5f86">Puteaux · kyrylo@exemple.fr · github.com/NebylytsiaKyrylo</div>
-</div>
-<div>
-<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">EXPÉRIENCES</div>
-<div style="margin-top:8px;font-size:12.5px;line-height:1.5">
-<div style="display:flex;justify-content:space-between;gap:8px"><strong style="color:#0f2a5c">Data engineer (stage) · Projet personnel</strong><span style="flex:none;color:#4a5f86">03/2025 – en cours</span></div>
-<ul style="margin:2px 0 0;padding-left:18px">
-<li>Conçu un pipeline ELT YouTube → PostgreSQL orchestré avec Airflow</li>
-<li style="background:#fff1b8">Mis en place des tests de qualité des données</li>
-</ul>
-</div>
-<div style="margin-top:10px;font-size:12.5px;line-height:1.5">
-<div style="display:flex;justify-content:space-between;gap:8px"><strong style="color:#0f2a5c">Directeur technique · SARL Vira</strong><span style="flex:none;color:#4a5f86">2015 – 2023</span></div>
-<ul style="margin:2px 0 0;padding-left:18px">
-<li>Conçu et administré la base PostgreSQL de l'ERP (1 000+ références)</li>
-<li>Encadré une équipe de 8 personnes</li>
-<li>Organisé la logistique de 200+ points de livraison</li>
-</ul>
-</div>
-</div>
-<div>
-<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">FORMATION</div>
-<div aria-hidden="true" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="height:6px;width:78%;border-radius:4px;background:#d3e1f6"></div><div style="height:6px;width:42%;border-radius:4px;background:#d3e1f6"></div></div>
-</div>
-<div>
-<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">COMPÉTENCES</div>
-<div aria-hidden="true" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="height:6px;width:88%;border-radius:4px;background:#d3e1f6"></div><div style="height:6px;width:56%;border-radius:4px;background:#d3e1f6"></div></div>
-</div>
-<div>
-<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">LANGUES</div>
-<div aria-hidden="true" style="margin-top:8px"><div style="height:6px;width:30%;border-radius:4px;background:#d3e1f6"></div></div>
-</div>
-</div>
+<p class="description-modele" data-description-modele></p>
+<div class="bureau"><div class="cadre-feuille" data-cadre><div class="feuille" data-feuille><article></article></div></div></div>
 </aside>
-
 </div>
+
 </main>
+<div class="notification" role="status" data-notification hidden></div>
 
 </div>
+<script type="module">
+import { nouveauCv, lireCv, creerCv, enregistrerCv } from "./cv-api.js";
+import { MODELES, POLICES, afficherCv, evaluerCv, echapper, periode } from "./cv-rendu.js";
+
+const ETAPES = ["Identité", "Expériences", "Formation", "Compétences", "Langues", "Vérification"];
+const NIVEAUX = ["Langue maternelle", "C2", "C1", "B2", "B1", "A2", "A1"];
+const $ = selecteur => document.querySelector(selecteur);
+
+const etat = {
+	cv: nouveauCv(),
+	etape: 0,
+	ouvert: { experiences: null, formations: null },
+	erreurs: {},
+};
+let minuteur;
+
+// ----- Utilitaires -----
+
+function notifier(message) {
+	const zone = $("[data-notification]");
+	zone.textContent = message;
+	zone.hidden = false;
+	clearTimeout(minuteur);
+	minuteur = setTimeout(() => { zone.hidden = true; }, 4500);
+}
+
+function lire(chemin) {
+	return chemin.split(".").reduce((objet, cle) => objet?.[cle], etat.cv);
+}
+
+function ecrire(chemin, valeur) {
+	const cles = chemin.split(".");
+	const derniere = cles.pop();
+	cles.reduce((objet, cle) => objet[cle], etat.cv)[derniere] = valeur;
+}
+
+function champ(libelle, chemin, { type = "text", obligatoire = false, aide = "" } = {}) {
+	const valeur = echapper(lire(chemin));
+	const erreur = etat.erreurs[chemin];
+	const attributs = `data-chemin="${chemin}"${obligatoire ? " required" : ""}${erreur ? ' aria-invalid="true"' : ""}${aide ? ` placeholder="${echapper(aide)}"` : ""}`;
+	const saisie = type === "textarea"
+		? `<textarea ${attributs}>${valeur}</textarea>`
+		: `<input type="${type}" ${attributs} value="${valeur}">`;
+	return `<label class="champ"><span>${libelle}${obligatoire ? " *" : ""}</span>${saisie}${erreur ? `<p class="erreur">${erreur}</p>` : ""}</label>`;
+}
+
+// ----- Panneaux du formulaire -----
+
+function panneauIdentite() {
+	const langue = etat.cv.langue;
+	return `<h2>Identité</h2><p class="aide">Les champs marqués d'un astérisque sont obligatoires.</p>
+<div class="champs">${champ("Titre du CV", "titre", { obligatoire: true, aide: "Ex. : Data engineer" })}
+<label class="champ"><span>Langue du CV</span><select data-chemin="langue">
+<option value="FR"${langue === "FR" ? " selected" : ""}>Français</option>
+<option value="EN"${langue === "EN" ? " selected" : ""}>Anglais</option></select></label></div>
+<div class="champs">${champ("Nom complet", "contenu.identite.nom", { obligatoire: true })}${champ("Poste visé", "contenu.identite.titre")}</div>
+<div class="champs">${champ("Ville", "contenu.identite.ville")}${champ("Téléphone", "contenu.identite.telephone", { type: "tel" })}</div>
+<div class="champs">${champ("E-mail", "contenu.identite.email", { type: "email" })}${champ("Lien (GitHub, LinkedIn)", "contenu.identite.lien")}</div>
+${champ("Profil", "contenu.identite.profil", { type: "textarea", aide: "Deux ou trois lignes : qui vous êtes et ce que vous cherchez." })}`;
+}
+
+function resume(liste, index, titre, detail) {
+	return `<div class="resume"><div style="min-width:0"><strong>${titre}</strong><span>${detail}</span></div>
+<div class="resume-actions"><button type="button" class="bouton bouton-petit" data-ouvrir="${liste}.${index}">Modifier</button>
+<button type="button" class="retirer" data-supprimer="${liste}.${index}">Supprimer</button></div></div>`;
+}
+
+function panneauExperiences() {
+	const liste = etat.cv.contenu.experiences;
+	const ouvert = etat.ouvert.experiences;
+	const resumes = liste.map((e, i) => i === ouvert ? "" : resume("experiences", i,
+		echapper([e.poste, e.entreprise].filter(v => v?.trim()).join(" · ") || "Expérience sans titre"),
+		echapper([periode(e.debut, e.fin), `${e.realisations.filter(r => r.trim()).length} réalisation(s)`].filter(Boolean).join(" · ")))).join("");
+	let editeur = "";
+	if (ouvert !== null && liste[ouvert]) {
+		const base = `contenu.experiences.${ouvert}`;
+		const realisations = liste[ouvert].realisations.map((r, j) =>
+			`<div class="ligne-liste"><input data-chemin="${base}.realisations.${j}" value="${echapper(r)}" aria-label="Réalisation ${j + 1}">
+<button type="button" class="retirer" data-retirer-realisation="${j}">Retirer</button></div>`).join("");
+		editeur = `<div class="editeur"><h3>${liste[ouvert].poste?.trim() ? "Modifier l'expérience" : "Nouvelle expérience"}</h3>
+<div class="champs">${champ("Poste", `${base}.poste`, { obligatoire: true })}${champ("Entreprise", `${base}.entreprise`, { obligatoire: true })}</div>
+<div class="champs">${champ("Début", `${base}.debut`, { aide: "03/2025" })}${champ("Fin", `${base}.fin`, { aide: "En cours" })}${champ("Lieu", `${base}.lieu`)}</div>
+<div class="champ"><span>Réalisations</span>${realisations}</div>
+<button type="button" class="lien" data-ajouter-realisation>+ Ajouter une réalisation</button>
+<p class="conseil"><strong>Conseil</strong> : commencez par un verbe d'action et ajoutez un résultat chiffré, par exemple « Réduit de 40 % la durée du chargement quotidien ».</p>
+<button type="button" class="bouton bouton-petit" style="align-self:flex-start" data-fermer>Fermer</button></div>`;
+	}
+	return `<h2>Expériences</h2><p class="aide">De la plus récente à la plus ancienne. Une réalisation par ligne : elles deviennent les puces du CV.</p>
+${resumes}${editeur}<button type="button" class="lien" data-ajouter="experiences">+ Ajouter une expérience</button>`;
+}
+
+function panneauFormations() {
+	const liste = etat.cv.contenu.formations;
+	const ouvert = etat.ouvert.formations;
+	const resumes = liste.map((f, i) => i === ouvert ? "" : resume("formations", i,
+		echapper([f.diplome, f.ecole].filter(v => v?.trim()).join(" · ") || "Formation sans titre"),
+		echapper(periode(f.debut, f.fin)))).join("");
+	let editeur = "";
+	if (ouvert !== null && liste[ouvert]) {
+		const base = `contenu.formations.${ouvert}`;
+		editeur = `<div class="editeur"><h3>${liste[ouvert].diplome?.trim() ? "Modifier la formation" : "Nouvelle formation"}</h3>
+${champ("Diplôme", `${base}.diplome`, { obligatoire: true })}
+<div class="champs">${champ("École", `${base}.ecole`)}${champ("Début", `${base}.debut`)}${champ("Fin", `${base}.fin`)}</div>
+<button type="button" class="bouton bouton-petit" style="align-self:flex-start" data-fermer>Fermer</button></div>`;
+	}
+	return `<h2>Formation</h2><p class="aide">De la plus récente à la plus ancienne.</p>
+${resumes}${editeur}<button type="button" class="lien" data-ajouter="formations">+ Ajouter une formation</button>`;
+}
+
+function panneauCompetences() {
+	const lignes = etat.cv.contenu.competences.map((g, i) => `<div class="rangee">
+${champ("Thème", `contenu.competences.${i}.groupe`, { aide: "Langages" })}
+<label class="champ"><span>Compétences (séparées par des virgules)</span><input data-virgules="contenu.competences.${i}.elements" value="${echapper(g.elements.join(", "))}" placeholder="SQL, Python, Java"></label>
+<button type="button" class="retirer" data-supprimer="competences.${i}">Retirer</button></div>`).join("");
+	return `<h2>Compétences</h2><p class="aide">Regroupez-les par thème : langages, données, outils…</p>
+${lignes}<button type="button" class="lien" data-ajouter="competences">+ Ajouter un groupe</button>`;
+}
+
+function panneauLangues() {
+	const lignes = etat.cv.contenu.langues.map((l, i) => `<div class="rangee rangee-langue">
+${champ("Langue", `contenu.langues.${i}.langue`)}
+<label class="champ"><span>Niveau</span><select data-chemin="contenu.langues.${i}.niveau">
+<option value="">Choisir</option>${NIVEAUX.map(n => `<option${n === l.niveau ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+<button type="button" class="retirer" data-supprimer="langues.${i}">Retirer</button></div>`).join("");
+	return `<h2>Langues</h2><p class="aide">Niveau du cadre européen (A1 à C2) ou langue maternelle.</p>
+${lignes}<button type="button" class="lien" data-ajouter="langues">+ Ajouter une langue</button>`;
+}
+
+function panneauVerification() {
+	const c = etat.cv.contenu;
+	const { aCompleter } = evaluerCv(c);
+	const ligne = (nom, detail, etape) => `<li><div><strong>${nom}</strong><br><span>${detail}</span></div>
+<button type="button" class="bouton bouton-petit" data-aller="${etape}">Modifier</button></li>`;
+	return `<h2>Vérification</h2><p class="aide">Relisez chaque section, choisissez le modèle et la police dans l'aperçu, puis enregistrez.</p>
+<ul class="recap">
+${ligne("Identité", echapper([c.identite.nom, c.identite.titre].filter(v => v?.trim()).join(" · ") || "À compléter"), 0)}
+${ligne("Expériences", `${c.experiences.length} expérience(s)`, 1)}
+${ligne("Formation", `${c.formations.length} formation(s)`, 2)}
+${ligne("Compétences", `${c.competences.reduce((n, g) => n + g.elements.length, 0)} compétence(s)`, 3)}
+${ligne("Langues", `${c.langues.length} langue(s)`, 4)}
+</ul>
+${aCompleter.length
+		? `<p class="a-completer-titre">À compléter (${aCompleter.length})</p><ul class="a-completer">${aCompleter.map(p => `<li><span>${echapper(p.texte)}</span><button type="button" class="bouton bouton-petit" data-aller="${p.etape}">Compléter</button></li>`).join("")}</ul>`
+		: `<p class="conseil"><strong>Votre CV est complet.</strong></p>`}
+<div class="ia"><div style="flex:1 1 240px;min-width:0"><strong>Améliorer avec l'IA</strong><p class="aide" style="margin:4px 0 0">L'IA propose de meilleures formulations pour le profil et les réalisations, sans inventer d'informations. Vous acceptez ou refusez chaque proposition.</p></div>
+<button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></div>
+<p class="aide" style="margin:0">Mise en page : <strong>${MODELES[etat.cv.modele].nom}</strong>, police <strong>${POLICES[etat.cv.police].nom}</strong>.</p>`;
+}
+
+const PANNEAUX = [panneauIdentite, panneauExperiences, panneauFormations, panneauCompetences, panneauLangues, panneauVerification];
+
+// ----- Affichage -----
+
+function afficherPanneau({ focus } = {}) {
+	$("[data-panneau]").innerHTML = PANNEAUX[etat.etape]();
+	afficherEtapes();
+	const precedent = $("[data-precedent]");
+	precedent.hidden = etat.etape === 0;
+	precedent.textContent = etat.etape > 0 ? `← ${ETAPES[etat.etape - 1]}` : "";
+	$("[data-suivant]").textContent = etat.etape < ETAPES.length - 1 ? `${ETAPES[etat.etape + 1]} →` : "Terminer";
+	if (focus) $(`[data-panneau] ${focus}`)?.focus();
+}
+
+// Barre de progression : vert = section remplie, bleu = étape en cours, gris = à compléter.
+function afficherEtapes() {
+	const { aCompleter } = evaluerCv(etat.cv.contenu);
+	const remplie = i => i === ETAPES.length - 1 ? aCompleter.length === 0 : !aCompleter.some(p => p.etape === i);
+	$("[data-etapes]").innerHTML = ETAPES.map((nom, i) => {
+		const classe = remplie(i) && i !== etat.etape ? ' class="remplie"' : "";
+		const courante = i === etat.etape ? ' aria-current="step"' : "";
+		return `<li${classe}${courante}><button type="button" data-aller="${i}" title="${remplie(i) ? "Section remplie" : "À compléter"}">${i + 1}. ${nom}</button></li>`;
+	}).join("");
+}
+
+function afficherOutils() {
+	$("[data-modeles]").innerHTML = Object.entries(MODELES).map(([cle, m]) =>
+		`<button type="button" data-modele="${cle}" aria-pressed="${cle === etat.cv.modele}">${m.nom}</button>`).join("");
+	const parDefaut = MODELES[etat.cv.modele].police;
+	$("[data-police]").innerHTML = Object.entries(POLICES).map(([cle, p]) =>
+		`<option value="${cle}"${cle === etat.cv.police ? " selected" : ""}>${p.nom}${cle === parDefaut ? " (par défaut)" : ""}</option>`).join("");
+	$("[data-description-modele]").textContent = MODELES[etat.cv.modele].description;
+}
+
+function afficherApercu() {
+	afficherCv($("[data-feuille] article"), etat.cv);
+	ajusterEchelle();
+}
+
+function ajusterEchelle() {
+	const cadre = $("[data-cadre]");
+	const feuille = $("[data-feuille]");
+	const echelle = Math.min(1, cadre.clientWidth / 794);
+	feuille.style.transform = `scale(${echelle})`;
+	feuille.style.left = `${Math.max(0, (cadre.clientWidth - 794 * echelle) / 2)}px`;
+	cadre.style.height = `${Math.ceil(feuille.offsetHeight * echelle)}px`;
+}
+
+function afficherEnTete() {
+	const titre = etat.cv.titre?.trim();
+	$("[data-titre-page]").textContent = etat.cv.id ? "Modifier le CV" : "Créer un CV";
+	$("[data-fil]").textContent = etat.cv.id && titre ? titre : "Nouveau CV";
+	document.title = `${etat.cv.id ? "Modifier le CV" : "Créer un CV"} · Suivi Candidatures`;
+}
+
+// ----- Enregistrement -----
+
+function verifierObligatoires() {
+	etat.erreurs = {};
+	if (!etat.cv.titre?.trim()) etat.erreurs.titre = "Donnez un titre à ce CV, par exemple « Data engineer ».";
+	if (!etat.cv.contenu.identite.nom?.trim()) etat.erreurs["contenu.identite.nom"] = "Le nom est obligatoire.";
+	return Object.keys(etat.erreurs).length === 0;
+}
+
+async function enregistrer({ silencieux = false } = {}) {
+	if (!verifierObligatoires()) {
+		etat.etape = 0;
+		afficherPanneau({ focus: "[aria-invalid=true]" });
+		notifier("Le titre du CV et le nom sont obligatoires.");
+		return false;
+	}
+	try {
+		if (etat.cv.id) {
+			etat.cv = await enregistrerCv(etat.cv);
+		} else {
+			etat.cv = await creerCv(etat.cv);
+			history.replaceState(null, "", `?id=${etat.cv.id}`);
+		}
+		afficherEnTete();
+		const heure = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+		$("[data-statut]").textContent = `Enregistré à ${heure}`;
+		if (!silencieux) notifier("Brouillon enregistré.");
+		return true;
+	} catch (erreur) {
+		notifier(erreur.message || "L'enregistrement a échoué. Réessayez.");
+		return false;
+	}
+}
+
+// ----- Événements -----
+
+document.addEventListener("input", evenement => {
+	const cible = evenement.target;
+	if (cible.dataset.chemin) {
+		ecrire(cible.dataset.chemin, cible.value);
+		if (etat.erreurs[cible.dataset.chemin] && cible.value.trim()) {
+			delete etat.erreurs[cible.dataset.chemin];
+			cible.removeAttribute("aria-invalid");
+			cible.parentElement.querySelector(".erreur")?.remove();
+		}
+	} else if (cible.dataset.virgules) {
+		ecrire(cible.dataset.virgules, cible.value.split(",").map(t => t.trim()).filter(Boolean));
+	} else {
+		return;
+	}
+	afficherApercu();
+	afficherEtapes();
+});
+
+$("[data-panneau]").addEventListener("change", evenement => {
+	if (evenement.target.tagName === "SELECT" && evenement.target.dataset.chemin) {
+		ecrire(evenement.target.dataset.chemin, evenement.target.value);
+		afficherApercu();
+	}
+});
+
+document.addEventListener("click", async evenement => {
+	const bouton = evenement.target.closest("button");
+	if (!bouton) return;
+	const c = etat.cv.contenu;
+	const d = bouton.dataset;
+
+	if (d.aller !== undefined) {
+		etat.etape = Number(d.aller);
+		afficherPanneau();
+	} else if (d.ajouter) {
+		const vides = {
+			experiences: { poste: "", entreprise: "", lieu: "", debut: "", fin: "", realisations: [""] },
+			formations: { diplome: "", ecole: "", debut: "", fin: "" },
+			competences: { groupe: "", elements: [] },
+			langues: { langue: "", niveau: "" },
+		};
+		c[d.ajouter].push(structuredClone(vides[d.ajouter]));
+		if (d.ajouter in etat.ouvert) etat.ouvert[d.ajouter] = c[d.ajouter].length - 1;
+		afficherPanneau({ focus: ".editeur input, .rangee:last-of-type input" });
+		afficherApercu();
+	} else if (d.ouvrir) {
+		const [liste, index] = d.ouvrir.split(".");
+		etat.ouvert[liste] = Number(index);
+		afficherPanneau({ focus: ".editeur input" });
+	} else if (d.fermer !== undefined) {
+		etat.ouvert = { experiences: null, formations: null };
+		afficherPanneau();
+	} else if (d.supprimer) {
+		const [liste, index] = d.supprimer.split(".");
+		c[liste].splice(Number(index), 1);
+		if (liste in etat.ouvert) etat.ouvert[liste] = null;
+		afficherPanneau();
+		afficherApercu();
+	} else if (d.ajouterRealisation !== undefined) {
+		c.experiences[etat.ouvert.experiences].realisations.push("");
+		afficherPanneau({ focus: ".ligne-liste:last-of-type input" });
+	} else if (d.retirerRealisation !== undefined) {
+		c.experiences[etat.ouvert.experiences].realisations.splice(Number(d.retirerRealisation), 1);
+		afficherPanneau();
+		afficherApercu();
+	} else if (d.modele) {
+		etat.cv.modele = d.modele;
+		etat.cv.police = MODELES[d.modele].police;
+		afficherOutils();
+		afficherApercu();
+		if (etat.etape === 5) afficherPanneau();
+	} else if (d.ameliorerIa !== undefined) {
+		notifier("L'amélioration par l'IA sera branchée sur le module IA commun à l'étape suivante.");
+	} else if (d.pdf !== undefined) {
+		notifier("Le téléchargement en PDF arrive avec la génération par le serveur (étape PDF).");
+	}
+});
+
+$("[data-police]").addEventListener("change", evenement => {
+	etat.cv.police = evenement.target.value;
+	afficherApercu();
+	if (etat.etape === 5) afficherPanneau();
+});
+
+$("[data-precedent]").addEventListener("click", () => {
+	etat.etape = Math.max(0, etat.etape - 1);
+	afficherPanneau();
+});
+
+$("[data-brouillon]").addEventListener("click", () => enregistrer());
+
+$("[data-suivant]").addEventListener("click", async () => {
+	if (etat.etape === 0 && !verifierObligatoires()) {
+		afficherPanneau({ focus: "[aria-invalid=true]" });
+		return;
+	}
+	const ok = await enregistrer({ silencieux: true });
+	if (!ok) return;
+	if (etat.etape < ETAPES.length - 1) {
+		etat.etape += 1;
+		etat.ouvert = { experiences: null, formations: null };
+		afficherPanneau();
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	} else {
+		window.location.href = "mes-cv.html";
+	}
+});
+
+if ("ResizeObserver" in window) new ResizeObserver(ajusterEchelle).observe($("[data-cadre]"));
+else window.addEventListener("resize", ajusterEchelle);
+document.fonts?.ready.then(ajusterEchelle);
+
+// ----- Démarrage -----
+
+const parametres = new URLSearchParams(window.location.search);
+const id = parametres.get("id");
+if (parametres.get("etape") === "verification") etat.etape = ETAPES.length - 1;
+if (id) {
+	try {
+		etat.cv = await lireCv(id);
+	} catch (erreur) {
+		notifier(`${erreur.message} Un nouveau CV a été ouvert.`);
+		history.replaceState(null, "", window.location.pathname);
+		etat.etape = 0;
+	}
+}
+afficherEnTete();
+afficherOutils();
+afficherPanneau();
+afficherApercu();
+</script>
 </body>
 </html>

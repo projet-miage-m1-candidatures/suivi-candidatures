@@ -1,0 +1,52 @@
+/*
+ * Les 3 modèles de CV (Classique, Moderne, Compact).
+ * Utilisés par l'aperçu, les miniatures de « Mes CV » et, plus tard, par les gabarits PDF.
+ * CSS volontairement simple (pas de flexbox ni de grid) : le convertisseur HTML -> PDF ne les comprend pas.
+ * La police est donnée par la variable --cv-police.
+ */
+.cv {
+	box-sizing: border-box;
+	font-family: var(--cv-police, 'Inter', Arial, sans-serif);
+	font-size: 13.5px;
+	line-height: 1.45;
+	padding: 56px 64px;
+	color: #1b1f24;
+	background: #fff;
+}
+.cv p { margin: 0; }
+.cv ul { margin: 4px 0 0; padding-left: 18px; }
+.cv li { margin: 2px 0; }
+.cv h1, .cv h2 { font-family: inherit; }
+.cv-nom { margin: 0; }
+.cv-section { margin-top: 18px; }
+.cv-section h2 { margin: 0 0 8px; }
+.cv-item { margin-bottom: 10px; }
+.cv-date { float: right; margin-left: 12px; color: #555b66; font-size: .92em; }
+.cv-sous { color: #555b66; }
+.cv-contact { color: #555b66; margin-top: 6px; font-size: .95em; }
+.cv-vide { color: #a2a9b5; }
+.cv:after { content: ""; display: block; clear: both; }
+
+/* Classique */
+.modele-classique .cv-tete { text-align: center; border-bottom: 1.5px solid #1b1f24; padding-bottom: 14px; }
+.modele-classique .cv-nom { font-size: 30px; font-weight: 600; letter-spacing: .03em; }
+.modele-classique .cv-titre { font-size: 15px; margin-top: 4px; font-style: italic; }
+.modele-classique .cv-section h2 { font-size: 12.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; border-bottom: 1px solid #9aa0aa; padding-bottom: 3px; }
+
+/* Moderne */
+.modele-moderne .cv-tete { border-left: 6px solid #1d4fa8; padding: 2px 0 2px 16px; }
+.modele-moderne .cv-nom { font-size: 32px; font-weight: 700; color: #0f2a5c; letter-spacing: -.01em; }
+.modele-moderne .cv-titre { font-size: 15px; font-weight: 600; color: #1d4fa8; margin-top: 2px; }
+.modele-moderne .cv-section h2 { font-size: 15px; font-weight: 700; color: #1d4fa8; }
+.modele-moderne .cv-item strong { color: #0f2a5c; }
+
+/* Compact */
+.modele-compact { padding: 40px 48px; font-size: 12.5px; }
+.modele-compact .cv-tete { border-bottom: 2px solid #1b1f24; padding-bottom: 10px; }
+.modele-compact .cv-nom { font-size: 24px; font-weight: 700; display: inline; }
+.modele-compact .cv-titre { display: inline; font-size: 14px; color: #555b66; margin-left: 8px; }
+.modele-compact .cv-section { margin-top: 10px; padding-top: 8px; border-top: 1px solid #dde1e7; }
+.modele-compact .cv-section:after { content: ""; display: block; clear: both; }
+.modele-compact .cv-section h2 { float: left; width: 118px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #555b66; margin: 2px 0 0; }
+.modele-compact .cv-corps { margin-left: 134px; }
+.modele-compact .cv-item { margin-bottom: 7px; }
