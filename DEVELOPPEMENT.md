@@ -26,6 +26,14 @@ Sous Windows, utilise `copy` à la place de `cp`.
 
 Dans `.env`, remplace `change-moi` par un mot de passe local. Ce fichier contient des informations sensibles : Git l'ignore et il ne doit jamais être commité.
 
+### Assistant IA (facultatif)
+
+L'application fonctionne par défaut en mode `faux`, sans clé API. Pour utiliser OpenAI, demande à Kyrylo
+une invitation dans le projet OpenAI de l'équipe et crée ta propre clé. Dans ton fichier `.env`,
+configure `IA_FOURNISSEUR=openai`, `IA_MODELE=gpt-6-luna` et renseigne `IA_CLE` avec ta clé.
+Garde ta clé privée et masque-la sur toute capture d'écran. Consulte la
+[fiche de l'assistant IA](doc/features/assistant-ia.md).
+
 ## 3. Lancer et arrêter l'application
 
 Démarre PostgreSQL :
