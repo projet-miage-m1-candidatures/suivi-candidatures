@@ -78,8 +78,11 @@ class CvController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	ProblemDetail demandeInvalide(MethodArgumentNotValidException erreur) {
 		String detail = erreur.getBindingResult().getFieldErrors().stream()
-				.map(champ -> champ.getField() + " : " + champ.getDefaultMessage())
-				.collect(Collectors.joining("\n"));
+				.map(champ -> champ.getDefaultMessage())
+				.map(message -> message.endsWith(".") ? message : message + ".")
+				.distinct()
+				.sorted()
+				.collect(Collectors.joining(" "));
 		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
 	}
 

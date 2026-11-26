@@ -21,6 +21,7 @@ import java.util.UUID;
 import fr.miage.suivicandidatures.commun.UtilisateurRepository;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
 import org.junit.jupiter.api.AfterEach;
@@ -190,17 +191,28 @@ class CvControllerTests {
 	@Test
 	void renvoieLesErreursDeValidationEnProblemDetail() throws Exception {
 		Navigateur candidat = connecter();
-		assertThat(probleme(candidat.envoyerCv("POST", "", exemple("   ")), 400)).contains("Le titre du CV est obligatoire");
+		assertThat(probleme(candidat.envoyerCv("POST", "", exemple("   ")), 400))
+				.isEqualTo("Le titre du CV est obligatoire.");
 		assertThat(probleme(candidat.envoyerCv("POST", "", exemple("A".repeat(121))), 400)).contains("120 caractères");
 
 		ObjectNode sansNom = json.valueToTree(exemple("CV sans nom"));
 		((ObjectNode) sansNom.path("contenu").path("identite")).remove("nom");
-		assertThat(probleme(candidat.envoyerCv("POST", "", sansNom), 400)).contains("Le nom est obligatoire");
+		assertThat(probleme(candidat.envoyerCv("POST", "", sansNom), 400)).isEqualTo("Le nom est obligatoire.");
+
+		ObjectNode champsAbsents = sansNom.deepCopy();
+		champsAbsents.remove(List.of("langue", "modele", "titre"));
+		assertThat(probleme(candidat.envoyerCv("POST", "", champsAbsents), 400)).isEqualTo(
+				"La langue du CV est obligatoire. Le modèle du CV est obligatoire. "
+						+ "Le nom est obligatoire. Le titre du CV est obligatoire.");
 
 		ObjectNode tropDeRealisations = json.valueToTree(exemple("CV trop long"));
-		ObjectNode experience = (ObjectNode) tropDeRealisations.path("contenu").path("experiences").path(0);
+		ArrayNode experiences = (ArrayNode) tropDeRealisations.path("contenu").path("experiences");
+		ObjectNode experience = (ObjectNode) experiences.path(0);
 		experience.set("realisations", json.valueToTree(Collections.nCopies(31, "Une réalisation")));
-		assertThat(probleme(candidat.envoyerCv("POST", "", tropDeRealisations), 400)).contains("realisations", "30");
+		String detail = probleme(candidat.envoyerCv("POST", "", tropDeRealisations), 400);
+		assertThat(detail).contains("30").doesNotContain("contenu.", "realisations").endsWith(".");
+		experiences.add(experience.deepCopy());
+		assertThat(probleme(candidat.envoyerCv("POST", "", tropDeRealisations), 400)).isEqualTo(detail);
 
 		ObjectNode modeleInvalide = json.valueToTree(exemple("CV invalide"));
 		modeleInvalide.put("modele", "INCONNU");
