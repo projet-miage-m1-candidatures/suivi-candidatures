@@ -1,6 +1,6 @@
 /*
  * Les 3 modèles de CV (Classique, Moderne, Compact).
- * Utilisés par l'aperçu, les miniatures de « Mes CV » et, plus tard, par les gabarits PDF.
+ * Utilisés par l'aperçu, les miniatures de « Mes CV » et le gabarit PDF.
  * CSS volontairement simple (pas de flexbox ni de grid) : le convertisseur HTML -> PDF ne les comprend pas.
  * La police est donnée par la variable --cv-police.
  */
@@ -50,3 +50,18 @@
 .modele-compact .cv-section h2 { float: left; width: 118px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #555b66; margin: 2px 0 0; }
 .modele-compact .cv-corps { margin-left: 134px; }
 .modele-compact .cv-item { margin-bottom: 7px; }
+
+@page { size: A4; margin: 56px 0; }
+@page compact { size: A4; margin: 40px 0; }
+
+@media print {
+	body { margin: 0; }
+	.cv, .modele-compact { padding-top: 0; padding-bottom: 0; }
+	.modele-compact { page: compact; }
+	/* Réserve la place d'un titre et des premières lignes en bas de page. */
+	.cv-section { -fs-page-break-min-height: 64px; }
+	.cv-item { page-break-inside: avoid; }
+	.cv-section h2 { page-break-after: avoid; }
+	/* En impression, le titre reste dans le flux pour suivre le premier élément. */
+	.modele-compact .cv-section h2 { float: none; height: 0; margin: 0; position: relative; top: 2px; }
+}

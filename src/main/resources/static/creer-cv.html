@@ -168,7 +168,7 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 
 </div>
 <script type="module">
-import { nouveauCv, lireCv, creerCv, enregistrerCv } from "./cv-api.js";
+import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf } from "./cv-api.js";
 import { MODELES, POLICES, afficherCv, evaluerCv, echapper, periode } from "./cv-rendu.js";
 
 const ETAPES = ["Identité", "Expériences", "Formation", "Compétences", "Langues", "Vérification"];
@@ -481,7 +481,16 @@ document.addEventListener("click", async evenement => {
 	} else if (d.ameliorerIa !== undefined) {
 		notifier("L'amélioration par l'IA sera branchée sur le module IA commun à l'étape suivante.");
 	} else if (d.pdf !== undefined) {
-		notifier("Le téléchargement en PDF arrive avec la génération par le serveur (étape PDF).");
+		bouton.disabled = true;
+		try {
+			if (await enregistrer({ silencieux: true })) {
+				await telechargerPdf(etat.cv.id);
+			}
+		} catch (erreur) {
+			notifier(erreur.message);
+		} finally {
+			bouton.disabled = false;
+		}
 	}
 });
 

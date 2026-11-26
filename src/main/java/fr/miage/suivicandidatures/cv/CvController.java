@@ -7,7 +7,10 @@ import java.util.stream.Collectors;
 
 import fr.miage.suivicandidatures.commun.CandidatCourant;
 import jakarta.validation.Valid;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -33,10 +36,12 @@ class CvController {
 
 	private final CvService service;
 	private final CandidatCourant candidatCourant;
+	private final CvPdf pdf;
 
-	CvController(CvService service, CandidatCourant candidatCourant) {
+	CvController(CvService service, CandidatCourant candidatCourant, CvPdf pdf) {
 		this.service = service;
 		this.candidatCourant = candidatCourant;
+		this.pdf = pdf;
 	}
 
 	@GetMapping
@@ -52,6 +57,15 @@ class CvController {
 	@GetMapping("/{id}")
 	ReponseCv lire(@PathVariable Long id) {
 		return ReponseCv.depuis(service.lire(candidatCourant.id(), id));
+	}
+
+	@GetMapping("/{id}/pdf")
+	ResponseEntity<byte[]> telechargerPdf(@PathVariable Long id) {
+		Cv cv = service.lire(candidatCourant.id(), id);
+		ContentDisposition disposition = ContentDisposition.attachment().filename(CvPdf.nomFichier(cv)).build();
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+				.header(HttpHeaders.CONTENT_DISPOSITION, disposition.toString())
+				.body(pdf.generer(cv));
 	}
 
 	@PutMapping("/{id}")

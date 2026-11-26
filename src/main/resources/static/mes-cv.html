@@ -112,7 +112,7 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 
 </div>
 <script type="module">
-import { listerCv, supprimerCv, dupliquerCv } from "./cv-api.js";
+import { listerCv, supprimerCv, dupliquerCv, telechargerPdf } from "./cv-api.js";
 import { MODELES, POLICES, afficherCv, evaluerCv, echapper } from "./cv-rendu.js";
 
 const grille = document.querySelector("[data-grille]");
@@ -246,7 +246,11 @@ grille.addEventListener("click", async evenement => {
 			break;
 		}
 		case "pdf":
-			notifier("Le téléchargement en PDF arrive avec la génération par le serveur (étape PDF).");
+			try {
+				await telechargerPdf(id);
+			} catch (erreur) {
+				notifier(erreur.message);
+			}
 			break;
 	}
 });

@@ -176,9 +176,25 @@ class CvControllerTests {
 		assertThat(probleme(camille.envoyerCv("PUT", routeAlex, exemple("Modification étrangère")), 404)).isEqualTo(detail);
 		assertThat(probleme(camille.envoyerCv("POST", routeAlex + "/copie", null), 404)).isEqualTo(detail);
 		assertThat(probleme(camille.envoyerCv("DELETE", routeAlex, null), 404)).isEqualTo(detail);
+		assertThat(probleme(camille.envoyerCv("GET", routeAlex + "/pdf", null), 404)).isEqualTo(detail);
 		assertThat(probleme(camille.envoyerCv("GET", "/0", null), 404)).isEqualTo(detail);
 		assertThat(listerCv(alex)).containsExactly(cvAlex);
 		assertThat(listerCv(camille)).containsExactly(cvCamille);
+	}
+
+	@Test
+	void telechargeLeCvEnPdfAvecUnNomDeFichierAscii() throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode demande = json.valueToTree(exemple("CV à télécharger"));
+		((ObjectNode) demande.path("contenu").path("identite")).put("nom", "Élodie Dupont");
+		long id = creerCv(candidat, demande).path("id").asLong();
+
+		HttpResponse<byte[]> reponse = candidat.lirePdf(id);
+		assertThat(reponse.statusCode()).isEqualTo(200);
+		assertThat(reponse.headers().firstValue("Content-Type")).contains("application/pdf");
+		assertThat(reponse.headers().firstValue("Content-Disposition"))
+				.contains("attachment; filename=\"CV-Elodie-Dupont.pdf\"");
+		assertThat(reponse.body()).startsWith("%PDF".getBytes(StandardCharsets.US_ASCII));
 	}
 
 	@Test
@@ -318,6 +334,10 @@ class CvControllerTests {
 
 		private final CookieManager cookies = new CookieManager();
 		private final HttpClient client = HttpClient.newBuilder().cookieHandler(cookies).build();
+
+		HttpResponse<byte[]> lirePdf(long id) throws Exception {
+			return client.send(requete(API_CV + "/" + id + "/pdf").build(), HttpResponse.BodyHandlers.ofByteArray());
+		}
 
 		HttpResponse<String> envoyerCv(String methode, String route, Object corps) throws Exception {
 			return envoyer(methode, API_CV + route, "application/json", corps == null ? null : json.writeValueAsString(corps));

@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${langue}">
+<head>
+	<meta charset="UTF-8" />
+	<title th:text="${titreCv}"></title>
+	<style type="text/css" th:utext="${css}"></style>
+</head>
+<body>
+<article th:class="${classeCv}" th:style="${styleCv}" th:lang="${langue}">
+	<header class="cv-tete"><h1 class="cv-nom"><th:block th:if="${nom != null}" th:text="${nom}"></th:block><span class="cv-vide" th:if="${nom == null}" th:text="${anglais ? 'Your name' : 'Votre nom'}"></span></h1><p class="cv-titre" th:if="${posteVise != null}" th:text="${posteVise}"></p><p class="cv-contact" th:if="${!contact.isEmpty()}" th:text="${contact}"></p></header>
+	<section class="cv-section" th:if="${profil != null}">
+		<h2 th:text="${anglais ? 'Profile' : 'Profil'}"></h2><div class="cv-corps"><p th:text="${profil}"></p></div>
+	</section>
+	<section class="cv-section" th:if="${!experiences.isEmpty()}">
+		<h2 th:text="${anglais ? 'Experience' : 'Expériences'}"></h2>
+		<div class="cv-corps">
+			<div class="cv-item" th:each="experience : ${experiences}">
+				<p><span class="cv-date" th:if="${!experience.periode.isEmpty()}" th:text="${experience.periode}"></span><strong th:text="${experience.poste}"></strong><th:block th:if="${experience.entreprise != null}" th:text="| · ${experience.entreprise}|"></th:block><span class="cv-sous" th:if="${experience.lieu != null}" th:text="| · ${experience.lieu}|"></span></p>
+				<ul th:if="${!experience.realisations.isEmpty()}"><li th:each="realisation : ${experience.realisations}" th:text="${realisation}"></li></ul>
+			</div>
+		</div>
+	</section>
+	<section class="cv-section" th:if="${!formations.isEmpty()}">
+		<h2 th:text="${anglais ? 'Education' : 'Formation'}"></h2>
+		<div class="cv-corps">
+			<div class="cv-item" th:each="formation : ${formations}">
+				<p><span class="cv-date" th:if="${!formation.periode.isEmpty()}" th:text="${formation.periode}"></span><strong th:text="${formation.diplome}"></strong><th:block th:if="${formation.ecole != null}" th:text="| · ${formation.ecole}|"></th:block></p>
+			</div>
+		</div>
+	</section>
+	<section class="cv-section" th:if="${!competences.isEmpty()}">
+		<h2 th:text="${anglais ? 'Skills' : 'Compétences'}"></h2>
+		<div class="cv-corps">
+			<p th:each="groupe : ${competences}"><strong th:if="${groupe.nom != null}" th:text="|${groupe.nom} :|"></strong><th:block th:text="${(groupe.nom == null ? '' : ' ') + groupe.elements}"></th:block></p>
+		</div>
+	</section>
+	<section class="cv-section" th:if="${!langues.isEmpty()}">
+		<h2 th:text="${anglais ? 'Languages' : 'Langues'}"></h2><div class="cv-corps"><p th:text="${langues}"></p></div>
+	</section>
+</article>
+</body>
+</html>
