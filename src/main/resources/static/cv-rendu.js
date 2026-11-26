@@ -1,18 +1,42 @@
-// Affichage d'un CV avec son modèle et sa police, dates, et complétude.
-// Partagé par « Mes CV » (miniatures) et « Créer un CV » (aperçu et vignettes des modèles).
+// Affichage d'un CV avec son modèle, sa couleur, sa police et sa taille ; dates et complétude.
+// Partagé par « Mes CV » (miniatures) et « Créer un CV » (aperçu).
 
+// Chaque modèle a sa police et sa couleur par défaut ; « colonnes » : en-tête puis deux colonnes.
 export const MODELES = {
-	CLASSIQUE: { nom: "Classique", police: "SOURCE_SERIF_4", description: "En-tête centré, titres en petites capitales soulignées." },
-	MODERNE: { nom: "Moderne", police: "INTER", description: "Bandeau de couleur à gauche de l'en-tête, titres en bleu." },
-	COMPACT: { nom: "Compact", police: "IBM_PLEX_SANS", description: "Dense, titres dans la marge, pensé pour tenir sur une page." },
+	CLASSIQUE: { nom: "Classique", police: "SOURCE_SERIF_4", couleur: "NOIR" },
+	MODERNE: { nom: "Moderne", police: "INTER", couleur: "BLEU" },
+	COMPACT: { nom: "Compact", police: "IBM_PLEX_SANS", couleur: "NOIR" },
+	ELEGANT: { nom: "Élégant", police: "EB_GARAMOND", couleur: "MARINE", colonnes: true },
+	EPURE: { nom: "Épuré", police: "LATO", couleur: "ANTHRACITE" },
 };
 
+// Polices libres (licence OFL), intégrées au PDF. Carlito a les mêmes largeurs que Calibri.
 export const POLICES = {
+	CARLITO: { nom: "Carlito (Calibri)", css: "'Carlito', Calibri, Arial, sans-serif" },
 	INTER: { nom: "Inter", css: "'Inter', Arial, sans-serif" },
-	LATO: { nom: "Lato", css: "'Lato', Arial, sans-serif" },
 	IBM_PLEX_SANS: { nom: "IBM Plex Sans", css: "'IBM Plex Sans', Arial, sans-serif" },
-	SOURCE_SERIF_4: { nom: "Source Serif 4", css: "'Source Serif 4', Georgia, serif" },
+	LATO: { nom: "Lato", css: "'Lato', Arial, sans-serif" },
+	OPEN_SANS: { nom: "Open Sans", css: "'Open Sans', Arial, sans-serif" },
+	ROBOTO: { nom: "Roboto", css: "'Roboto', Arial, sans-serif" },
+	EB_GARAMOND: { nom: "EB Garamond", css: "'EB Garamond', Garamond, Georgia, serif" },
 	LORA: { nom: "Lora", css: "'Lora', Georgia, serif" },
+	SOURCE_SERIF_4: { nom: "Source Serif 4", css: "'Source Serif 4', Georgia, serif" },
+};
+
+// Thèmes de couleur : une couleur pour le nom et les titres, une pour le texte. Tons sobres uniquement.
+export const COULEURS = {
+	NOIR: { nom: "Noir", titres: "#1b1f24", texte: "#1b1f24" },
+	MARINE: { nom: "Bleu marine", titres: "#1f2f4f", texte: "#1b1f24" },
+	BLEU: { nom: "Bleu", titres: "#1d4fa8", texte: "#1b1f24" },
+	BORDEAUX: { nom: "Bordeaux", titres: "#7a1f2b", texte: "#1b1f24" },
+	SAPIN: { nom: "Vert sapin", titres: "#1f4d3a", texte: "#1b1f24" },
+	ANTHRACITE: { nom: "Anthracite, texte gris", titres: "#2b2f36", texte: "#4a4f57" },
+};
+
+export const TAILLES = {
+	PETITE: { nom: "Petite" },
+	NORMALE: { nom: "Normale" },
+	GRANDE: { nom: "Grande" },
 };
 
 export const PERMIS = ["AM", "A1", "A2", "A", "B", "BE", "C1", "C1E", "C", "CE", "D1", "D1E", "D", "DE"];
@@ -116,7 +140,7 @@ function rendreContenu(cv) {
 	const id = c.identite;
 	const langue = cv.langue === "EN" ? "EN" : "FR";
 	const t = TEXTES[langue];
-	const section = (titre, corps) => corps ? `<section class="cv-section"><h2>${titre}</h2><div class="cv-corps">${corps}</div></section>` : "";
+	const section = (titre, corps) => corps ? `<section class="cv-section"><h2><span>${titre}</span></h2><div class="cv-corps">${corps}</div></section>` : "";
 	const puces = liste => {
 		const lignes = (liste ?? []).map(l => String(l).trim()).filter(Boolean);
 		return lignes.length ? `<ul>${lignes.map(l => `<li>${echapper(l)}</li>`).join("")}</ul>` : "";
@@ -150,23 +174,52 @@ function rendreContenu(cv) {
 
 	const nom = nomComplet(id) ? echapper(nomComplet(id)) : `<span class="cv-vide">${t.nom}</span>`;
 	return `<header class="cv-tete"><h1 class="cv-nom">${nom}</h1>${rempli(id.titre) ? `<p class="cv-titre">${echapper(id.titre)}</p>` : ""}${contact ? `<p class="cv-contact">${contact}</p>` : ""}${complements ? `<p class="cv-contact">${complements}</p>` : ""}</header>`
-		// Ordre des sections = ordre des étapes du formulaire (ETAPES).
-		+ section(t.profil, rempli(c.profil) ? `<p>${echapper(c.profil)}</p>` : "")
-		+ section(t.competences, competences)
-		+ section(t.experiences, experiences)
-		+ section(t.projets, projets)
-		+ section(t.formations, formations)
-		+ section(t.certifications, certifications)
-		+ section(t.langues, langues ? `<p>${langues}</p>` : "")
-		+ section(t.centresInteret, interets ? `<p>${interets}</p>` : "");
+		+ corps(cv, {
+			profil: section(t.profil, rempli(c.profil) ? `<p>${echapper(c.profil)}</p>` : ""),
+			competences: section(t.competences, competences),
+			experiences: section(t.experiences, experiences),
+			projets: section(t.projets, projets),
+			formations: section(t.formations, formations),
+			certifications: section(t.certifications, certifications),
+			langues: section(t.langues, langues ? `<p>${langues}</p>` : ""),
+			centresInteret: section(t.centresInteret, interets ? `<p>${interets}</p>` : ""),
+		});
 }
 
-// Remplit un élément <article> avec le CV, dans son modèle et sa police.
+// Une colonne : ordre des étapes du formulaire (ETAPES).
+// Deux colonnes : l'encadré (sections courtes) puis le parcours, pour garder un ordre de lecture logique.
+const COTE = ["profil", "competences", "langues", "certifications", "centresInteret"];
+const PRINCIPAL = ["experiences", "projets", "formations"];
+
+function corps(cv, s) {
+	if (!MODELES[cv.modele]?.colonnes) {
+		return ["profil", "competences", "experiences", "projets", "formations", "certifications", "langues", "centresInteret"].map(cle => s[cle]).join("");
+	}
+	return `<div class="cv-colonnes"><div class="cv-cote">${COTE.map(cle => s[cle]).join("")}</div>`
+		+ `<div class="cv-principal">${PRINCIPAL.map(cle => s[cle]).join("")}</div></div>`;
+}
+
+// Réglages d'affichage complétés (anciens CV sans couleur ni taille : valeurs du modèle).
+export function reglages(cv) {
+	const modele = MODELES[cv.modele] ? cv.modele : "CLASSIQUE";
+	return {
+		modele,
+		police: POLICES[cv.police] ? cv.police : MODELES[modele].police,
+		couleur: COULEURS[cv.couleur] ? cv.couleur : MODELES[modele].couleur,
+		taille: TAILLES[cv.taille] ? cv.taille : "NORMALE",
+	};
+}
+
+// Remplit un élément <article> avec le CV, dans son modèle, sa couleur, sa police et sa taille.
 export function afficherCv(article, cv) {
-	article.className = `cv modele-${(cv.modele ?? "CLASSIQUE").toLowerCase()}`;
-	article.style.setProperty("--cv-police", (POLICES[cv.police] ?? POLICES.INTER).css);
+	const r = reglages(cv);
+	const taille = r.taille === "NORMALE" ? "" : ` taille-${r.taille.toLowerCase()}`;
+	article.className = `cv modele-${r.modele.toLowerCase()}${taille}`;
+	article.style.setProperty("--cv-police", POLICES[r.police].css);
+	article.style.setProperty("--cv-titres", COULEURS[r.couleur].titres);
+	article.style.setProperty("--cv-texte", COULEURS[r.couleur].texte);
 	article.lang = cv.langue === "EN" ? "en" : "fr";
-	article.innerHTML = rendreContenu(cv);
+	article.innerHTML = rendreContenu({ ...cv, modele: r.modele });
 }
 
 // Étapes du formulaire, dans l'ordre des sections du CV (indices utilisés par evaluerCv et sectionRemplie).

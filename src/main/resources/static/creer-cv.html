@@ -80,25 +80,30 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .depot{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(15,42,92,.55);color:#fff;font-size:22px;font-weight:700;pointer-events:none}
 .depot span{padding:28px 40px;border:3px dashed #fff;border-radius:24px}
 .apercu{position:sticky;top:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.apercu-tete{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
-.apercu-tete h2{margin:0;font-size:15px;font-weight:700}
+.apercu-tete{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.apercu-tete h2{margin:0 auto 0 0;font-size:15px;font-weight:700}
+.apercu-tete .statut{min-width:7.5em;text-align:right}
+.outils{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.reglages{display:flex;flex-wrap:wrap;gap:8px}
+.reglage{position:relative}
+.pastille{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px 0 14px;border-radius:12px;border:1.5px solid #d3dbe8;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.pastille:hover,.pastille[aria-expanded=true]{border-color:#0f2a5c}
+.pastille svg{flex:none;transition:transform .15s}
+.pastille[aria-expanded=true] svg{transform:rotate(180deg)}
+.menu-reglage{position:absolute;left:0;top:calc(100% + 6px);z-index:15;min-width:230px;max-height:460px;overflow:auto;padding:6px;border-radius:14px;background:#fff;box-shadow:0 12px 32px rgba(15,42,92,.2)}
+.menu-reglage button{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#0f2a5c;font-size:15px;text-align:left;cursor:pointer}
+.menu-reglage button:hover{background:#f1f6fd}
+.menu-reglage [aria-checked=true]{background:#e3edfc;font-weight:700}
+.menu-titre{margin:0;padding:8px 12px 4px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5f86}
+.nuancier{flex:none;width:14px;height:14px;border-radius:50%}
 .puce-ats{padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700}
-.outils{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px;padding:14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
-.outil{flex:1 1 112px;min-width:112px}
-.outil-police{flex-basis:148px;min-width:148px}
-.outils select{width:100%}
-.outils .bouton{flex:1 0 auto;min-height:46px;padding:0 14px;font-size:14px}
-.sous-outils{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;min-height:20px}
+.puce-ats.attention{background:#fdf0d5;color:#7a4a00}
 select{appearance:none;-webkit-appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231d4fa8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:12px 8px;padding-right:44px!important;cursor:pointer}
 select:disabled{cursor:default;opacity:.7}
 select:hover:not(:disabled){border-color:#9dbbea}
-.outils .titre-outil{display:block;margin-bottom:6px;font-size:12.5px;font-weight:700;color:#4a5f86}
 .segments{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;border-radius:999px;border:1.5px solid #bcd3f5}
 .segments button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#4a5f86;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .segments button[aria-pressed=true]{background:#0f2a5c;color:#fff}
-.outils select{min-height:46px;padding:0 12px;background-position:right 12px center;padding-right:32px!important;border-radius:14px;border:1.5px solid #bcd3f5;background-color:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px}
-.outils .pousser{margin-left:auto}
-.description-modele{margin:0;font-size:13px;color:#4a5f86}
 .bureau{padding:16px;border-radius:20px;background:#dfe8f6;overflow:hidden}
 .cadre-feuille{position:relative;width:100%}
 .feuille{position:absolute;top:0;left:0;width:794px;min-height:1123px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.16);transform-origin:top left}
@@ -112,7 +117,7 @@ select:hover:not(:disabled){border-color:#9dbbea}
 @media (max-width:1100px){.colonnes{grid-template-columns:minmax(0,1fr)}.apercu{position:static}}
 @media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:42px}.etapes button{font-size:0;line-height:0}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lato:wght@400;700&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;600;700&family=Lora:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/cv-modeles.css">
 <script type="module" src="/authentification.js"></script>
 </head>
@@ -180,14 +185,10 @@ select:hover:not(:disabled){border-color:#9dbbea}
 </div>
 
 <aside class="apercu" aria-label="Aperçu du CV">
-<div class="apercu-tete"><h2>Aperçu du PDF</h2><span class="puce-ats">Une colonne · lisible par les logiciels de tri</span></div>
-<div class="outils">
-<label class="outil"><span class="titre-outil">Modèle</span><select data-modele></select></label>
-<label class="outil outil-police"><span class="titre-outil">Police</span><select data-police></select></label>
+<div class="apercu-tete"><h2>Aperçu du PDF</h2><span class="statut" data-statut></span>
 <button type="button" class="bouton" data-brouillon>Enregistrer le brouillon</button>
-<button type="button" class="bouton bouton-jaune" data-pdf>Télécharger le PDF</button>
-</div>
-<div class="sous-outils"><p class="description-modele" data-description-modele></p><span class="statut" data-statut></span></div>
+<button type="button" class="bouton bouton-jaune" data-pdf>Télécharger le PDF</button></div>
+<div class="outils"><div class="reglages" data-reglages></div><span class="puce-ats" data-ats></span></div>
 <div class="bureau"><div class="cadre-feuille" data-cadre><div class="feuille" data-feuille><article></article></div></div></div>
 </aside>
 </div>
@@ -200,7 +201,7 @@ select:hover:not(:disabled){border-color:#9dbbea}
 <script type="module">
 import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf } from "./cv-api.js";
 import { brancherImport } from "./cv-import.js";
-import { MODELES, POLICES, PERMIS, ETAPES, afficherCv, evaluerCv, sectionRemplie, normaliserContenu, nomComplet, echapper, periode, formaterDate } from "./cv-rendu.js";
+import { MODELES, POLICES, COULEURS, TAILLES, reglages, PERMIS, ETAPES, afficherCv, evaluerCv, sectionRemplie, normaliserContenu, nomComplet, echapper, periode, formaterDate } from "./cv-rendu.js";
 
 const NIVEAUX = ["Langue maternelle", "C2", "C1", "B2", "B1", "A2", "A1"];
 const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
@@ -326,7 +327,6 @@ function listeEditee(cle, { titre, detail, editeur, ajouter }) {
 
 function panneauProfil() {
 	const c = etat.cv.contenu;
-	const langue = etat.cv.langue;
 	const liens = c.identite.liens.map((l, i) => `<div class="rangee rangee-lien">
 ${champ("Libellé", `contenu.identite.liens.${i}.libelle`, { aide: "GitHub" })}
 ${champ("URL", `contenu.identite.liens.${i}.url`, { aide: "github.com/votre-profil" })}
@@ -334,10 +334,7 @@ ${corbeille(`contenu.identite.liens.${i}`, "Retirer ce lien")}</div>`).join("");
 	const permis = PERMIS.map(p => `<button type="button" class="puce" data-permis="${p}" aria-pressed="${c.identite.permis.includes(p)}">${p}</button>`).join("");
 	const d = c.disponibilite;
 	return `<h2>Profil</h2><p class="aide">L'en-tête du CV et votre accroche. Les champs marqués d'un astérisque sont obligatoires.</p>
-<div class="champs">${champ("Titre du CV", "titre", { obligatoire: true, aide: "Ex. : Data engineer" })}
-<label class="champ"><span>Langue du CV</span><select data-chemin="langue">
-<option value="FR"${langue === "FR" ? " selected" : ""}>Français</option>
-<option value="EN"${langue === "EN" ? " selected" : ""}>Anglais</option></select></label></div>
+${champ("Titre du CV", "titre", { obligatoire: true, aide: "Ex. : Data engineer (visible seulement dans « Mes CV »)" })}
 <div class="champs">${champ("Prénom", "contenu.identite.prenom", { obligatoire: true })}${champ("Nom", "contenu.identite.nom", { obligatoire: true })}</div>
 ${champ("Poste visé", "contenu.identite.titre", { aide: "Ex. : Data engineer en alternance" })}
 <div class="champs">${champ("Ville", "contenu.identite.ville")}${champ("Téléphone", "contenu.identite.telephone", { type: "tel" })}</div>
@@ -497,12 +494,63 @@ function afficherEtapes() {
 	}).join("");
 }
 
+// ----- Barre de réglages de l'aperçu : Modèle, Couleur, Police, Taille, Langue -----
+
+const LANGUES = { FR: { nom: "Français" }, EN: { nom: "Anglais" } };
+const CHEVRON = `<svg aria-hidden="true" viewBox="0 0 12 8" width="11" height="8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>`;
+const SERIF = ["EB_GARAMOND", "LORA", "SOURCE_SERIF_4"];
+
+function optionsReglage(cle, choisi) {
+	const option = (valeur, contenu) => `<button type="button" role="menuitemradio" aria-checked="${valeur === choisi}" data-reglage="${cle}" data-valeur="${valeur}">${contenu}</button>`;
+	switch (cle) {
+		case "couleur":
+			return Object.entries(COULEURS).map(([v, x]) => option(v, `<span class="nuancier" style="background:${x.titres}" aria-hidden="true"></span>${x.nom}`)).join("");
+		case "police": {
+			const groupe = (titre, filtre) => `<p class="menu-titre">${titre}</p>` + Object.entries(POLICES).filter(([v]) => filtre(v))
+				.map(([v, x]) => option(v, `<span style="font-family:${x.css}">${x.nom}</span>`)).join("");
+			return groupe("Sans empattement", v => !SERIF.includes(v)) + groupe("Avec empattement", v => SERIF.includes(v));
+		}
+		default: {
+			const liste = { modele: MODELES, taille: TAILLES, langue: LANGUES }[cle];
+			return Object.entries(liste).map(([v, x]) => option(v, x.nom)).join("");
+		}
+	}
+}
+
 function afficherOutils() {
-	const options = (liste, choisi) => Object.entries(liste).map(([cle, x]) =>
-		`<option value="${cle}"${cle === choisi ? " selected" : ""}>${x.nom}</option>`).join("");
-	$("[data-modele]").innerHTML = options(MODELES, etat.cv.modele);
-	$("[data-police]").innerHTML = options(POLICES, etat.cv.police);
-	$("[data-description-modele]").textContent = MODELES[etat.cv.modele].description;
+	const r = { ...reglages(etat.cv), langue: etat.cv.langue === "EN" ? "EN" : "FR" };
+	const boutons = [["modele", "Modèle"], ["couleur", "Couleur"], ["police", "Police"], ["taille", "Taille"], ["langue", r.langue]];
+	$("[data-reglages]").innerHTML = boutons.map(([cle, libelle]) => `<div class="reglage">
+<button type="button" class="pastille" data-menu="${cle}" aria-haspopup="true" aria-expanded="false">${libelle}${CHEVRON}</button>
+<div class="menu-reglage" role="menu" aria-label="${libelle}" hidden>${optionsReglage(cle, r[cle])}</div></div>`).join("");
+	const colonnes = MODELES[r.modele].colonnes;
+	const ats = $("[data-ats]");
+	ats.textContent = colonnes ? "Deux colonnes · moins sûr pour les ATS" : "Une colonne · compatible ATS";
+	ats.title = colonnes
+		? "ATS : logiciels de tri des candidatures. Certains lisent mal deux colonnes ; préférez une colonne pour les candidatures en ligne."
+		: "ATS : logiciels de tri des candidatures. Une colonne est lue dans le bon ordre.";
+	ats.classList.toggle("attention", Boolean(colonnes));
+}
+
+function fermerMenus(sauf) {
+	document.querySelectorAll("[data-menu]").forEach(bouton => {
+		if (bouton === sauf) return;
+		bouton.setAttribute("aria-expanded", "false");
+		bouton.nextElementSibling.hidden = true;
+	});
+}
+
+// Changer de modèle remet sa police et sa couleur par défaut ; elles restent modifiables ensuite.
+function appliquerReglage(cle, valeur) {
+	if (cle === "modele") {
+		etat.cv.modele = valeur;
+		etat.cv.police = MODELES[valeur].police;
+		etat.cv.couleur = MODELES[valeur].couleur;
+	} else {
+		etat.cv[cle] = valeur;
+	}
+	afficherOutils();
+	afficherApercu();
 }
 
 function afficherApercu() {
@@ -653,6 +701,15 @@ document.addEventListener("click", async evenement => {
 		else permis.splice(PERMIS.filter(p => permis.includes(p) || p === d.permis).indexOf(d.permis), 0, d.permis);
 		bouton.setAttribute("aria-pressed", String(position < 0));
 		apresModification();
+	} else if (d.menu) {
+		const ouvrir = bouton.getAttribute("aria-expanded") !== "true";
+		fermerMenus(bouton);
+		bouton.setAttribute("aria-expanded", String(ouvrir));
+		bouton.nextElementSibling.hidden = !ouvrir;
+		if (ouvrir) bouton.nextElementSibling.querySelector("[aria-checked=true]")?.focus();
+	} else if (d.reglage) {
+		appliquerReglage(d.reglage, d.valeur);
+		$(`[data-menu="${d.reglage}"]`)?.focus();
 	} else if (d.ameliorerIa !== undefined) {
 		notifier("L'amélioration par l'IA sera branchée sur le module IA commun dans une prochaine étape.");
 	} else if (d.pdf !== undefined) {
@@ -671,17 +728,14 @@ document.addEventListener("click", async evenement => {
 
 brancherImport({ champ: $("[data-fichier]"), depot: $("[data-depot]"), notifier });
 
-// Changer de modèle remet sa police par défaut ; la police reste modifiable ensuite.
-$("[data-modele]").addEventListener("change", evenement => {
-	etat.cv.modele = evenement.target.value;
-	etat.cv.police = MODELES[etat.cv.modele].police;
-	afficherOutils();
-	afficherApercu();
+document.addEventListener("click", evenement => {
+	if (!evenement.target.closest(".reglage")) fermerMenus();
 });
-
-$("[data-police]").addEventListener("change", evenement => {
-	etat.cv.police = evenement.target.value;
-	afficherApercu();
+document.addEventListener("keydown", evenement => {
+	if (evenement.key !== "Escape") return;
+	const ouvert = document.querySelector("[data-menu][aria-expanded=true]");
+	fermerMenus();
+	ouvert?.focus();
 });
 
 $("[data-precedent]").addEventListener("click", () => {
