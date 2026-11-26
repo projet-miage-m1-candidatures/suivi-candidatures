@@ -23,12 +23,14 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .ia{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:16px;background:#fff8e0;border:1.5px solid #ffd970}
 .page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
 .page-tete p{margin:10px 0 0;max-width:600px;font-size:16.5px;color:#4a5f86}
-.etapes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
-.etapes button{display:block;width:100%;min-width:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit;font-size:13.5px;color:#4a5f86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etapes{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
+.etapes button{display:block;width:100%;min-width:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;line-height:1.3;color:#4a5f86;overflow:hidden}
 .etapes button:before{content:"";display:block;height:6px;margin-bottom:8px;border-radius:999px;background:#d3e1f6}
 .etapes .remplie button:before{background:#3a9a6a}
 .etapes [aria-current=step] button:before{background:#2a64cc}
 .etapes [aria-current=step] button{color:#0f2a5c;font-weight:700}
+.point{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#f0b400;vertical-align:1px}
+.remplie-point .point{background:#3a9a6a}
 .colonnes{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:28px;align-items:start}
 .panneau{display:flex;flex-direction:column;gap:16px;min-width:0;padding:26px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
 .panneau h2{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1}
@@ -36,7 +38,7 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px}
 .champ{display:flex;flex-direction:column;gap:6px;min-width:0}
 .champ span{font-size:14px;font-weight:700}
-.champ input,.champ textarea,.champ select{width:100%;min-height:46px;box-sizing:border-box;padding:10px 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-family:inherit;font-size:15px}
+.champ input,.champ textarea,.champ select{width:100%;min-height:46px;box-sizing:border-box;padding:10px 14px;border-radius:14px;border:1.5px solid #bcd3f5;background-color:#fff;color:#0f2a5c;font-family:inherit;font-size:15px}
 .champ textarea{min-height:96px;resize:vertical;line-height:1.5}
 .champ [aria-invalid=true]{border-color:#c4534f}
 .erreur{margin:0;font-size:13px;color:#a02738}
@@ -49,30 +51,55 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .ligne-liste{display:flex;gap:10px;align-items:center}
 .ligne-liste input{flex:1;min-width:0;min-height:44px;box-sizing:border-box;padding:10px 14px;border-radius:14px;border:1.5px solid #bcd3f5;font-family:inherit;font-size:15px;color:#0f2a5c}
 .rangee{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:10px;align-items:end}
-.rangee-langue{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.rangee-langue,.rangee-lien{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.rangee-lien{grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto}
+.date{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px}
+.date select,.date input{width:100%;min-height:46px;box-sizing:border-box;padding:10px 12px;border-radius:14px;border:1.5px solid #bcd3f5;background-color:#fff;color:#0f2a5c;font-family:inherit;font-size:15px}
+.date :disabled,.champ :disabled{background:#f1f4f9;color:#9aa6bd}
+.case{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;cursor:pointer}
+.case input{width:20px;height:20px;accent-color:#2a64cc}
+.puces{display:flex;flex-wrap:wrap;gap:8px}
+.puce{min-width:46px;min-height:38px;padding:0 12px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.puce[aria-pressed=true]{border-color:#0f2a5c;background:#0f2a5c;color:#fff}
+.sous-titre{margin:8px 0 0;font-size:17px;font-weight:700}
 .bouton{display:inline-flex;align-items:center;justify-content:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;text-decoration:none}
 .bouton-petit{min-height:38px;padding:0 14px;font-size:13.5px}
 .bouton-jaune{border:0;background:#ffc933;font-weight:700;box-shadow:0 8px 22px rgba(15,42,92,.14)}
 .lien{align-self:flex-start;padding:4px 0;border:0;background:transparent;color:#1d4fa8;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
-.retirer{padding:4px 6px;border:0;background:transparent;color:#a02738;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.corbeille{display:inline-flex;align-items:center;justify-content:center;flex:none;width:38px;height:38px;padding:0;border:0;border-radius:10px;background:transparent;color:#7d8aa3;cursor:pointer}
+.corbeille:hover{background:#fdecee;color:#a02738}
+.rangee .corbeille{margin-bottom:4px}
+.ligne-texte{align-items:flex-start}
+.ligne-texte textarea{flex:1;min-width:0}
+.ajouts{display:flex;flex-wrap:wrap;gap:4px 20px}
 .conseil{margin:0;padding:12px 16px;border-radius:14px;background:#e3edfc;font-size:14px;line-height:1.5}
 .navigation{display:flex;align-items:center;gap:10px;padding-top:18px;border-top:1px solid #e3edfc}
 .navigation [data-suivant]{margin-left:auto}
 .navigation .espace{flex:1}
 .statut{font-size:13px;color:#4a5f86}
+.depot{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(15,42,92,.55);color:#fff;font-size:22px;font-weight:700;pointer-events:none}
+.depot span{padding:28px 40px;border:3px dashed #fff;border-radius:24px}
 .apercu{position:sticky;top:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .apercu-tete{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
 .apercu-tete h2{margin:0;font-size:15px;font-weight:700}
 .puce-ats{padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700}
-.outils{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;padding:14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.outils{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px;padding:14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.outil{flex:1 1 112px;min-width:112px}
+.outil-police{flex-basis:148px;min-width:148px}
+.outils select{width:100%}
+.outils .bouton{flex:1 0 auto;min-height:46px;padding:0 14px;font-size:14px}
+.sous-outils{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;min-height:20px}
+select{appearance:none;-webkit-appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231d4fa8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:12px 8px;padding-right:44px!important;cursor:pointer}
+select:disabled{cursor:default;opacity:.7}
+select:hover:not(:disabled){border-color:#9dbbea}
 .outils .titre-outil{display:block;margin-bottom:6px;font-size:12.5px;font-weight:700;color:#4a5f86}
 .segments{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;border-radius:999px;border:1.5px solid #bcd3f5}
 .segments button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#4a5f86;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .segments button[aria-pressed=true]{background:#0f2a5c;color:#fff}
-.outils select{min-height:42px;padding:0 12px;border-radius:12px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px}
+.outils select{min-height:46px;padding:0 12px;background-position:right 12px center;padding-right:32px!important;border-radius:14px;border:1.5px solid #bcd3f5;background-color:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px}
 .outils .pousser{margin-left:auto}
 .description-modele{margin:0;font-size:13px;color:#4a5f86}
-.bureau{padding:16px;border-radius:20px;background:#dfe8f6}
+.bureau{padding:16px;border-radius:20px;background:#dfe8f6;overflow:hidden}
 .cadre-feuille{position:relative;width:100%}
 .feuille{position:absolute;top:0;left:0;width:794px;min-height:1123px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.16);transform-origin:top left}
 .recap{margin:0;padding:0;list-style:none}
@@ -83,7 +110,7 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .recap span{font-size:14px;color:#4a5f86}
 .notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
 @media (max-width:1100px){.colonnes{grid-template-columns:minmax(0,1fr)}.apercu{position:static}}
-@media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:42px}.etapes button{font-size:11px}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:42px}.etapes button{font-size:0;line-height:0}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lato:wght@400;700&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/cv-modeles.css">
@@ -131,11 +158,11 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 <div class="page-tete">
 <div style="flex:1 1 420px;min-width:0">
 <h1 data-titre-page>Créer un CV</h1>
-<p>Écrivez tout ce que vous pouvez, même sans mise en forme : à la fin, vous pourrez améliorer votre CV avec l'IA. L'aperçu se met à jour pendant que vous écrivez.</p>
+<p>Écrivez tout ce que vous pouvez, même sans mise en forme : à la fin, vous pourrez améliorer votre CV avec l'IA. Vous pouvez aussi importer un CV existant, ou le glisser sur la page.</p>
 </div>
 <div class="actions-tete">
-<div class="boutons"><button type="button" class="bouton" data-brouillon>Enregistrer le brouillon</button><button type="button" class="bouton bouton-jaune" data-pdf>Télécharger en PDF</button></div>
-<span class="statut" data-statut></span>
+<div class="boutons"><button type="button" class="bouton" data-importer>Importer un CV</button></div>
+<input type="file" accept=".pdf,.docx" data-fichier hidden>
 </div>
 </div>
 
@@ -155,31 +182,48 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 <aside class="apercu" aria-label="Aperçu du CV">
 <div class="apercu-tete"><h2>Aperçu du PDF</h2><span class="puce-ats">Une colonne · lisible par les logiciels de tri</span></div>
 <div class="outils">
-<div><span class="titre-outil">Modèle</span><div class="segments" role="group" aria-label="Modèle du CV" data-modeles></div></div>
-<label><span class="titre-outil">Police</span><select data-police></select></label>
+<label class="outil"><span class="titre-outil">Modèle</span><select data-modele></select></label>
+<label class="outil outil-police"><span class="titre-outil">Police</span><select data-police></select></label>
+<button type="button" class="bouton" data-brouillon>Enregistrer le brouillon</button>
+<button type="button" class="bouton bouton-jaune" data-pdf>Télécharger le PDF</button>
 </div>
-<p class="description-modele" data-description-modele></p>
+<div class="sous-outils"><p class="description-modele" data-description-modele></p><span class="statut" data-statut></span></div>
 <div class="bureau"><div class="cadre-feuille" data-cadre><div class="feuille" data-feuille><article></article></div></div></div>
 </aside>
 </div>
 
 </main>
 <div class="notification" role="status" data-notification hidden></div>
+<div class="depot" data-depot hidden><span>Déposez votre CV (PDF ou DOCX)</span></div>
 
 </div>
 <script type="module">
 import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf } from "./cv-api.js";
-import { MODELES, POLICES, afficherCv, evaluerCv, echapper, periode } from "./cv-rendu.js";
+import { brancherImport } from "./cv-import.js";
+import { MODELES, POLICES, PERMIS, ETAPES, afficherCv, evaluerCv, sectionRemplie, normaliserContenu, nomComplet, echapper, periode, formaterDate } from "./cv-rendu.js";
 
-const ETAPES = ["Identité", "Expériences", "Formation", "Compétences", "Langues", "Vérification"];
 const NIVEAUX = ["Langue maternelle", "C2", "C1", "B2", "B1", "A2", "A1"];
+const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+const VIDES = {
+	liens: { libelle: "", url: "" },
+	competences: { groupe: "", elements: [] },
+	experiences: { poste: "", entreprise: "", lieu: "", debut: "", fin: "", enCours: false, description: "", realisations: [] },
+	formations: { diplome: "", etablissement: "", mention: "", debut: "", fin: "", enCours: false, description: "" },
+	projets: { titre: "", lien: "", description: "" },
+	langues: { langue: "", niveau: "" },
+	certifications: { nom: "", organisme: "", date: "", lien: "" },
+};
+const LISTES_EDITEES = ["experiences", "formations", "projets", "certifications"];
 const $ = selecteur => document.querySelector(selecteur);
+const rempli = valeur => String(valeur ?? "").trim() !== "";
+const CORBEILLE = `<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
 
 const etat = {
 	cv: nouveauCv(),
 	etape: 0,
-	ouvert: { experiences: null, formations: null },
+	ouvert: { experiences: null, formations: null, projets: null, certifications: null },
 	erreurs: {},
+	descriptions: new Set(), // expériences dont la zone « Description » est ouverte
 };
 let minuteur;
 
@@ -190,7 +234,7 @@ function notifier(message) {
 	zone.textContent = message;
 	zone.hidden = false;
 	clearTimeout(minuteur);
-	minuteur = setTimeout(() => { zone.hidden = true; }, 4500);
+	minuteur = setTimeout(() => { zone.hidden = true; }, 5000);
 }
 
 function lire(chemin) {
@@ -203,120 +247,229 @@ function ecrire(chemin, valeur) {
 	cles.reduce((objet, cle) => objet[cle], etat.cv)[derniere] = valeur;
 }
 
-function champ(libelle, chemin, { type = "text", obligatoire = false, aide = "" } = {}) {
+function fermerEditeurs() {
+	LISTES_EDITEES.forEach(cle => { etat.ouvert[cle] = null; });
+	etat.descriptions.clear();
+}
+
+function champ(libelle, chemin, { type = "text", obligatoire = false, aide = "", desactive = false } = {}) {
 	const valeur = echapper(lire(chemin));
 	const erreur = etat.erreurs[chemin];
-	const attributs = `data-chemin="${chemin}"${obligatoire ? " required" : ""}${erreur ? ' aria-invalid="true"' : ""}${aide ? ` placeholder="${echapper(aide)}"` : ""}`;
+	const attributs = `data-chemin="${chemin}"${obligatoire ? " required" : ""}${erreur ? ' aria-invalid="true"' : ""}${aide ? ` placeholder="${echapper(aide)}"` : ""}${desactive ? " disabled" : ""}`;
 	const saisie = type === "textarea"
 		? `<textarea ${attributs}>${valeur}</textarea>`
 		: `<input type="${type}" ${attributs} value="${valeur}">`;
 	return `<label class="champ"><span>${libelle}${obligatoire ? " *" : ""}</span>${saisie}${erreur ? `<p class="erreur">${erreur}</p>` : ""}</label>`;
 }
 
-// ----- Panneaux du formulaire -----
+// Liste de textes saisie dans une zone de texte, un élément par ligne.
+function champLignes(libelle, chemin, aide) {
+	const valeur = echapper((lire(chemin) ?? []).join("\n"));
+	return `<label class="champ"><span>${libelle}</span><textarea data-lignes="${chemin}" placeholder="${echapper(aide)}">${valeur}</textarea></label>`;
+}
 
-function panneauIdentite() {
-	const langue = etat.cv.langue;
-	return `<h2>Identité</h2><p class="aide">Les champs marqués d'un astérisque sont obligatoires.</p>
-<div class="champs">${champ("Titre du CV", "titre", { obligatoire: true, aide: "Ex. : Data engineer" })}
-<label class="champ"><span>Langue du CV</span><select data-chemin="langue">
-<option value="FR"${langue === "FR" ? " selected" : ""}>Français</option>
-<option value="EN"${langue === "EN" ? " selected" : ""}>Anglais</option></select></label></div>
-<div class="champs">${champ("Nom complet", "contenu.identite.nom", { obligatoire: true })}${champ("Poste visé", "contenu.identite.titre")}</div>
-<div class="champs">${champ("Ville", "contenu.identite.ville")}${champ("Téléphone", "contenu.identite.telephone", { type: "tel" })}</div>
-<div class="champs">${champ("E-mail", "contenu.identite.email", { type: "email" })}${champ("Lien (GitHub, LinkedIn)", "contenu.identite.lien")}</div>
-${champ("Profil", "contenu.identite.profil", { type: "textarea", aide: "Deux ou trois lignes : qui vous êtes et ce que vous cherchez." })}`;
+// Date « mois + année » enregistrée « AAAA » ou « AAAA-MM ».
+function decouperDate(valeur) {
+	const texte = String(valeur ?? "").trim();
+	let m = texte.match(/^(\d{4})(?:-(\d{2}))?$/);
+	if (m) return { annee: m[1], mois: m[2] ?? "" };
+	m = texte.match(/^(\d{1,2})\/(\d{4})$/);
+	if (m) return { annee: m[2], mois: m[1].padStart(2, "0") };
+	m = texte.match(/^(\d{4})/);
+	return { annee: m ? m[1] : "", mois: "" };
+}
+
+function champDate(libelle, chemin, { desactive = false } = {}) {
+	const { annee, mois } = decouperDate(lire(chemin));
+	const options = `<option value="">Mois</option>` + MOIS.map((nom, i) => {
+		const valeur = String(i + 1).padStart(2, "0");
+		return `<option value="${valeur}"${valeur === mois ? " selected" : ""}>${nom}</option>`;
+	}).join("");
+	const attente = desactive ? " disabled" : "";
+	return `<div class="champ"><span>${libelle}</span><div class="date">
+<select data-date-mois="${chemin}" aria-label="${libelle} : mois"${attente}>${options}</select>
+<input data-date-annee="${chemin}" value="${echapper(annee)}" inputmode="numeric" maxlength="4" placeholder="AAAA" aria-label="${libelle} : année"${attente}></div></div>`;
+}
+
+function caseACocher(libelle, chemin) {
+	return `<label class="case"><input type="checkbox" data-coche="${chemin}"${lire(chemin) ? " checked" : ""}> ${libelle}</label>`;
+}
+
+// Petite corbeille : « action » vaut « supprimer » (retire un élément d'une liste) ou « effacer » (vide un champ).
+function corbeille(chemin, libelle, action = "supprimer") {
+	return `<button type="button" class="corbeille" data-${action}="${chemin}" aria-label="${libelle}" title="${libelle}">${CORBEILLE}</button>`;
+}
+
+function boutonAjouter(chemin, texte) {
+	return `<button type="button" class="lien" data-ajouter="${chemin}">+ ${texte}</button>`;
 }
 
 function resume(liste, index, titre, detail) {
 	return `<div class="resume"><div style="min-width:0"><strong>${titre}</strong><span>${detail}</span></div>
 <div class="resume-actions"><button type="button" class="bouton bouton-petit" data-ouvrir="${liste}.${index}">Modifier</button>
-<button type="button" class="retirer" data-supprimer="${liste}.${index}">Supprimer</button></div></div>`;
+${corbeille(`contenu.${liste}.${index}`, "Supprimer")}</div></div>`;
 }
 
-function panneauExperiences() {
-	const liste = etat.cv.contenu.experiences;
-	const ouvert = etat.ouvert.experiences;
-	const resumes = liste.map((e, i) => i === ouvert ? "" : resume("experiences", i,
-		echapper([e.poste, e.entreprise].filter(v => v?.trim()).join(" · ") || "Expérience sans titre"),
-		echapper([periode(e.debut, e.fin), `${e.realisations.filter(r => r.trim()).length} réalisation(s)`].filter(Boolean).join(" · ")))).join("");
-	let editeur = "";
-	if (ouvert !== null && liste[ouvert]) {
-		const base = `contenu.experiences.${ouvert}`;
-		const realisations = liste[ouvert].realisations.map((r, j) =>
-			`<div class="ligne-liste"><input data-chemin="${base}.realisations.${j}" value="${echapper(r)}" aria-label="Réalisation ${j + 1}">
-<button type="button" class="retirer" data-retirer-realisation="${j}">Retirer</button></div>`).join("");
-		editeur = `<div class="editeur"><h3>${liste[ouvert].poste?.trim() ? "Modifier l'expérience" : "Nouvelle expérience"}</h3>
-<div class="champs">${champ("Poste", `${base}.poste`, { obligatoire: true })}${champ("Entreprise", `${base}.entreprise`, { obligatoire: true })}</div>
-<div class="champs">${champ("Début", `${base}.debut`, { aide: "03/2025" })}${champ("Fin", `${base}.fin`, { aide: "En cours" })}${champ("Lieu", `${base}.lieu`)}</div>
-<div class="champ"><span>Réalisations</span>${realisations}</div>
-<button type="button" class="lien" data-ajouter-realisation>+ Ajouter une réalisation</button>
-<p class="conseil"><strong>Conseil</strong> : commencez par un verbe d'action et ajoutez un résultat chiffré, par exemple « Réduit de 40 % la durée du chargement quotidien ».</p>
-<button type="button" class="bouton bouton-petit" style="align-self:flex-start" data-fermer>Fermer</button></div>`;
-	}
-	return `<h2>Expériences</h2><p class="aide">De la plus récente à la plus ancienne. Une réalisation par ligne : elles deviennent les puces du CV.</p>
-${resumes}${editeur}<button type="button" class="lien" data-ajouter="experiences">+ Ajouter une expérience</button>`;
+// Liste d'éléments repliés en résumés, avec un seul élément ouvert à la fois.
+function listeEditee(cle, { titre, detail, editeur, ajouter }) {
+	const liste = etat.cv.contenu[cle];
+	const ouvert = etat.ouvert[cle];
+	const resumes = liste.map((element, i) => i === ouvert ? "" : resume(cle, i, echapper(titre(element)), echapper(detail(element)))).join("");
+	const edition = ouvert !== null && liste[ouvert]
+		? `<div class="editeur">${editeur(`contenu.${cle}.${ouvert}`, liste[ouvert])}
+<button type="button" class="bouton bouton-petit" style="align-self:flex-start" data-fermer>Fermer</button></div>`
+		: "";
+	return resumes + edition + boutonAjouter(`contenu.${cle}`, ajouter);
 }
 
-function panneauFormations() {
-	const liste = etat.cv.contenu.formations;
-	const ouvert = etat.ouvert.formations;
-	const resumes = liste.map((f, i) => i === ouvert ? "" : resume("formations", i,
-		echapper([f.diplome, f.ecole].filter(v => v?.trim()).join(" · ") || "Formation sans titre"),
-		echapper(periode(f.debut, f.fin)))).join("");
-	let editeur = "";
-	if (ouvert !== null && liste[ouvert]) {
-		const base = `contenu.formations.${ouvert}`;
-		editeur = `<div class="editeur"><h3>${liste[ouvert].diplome?.trim() ? "Modifier la formation" : "Nouvelle formation"}</h3>
-${champ("Diplôme", `${base}.diplome`, { obligatoire: true })}
-<div class="champs">${champ("École", `${base}.ecole`)}${champ("Début", `${base}.debut`)}${champ("Fin", `${base}.fin`)}</div>
-<button type="button" class="bouton bouton-petit" style="align-self:flex-start" data-fermer>Fermer</button></div>`;
-	}
-	return `<h2>Formation</h2><p class="aide">De la plus récente à la plus ancienne.</p>
-${resumes}${editeur}<button type="button" class="lien" data-ajouter="formations">+ Ajouter une formation</button>`;
+// ----- Panneaux du formulaire -----
+
+function panneauProfil() {
+	const c = etat.cv.contenu;
+	const langue = etat.cv.langue;
+	const liens = c.identite.liens.map((l, i) => `<div class="rangee rangee-lien">
+${champ("Libellé", `contenu.identite.liens.${i}.libelle`, { aide: "GitHub" })}
+${champ("URL", `contenu.identite.liens.${i}.url`, { aide: "github.com/votre-profil" })}
+${corbeille(`contenu.identite.liens.${i}`, "Retirer ce lien")}</div>`).join("");
+	const permis = PERMIS.map(p => `<button type="button" class="puce" data-permis="${p}" aria-pressed="${c.identite.permis.includes(p)}">${p}</button>`).join("");
+	const d = c.disponibilite;
+	return `<h2>Profil</h2><p class="aide">L'en-tête du CV et votre accroche. Les champs marqués d'un astérisque sont obligatoires.</p>
+<div class="champs">${champ("Titre du CV", "titre", { obligatoire: true, aide: "Ex. : Data engineer" })}
+<label class="champ"><span>Langue du CV</span><select data-chemin="langue">
+<option value="FR"${langue === "FR" ? " selected" : ""}>Français</option>
+<option value="EN"${langue === "EN" ? " selected" : ""}>Anglais</option></select></label></div>
+<div class="champs">${champ("Prénom", "contenu.identite.prenom", { obligatoire: true })}${champ("Nom", "contenu.identite.nom", { obligatoire: true })}</div>
+${champ("Poste visé", "contenu.identite.titre", { aide: "Ex. : Data engineer en alternance" })}
+<div class="champs">${champ("Ville", "contenu.identite.ville")}${champ("Téléphone", "contenu.identite.telephone", { type: "tel" })}</div>
+${champ("E-mail", "contenu.identite.email", { type: "email" })}
+<div class="champ"><span>Liens</span>${liens}${boutonAjouter("contenu.identite.liens", "Ajouter un lien")}</div>
+<div class="champ"><span>Permis de conduire</span><div class="puces" role="group" aria-label="Permis de conduire">${permis}</div></div>
+<div class="champ"><span>Disponibilité</span>${caseACocher("Disponible immédiatement", "contenu.disponibilite.immediate")}</div>
+${champ("Disponible à partir du", "contenu.disponibilite.date", { type: "date", desactive: d.immediate })}
+${champ("Résumé", "contenu.profil", { type: "textarea", aide: "Deux ou trois lignes : qui vous êtes et ce que vous cherchez." })}`;
 }
 
 function panneauCompetences() {
-	const lignes = etat.cv.contenu.competences.map((g, i) => `<div class="rangee">
+	const groupes = etat.cv.contenu.competences.map((g, i) => `<div class="rangee">
 ${champ("Thème", `contenu.competences.${i}.groupe`, { aide: "Langages" })}
 <label class="champ"><span>Compétences (séparées par des virgules)</span><input data-virgules="contenu.competences.${i}.elements" value="${echapper(g.elements.join(", "))}" placeholder="SQL, Python, Java"></label>
-<button type="button" class="retirer" data-supprimer="competences.${i}">Retirer</button></div>`).join("");
-	return `<h2>Compétences</h2><p class="aide">Regroupez-les par thème : langages, données, outils…</p>
-${lignes}<button type="button" class="lien" data-ajouter="competences">+ Ajouter un groupe</button>`;
+${corbeille(`contenu.competences.${i}`, "Retirer ce groupe")}</div>`).join("");
+	return `<h2>Compétences</h2><p class="aide">Placées juste après le résumé : c'est ce que le recruteur et les logiciels de tri lisent en premier.</p>
+<div class="champ"><span>Compétences techniques</span>${groupes}${boutonAjouter("contenu.competences", "Ajouter un groupe")}</div>
+${champLignes("Savoir-être (un par ligne)", "contenu.savoirEtre", "Rigueur\nTravail en équipe")}`;
+}
+
+function panneauExperiences() {
+	return `<h2>Expériences</h2><p class="aide">De la plus récente à la plus ancienne. Sans date de fin, la période se termine « aujourd'hui ».</p>
+${listeEditee("experiences", {
+		titre: e => [e.poste, e.entreprise].filter(v => v?.trim()).join(" · ") || "Expérience sans titre",
+		detail: e => {
+			const n = e.realisations.filter(rempli).length;
+			return [periode(e, "FR", true), rempli(e.description) ? "description" : "", n ? `${n} réalisation${n > 1 ? "s" : ""}` : ""].filter(Boolean).join(" · ");
+		},
+		ajouter: "Ajouter une expérience",
+		editeur: (base, e) => {
+			const realisations = e.realisations.map((r, j) =>
+				`<div class="ligne-liste"><input data-chemin="${base}.realisations.${j}" value="${echapper(r)}" aria-label="Réalisation ${j + 1}">
+${corbeille(`${base}.realisations.${j}`, "Retirer cette réalisation")}</div>`).join("");
+			const avecDescription = rempli(e.description) || etat.descriptions.has(base);
+			const description = avecDescription
+				? `<div class="champ"><span>Description</span><div class="ligne-liste ligne-texte">
+<textarea data-chemin="${base}.description" placeholder="Un paragraphe : le contexte, vos missions, l'équipe.">${echapper(e.description)}</textarea>
+${corbeille(`${base}.description`, "Retirer la description", "effacer")}</div></div>`
+				: "";
+			return `<h3>${e.poste?.trim() ? "Modifier l'expérience" : "Nouvelle expérience"}</h3>
+<div class="champs">${champ("Poste", `${base}.poste`, { obligatoire: true })}${champ("Entreprise", `${base}.entreprise`, { obligatoire: true })}</div>
+${champ("Lieu", `${base}.lieu`)}
+<div class="champs">${champDate("Début", `${base}.debut`)}${champDate("Fin", `${base}.fin`, { desactive: e.enCours })}</div>
+${caseACocher("Poste actuel (en cours)", `${base}.enCours`)}
+<p class="aide" style="margin:0">Décrivez le poste par un paragraphe, par des réalisations en liste à puces, ou les deux.</p>
+${description}
+${e.realisations.length ? `<div class="champ"><span>Réalisations</span>${realisations}</div>` : ""}
+<div class="ajouts">${avecDescription ? "" : `<button type="button" class="lien" data-ajouter-description="${base}">+ Ajouter une description</button>`}${boutonAjouter(`${base}.realisations`, "Ajouter une réalisation")}</div>
+<p class="conseil"><strong>Conseil</strong> : commencez par un verbe d'action et ajoutez un résultat chiffré, par exemple « Réduit de 40 % la durée du chargement quotidien ».</p>`;
+		},
+	})}`;
+}
+
+function panneauFormations() {
+	return `<h2>Formation</h2><p class="aide">Diplômes et établissements, du plus récent au plus ancien.</p>
+${listeEditee("formations", {
+		titre: f => [f.diplome, f.etablissement].filter(v => v?.trim()).join(" · ") || "Formation sans titre",
+		detail: f => periode(f, "FR"),
+		ajouter: "Ajouter une formation",
+		editeur: (base, f) => `<h3>${f.diplome?.trim() ? "Modifier la formation" : "Nouvelle formation"}</h3>
+<div class="champs">${champ("Diplôme", `${base}.diplome`, { obligatoire: true })}${champ("Établissement", `${base}.etablissement`)}</div>
+${champ("Mention", `${base}.mention`, { aide: "Bien, Très bien…" })}
+<div class="champs">${champDate("Début", `${base}.debut`)}${champDate("Fin", `${base}.fin`, { desactive: f.enCours })}</div>
+${caseACocher("Formation en cours", `${base}.enCours`)}
+${champ("Description", `${base}.description`, { type: "textarea", aide: "Matières principales, projets, spécialisation…" })}`,
+	})}`;
+}
+
+function panneauProjets() {
+	return `<h2>Projets</h2><p class="aide">Projets personnels, universitaires ou open source qui montrent ce que vous savez faire. Le lien n'est pas écrit en clair : dans le PDF, le titre du projet devient cliquable.</p>
+${listeEditee("projets", {
+		titre: p => p.titre?.trim() || "Projet sans titre",
+		detail: p => p.lien?.trim() ? "titre cliquable" : "",
+		ajouter: "Ajouter un projet",
+		editeur: (base, p) => `<h3>${p.titre?.trim() ? "Modifier le projet" : "Nouveau projet"}</h3>
+${champ("Projet", `${base}.titre`, { obligatoire: true })}
+${champ("Lien", `${base}.lien`, { aide: "github.com/…" })}
+${champ("Description", `${base}.description`, { type: "textarea", aide: "Objectif, technologies, résultat." })}`,
+	})}`;
 }
 
 function panneauLangues() {
-	const lignes = etat.cv.contenu.langues.map((l, i) => `<div class="rangee rangee-langue">
+	const langues = etat.cv.contenu.langues.map((l, i) => `<div class="rangee rangee-langue">
 ${champ("Langue", `contenu.langues.${i}.langue`)}
 <label class="champ"><span>Niveau</span><select data-chemin="contenu.langues.${i}.niveau">
 <option value="">Choisir</option>${NIVEAUX.map(n => `<option${n === l.niveau ? " selected" : ""}>${n}</option>`).join("")}</select></label>
-<button type="button" class="retirer" data-supprimer="langues.${i}">Retirer</button></div>`).join("");
+${corbeille(`contenu.langues.${i}`, "Retirer cette langue")}</div>`).join("");
 	return `<h2>Langues</h2><p class="aide">Niveau du cadre européen (A1 à C2) ou langue maternelle.</p>
-${lignes}<button type="button" class="lien" data-ajouter="langues">+ Ajouter une langue</button>`;
+${langues}${boutonAjouter("contenu.langues", "Ajouter une langue")}
+${champLignes("Centres d'intérêt (un par ligne)", "contenu.centresInteret", "Course à pied\nPhotographie")}`;
+}
+
+function panneauCertifications() {
+	return `<h2>Certifications</h2><p class="aide">Certifications et attestations de formation. Le lien de vérification n'est pas écrit en clair : dans le PDF, le nom de la certification devient cliquable.</p>
+${listeEditee("certifications", {
+		titre: x => [x.nom, x.organisme].filter(v => v?.trim()).join(" · ") || "Certification sans titre",
+		detail: x => [formaterDate(x.date, "FR"), rempli(x.lien) ? "titre cliquable" : ""].filter(Boolean).join(" · "),
+		ajouter: "Ajouter une certification",
+		editeur: (base, x) => `<h3>${x.nom?.trim() ? "Modifier la certification" : "Nouvelle certification"}</h3>
+<div class="champs">${champ("Certification", `${base}.nom`, { obligatoire: true, aide: "Ex. : DataCamp Data Engineer" })}${champ("Organisme", `${base}.organisme`)}</div>
+${champDate("Date d'obtention", `${base}.date`)}
+${champ("Lien", `${base}.lien`, { aide: "Lien de vérification" })}`,
+	})}`;
 }
 
 function panneauVerification() {
 	const c = etat.cv.contenu;
 	const { aCompleter } = evaluerCv(c);
+	const compte = (n, singulier) => `${n} ${singulier}${n > 1 ? "s" : ""}`;
 	const ligne = (nom, detail, etape) => `<li><div><strong>${nom}</strong><br><span>${detail}</span></div>
 <button type="button" class="bouton bouton-petit" data-aller="${etape}">Modifier</button></li>`;
+	const dispo = c.disponibilite.immediate ? "Immédiate" : c.disponibilite.date ? `À partir du ${c.disponibilite.date.split("-").reverse().join("/")}` : "Non précisée";
 	return `<h2>Vérification</h2><p class="aide">Relisez chaque section, choisissez le modèle et la police dans l'aperçu, puis enregistrez.</p>
 <ul class="recap">
-${ligne("Identité", echapper([c.identite.nom, c.identite.titre].filter(v => v?.trim()).join(" · ") || "À compléter"), 0)}
-${ligne("Expériences", `${c.experiences.length} expérience(s)`, 1)}
-${ligne("Formation", `${c.formations.length} formation(s)`, 2)}
-${ligne("Compétences", `${c.competences.reduce((n, g) => n + g.elements.length, 0)} compétence(s)`, 3)}
-${ligne("Langues", `${c.langues.length} langue(s)`, 4)}
+${ligne("Profil", echapper([nomComplet(c.identite), c.identite.titre].filter(v => v?.trim()).join(" · ") || "À compléter") + ` · disponibilité : ${dispo.toLowerCase()}`, 0)}
+${ligne("Compétences", `${compte(c.competences.reduce((n, g) => n + g.elements.length, 0), "compétence")}, ${c.savoirEtre.length} savoir-être`, 1)}
+${ligne("Expériences", compte(c.experiences.length, "expérience"), 2)}
+${ligne("Projets", compte(c.projets.length, "projet"), 3)}
+${ligne("Formation", compte(c.formations.length, "formation"), 4)}
+${ligne("Certifications", compte(c.certifications.length, "certification"), 5)}
+${ligne("Langues", `${compte(c.langues.length, "langue")}, ${compte(c.centresInteret.length, "centre")} d'intérêt`, 6)}
 </ul>
 ${aCompleter.length
 		? `<p class="a-completer-titre">À compléter (${aCompleter.length})</p><ul class="a-completer">${aCompleter.map(p => `<li><span>${echapper(p.texte)}</span><button type="button" class="bouton bouton-petit" data-aller="${p.etape}">Compléter</button></li>`).join("")}</ul>`
 		: `<p class="conseil"><strong>Votre CV est complet.</strong></p>`}
-<div class="ia"><div style="flex:1 1 240px;min-width:0"><strong>Améliorer avec l'IA</strong><p class="aide" style="margin:4px 0 0">L'IA propose de meilleures formulations pour le profil et les réalisations, sans inventer d'informations. Vous acceptez ou refusez chaque proposition.</p></div>
-<button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></div>
-<p class="aide" style="margin:0">Mise en page : <strong>${MODELES[etat.cv.modele].nom}</strong>, police <strong>${POLICES[etat.cv.police].nom}</strong>.</p>`;
+<div class="ia"><div style="flex:1 1 240px;min-width:0"><strong>Améliorer avec l'IA</strong><p class="aide" style="margin:4px 0 0">L'IA propose de meilleures formulations pour le résumé et les réalisations, sans inventer d'informations. Vous acceptez ou refusez chaque proposition.</p></div>
+<button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></div>`;
 }
 
-const PANNEAUX = [panneauIdentite, panneauExperiences, panneauFormations, panneauCompetences, panneauLangues, panneauVerification];
+// Même ordre que ETAPES et que les sections du CV.
+const PANNEAUX = [panneauProfil, panneauCompetences, panneauExperiences, panneauProjets, panneauFormations, panneauCertifications, panneauLangues, panneauVerification];
 
 // ----- Affichage -----
 
@@ -330,23 +483,25 @@ function afficherPanneau({ focus } = {}) {
 	if (focus) $(`[data-panneau] ${focus}`)?.focus();
 }
 
-// Barre de progression : vert = section remplie, bleu = étape en cours, gris = à compléter.
+// Barre de progression : vert = section remplie, bleu = étape en cours, gris = vide.
 function afficherEtapes() {
-	const { aCompleter } = evaluerCv(etat.cv.contenu);
-	const remplie = i => i === ETAPES.length - 1 ? aCompleter.length === 0 : !aCompleter.some(p => p.etape === i);
+	const derniere = ETAPES.length - 1;
 	$("[data-etapes]").innerHTML = ETAPES.map((nom, i) => {
-		const classe = remplie(i) && i !== etat.etape ? ' class="remplie"' : "";
+		const remplie = sectionRemplie(etat.cv.contenu, i);
+		const classe = remplie && i !== etat.etape ? ' class="remplie"' : "";
 		const courante = i === etat.etape ? ' aria-current="step"' : "";
-		return `<li${classe}${courante}><button type="button" data-aller="${i}" title="${remplie(i) ? "Section remplie" : "À compléter"}">${i + 1}. ${nom}</button></li>`;
+		// Point jaune = à compléter, point vert = rempli ; pas de point sur « Vérification ».
+		const point = i < derniere ? `<span class="point" aria-hidden="true"></span>` : "";
+		const etatLu = i < derniere ? ` (${remplie ? "remplie" : "à compléter"})` : "";
+		return `<li${classe}${courante}><button type="button" data-aller="${i}"${remplie ? ' class="remplie-point"' : ""} aria-label="${i + 1}. ${nom}${etatLu}">${point}${i + 1}. ${nom}</button></li>`;
 	}).join("");
 }
 
 function afficherOutils() {
-	$("[data-modeles]").innerHTML = Object.entries(MODELES).map(([cle, m]) =>
-		`<button type="button" data-modele="${cle}" aria-pressed="${cle === etat.cv.modele}">${m.nom}</button>`).join("");
-	const parDefaut = MODELES[etat.cv.modele].police;
-	$("[data-police]").innerHTML = Object.entries(POLICES).map(([cle, p]) =>
-		`<option value="${cle}"${cle === etat.cv.police ? " selected" : ""}>${p.nom}${cle === parDefaut ? " (par défaut)" : ""}</option>`).join("");
+	const options = (liste, choisi) => Object.entries(liste).map(([cle, x]) =>
+		`<option value="${cle}"${cle === choisi ? " selected" : ""}>${x.nom}</option>`).join("");
+	$("[data-modele]").innerHTML = options(MODELES, etat.cv.modele);
+	$("[data-police]").innerHTML = options(POLICES, etat.cv.police);
 	$("[data-description-modele]").textContent = MODELES[etat.cv.modele].description;
 }
 
@@ -376,6 +531,7 @@ function afficherEnTete() {
 function verifierObligatoires() {
 	etat.erreurs = {};
 	if (!etat.cv.titre?.trim()) etat.erreurs.titre = "Donnez un titre à ce CV, par exemple « Data engineer ».";
+	if (!etat.cv.contenu.identite.prenom?.trim()) etat.erreurs["contenu.identite.prenom"] = "Le prénom est obligatoire.";
 	if (!etat.cv.contenu.identite.nom?.trim()) etat.erreurs["contenu.identite.nom"] = "Le nom est obligatoire.";
 	return Object.keys(etat.erreurs).length === 0;
 }
@@ -384,7 +540,7 @@ async function enregistrer({ silencieux = false } = {}) {
 	if (!verifierObligatoires()) {
 		etat.etape = 0;
 		afficherPanneau({ focus: "[aria-invalid=true]" });
-		notifier("Le titre du CV et le nom sont obligatoires.");
+		notifier("Le titre du CV, le prénom et le nom sont obligatoires.");
 		return false;
 	}
 	try {
@@ -394,6 +550,7 @@ async function enregistrer({ silencieux = false } = {}) {
 			etat.cv = await creerCv(etat.cv);
 			history.replaceState(null, "", `?id=${etat.cv.id}`);
 		}
+		etat.cv.contenu = normaliserContenu(etat.cv.contenu);
 		afficherEnTete();
 		const heure = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 		$("[data-statut]").textContent = `Enregistré à ${heure}`;
@@ -407,79 +564,97 @@ async function enregistrer({ silencieux = false } = {}) {
 
 // ----- Événements -----
 
+function apresModification() {
+	afficherApercu();
+	afficherEtapes();
+}
+
 document.addEventListener("input", evenement => {
 	const cible = evenement.target;
-	if (cible.dataset.chemin) {
-		ecrire(cible.dataset.chemin, cible.value);
-		if (etat.erreurs[cible.dataset.chemin] && cible.value.trim()) {
-			delete etat.erreurs[cible.dataset.chemin];
+	const d = cible.dataset;
+	if (d.chemin && cible.type !== "checkbox") {
+		ecrire(d.chemin, cible.value);
+		if (etat.erreurs[d.chemin] && cible.value.trim()) {
+			delete etat.erreurs[d.chemin];
 			cible.removeAttribute("aria-invalid");
 			cible.parentElement.querySelector(".erreur")?.remove();
 		}
-	} else if (cible.dataset.virgules) {
-		ecrire(cible.dataset.virgules, cible.value.split(",").map(t => t.trim()).filter(Boolean));
+	} else if (d.virgules) {
+		ecrire(d.virgules, cible.value.split(",").map(t => t.trim()).filter(Boolean));
+	} else if (d.lignes) {
+		ecrire(d.lignes, cible.value.split("\n").map(t => t.trim()).filter(Boolean));
+	} else if (d.dateAnnee || d.dateMois) {
+		const chemin = d.dateAnnee || d.dateMois;
+		const annee = document.querySelector(`[data-date-annee="${chemin}"]`).value.trim();
+		const mois = document.querySelector(`[data-date-mois="${chemin}"]`).value;
+		ecrire(chemin, /^\d{4}$/.test(annee) ? (mois ? `${annee}-${mois}` : annee) : "");
 	} else {
 		return;
 	}
-	afficherApercu();
-	afficherEtapes();
+	apresModification();
 });
 
-$("[data-panneau]").addEventListener("change", evenement => {
-	if (evenement.target.tagName === "SELECT" && evenement.target.dataset.chemin) {
-		ecrire(evenement.target.dataset.chemin, evenement.target.value);
-		afficherApercu();
+document.addEventListener("change", evenement => {
+	const cible = evenement.target;
+	if (cible.dataset.coche) {
+		ecrire(cible.dataset.coche, cible.checked);
+		afficherPanneau();
+		apresModification();
+	} else if (cible.tagName === "SELECT" && cible.dataset.chemin) {
+		ecrire(cible.dataset.chemin, cible.value);
+		apresModification();
 	}
 });
 
 document.addEventListener("click", async evenement => {
 	const bouton = evenement.target.closest("button");
 	if (!bouton) return;
-	const c = etat.cv.contenu;
 	const d = bouton.dataset;
 
 	if (d.aller !== undefined) {
 		etat.etape = Number(d.aller);
+		fermerEditeurs();
 		afficherPanneau();
 	} else if (d.ajouter) {
-		const vides = {
-			experiences: { poste: "", entreprise: "", lieu: "", debut: "", fin: "", realisations: [""] },
-			formations: { diplome: "", ecole: "", debut: "", fin: "" },
-			competences: { groupe: "", elements: [] },
-			langues: { langue: "", niveau: "" },
-		};
-		c[d.ajouter].push(structuredClone(vides[d.ajouter]));
-		if (d.ajouter in etat.ouvert) etat.ouvert[d.ajouter] = c[d.ajouter].length - 1;
-		afficherPanneau({ focus: ".editeur input, .rangee:last-of-type input" });
-		afficherApercu();
+		const liste = lire(d.ajouter);
+		const cle = d.ajouter.split(".").pop();
+		liste.push(cle === "realisations" ? "" : structuredClone(VIDES[cle]));
+		if (cle in etat.ouvert) etat.ouvert[cle] = liste.length - 1;
+		afficherPanneau({ focus: cle === "realisations" ? ".ligne-liste:last-of-type input" : ".editeur input, .rangee:last-of-type input" });
+		apresModification();
 	} else if (d.ouvrir) {
 		const [liste, index] = d.ouvrir.split(".");
 		etat.ouvert[liste] = Number(index);
 		afficherPanneau({ focus: ".editeur input" });
 	} else if (d.fermer !== undefined) {
-		etat.ouvert = { experiences: null, formations: null };
+		fermerEditeurs();
 		afficherPanneau();
 	} else if (d.supprimer) {
-		const [liste, index] = d.supprimer.split(".");
-		c[liste].splice(Number(index), 1);
+		const cles = d.supprimer.split(".");
+		const index = Number(cles.pop());
+		lire(cles.join(".")).splice(index, 1);
+		const liste = cles[cles.length - 1];
 		if (liste in etat.ouvert) etat.ouvert[liste] = null;
+		etat.descriptions.clear();
 		afficherPanneau();
-		afficherApercu();
-	} else if (d.ajouterRealisation !== undefined) {
-		c.experiences[etat.ouvert.experiences].realisations.push("");
-		afficherPanneau({ focus: ".ligne-liste:last-of-type input" });
-	} else if (d.retirerRealisation !== undefined) {
-		c.experiences[etat.ouvert.experiences].realisations.splice(Number(d.retirerRealisation), 1);
+		apresModification();
+	} else if (d.ajouterDescription) {
+		etat.descriptions.add(d.ajouterDescription);
+		afficherPanneau({ focus: ".ligne-texte textarea" });
+	} else if (d.effacer) {
+		ecrire(d.effacer, "");
+		etat.descriptions.delete(d.effacer.replace(/\.description$/, ""));
 		afficherPanneau();
-		afficherApercu();
-	} else if (d.modele) {
-		etat.cv.modele = d.modele;
-		etat.cv.police = MODELES[d.modele].police;
-		afficherOutils();
-		afficherApercu();
-		if (etat.etape === 5) afficherPanneau();
+		apresModification();
+	} else if (d.permis) {
+		const permis = etat.cv.contenu.identite.permis;
+		const position = permis.indexOf(d.permis);
+		if (position >= 0) permis.splice(position, 1);
+		else permis.splice(PERMIS.filter(p => permis.includes(p) || p === d.permis).indexOf(d.permis), 0, d.permis);
+		bouton.setAttribute("aria-pressed", String(position < 0));
+		apresModification();
 	} else if (d.ameliorerIa !== undefined) {
-		notifier("L'amélioration par l'IA sera branchée sur le module IA commun à l'étape suivante.");
+		notifier("L'amélioration par l'IA sera branchée sur le module IA commun dans une prochaine étape.");
 	} else if (d.pdf !== undefined) {
 		bouton.disabled = true;
 		try {
@@ -494,14 +669,24 @@ document.addEventListener("click", async evenement => {
 	}
 });
 
+brancherImport({ champ: $("[data-fichier]"), depot: $("[data-depot]"), notifier });
+
+// Changer de modèle remet sa police par défaut ; la police reste modifiable ensuite.
+$("[data-modele]").addEventListener("change", evenement => {
+	etat.cv.modele = evenement.target.value;
+	etat.cv.police = MODELES[etat.cv.modele].police;
+	afficherOutils();
+	afficherApercu();
+});
+
 $("[data-police]").addEventListener("change", evenement => {
 	etat.cv.police = evenement.target.value;
 	afficherApercu();
-	if (etat.etape === 5) afficherPanneau();
 });
 
 $("[data-precedent]").addEventListener("click", () => {
 	etat.etape = Math.max(0, etat.etape - 1);
+	fermerEditeurs();
 	afficherPanneau();
 });
 
@@ -516,7 +701,7 @@ $("[data-suivant]").addEventListener("click", async () => {
 	if (!ok) return;
 	if (etat.etape < ETAPES.length - 1) {
 		etat.etape += 1;
-		etat.ouvert = { experiences: null, formations: null };
+		fermerEditeurs();
 		afficherPanneau();
 		window.scrollTo({ top: 0, behavior: "smooth" });
 	} else {
@@ -532,7 +717,10 @@ document.fonts?.ready.then(ajusterEchelle);
 
 const parametres = new URLSearchParams(window.location.search);
 const id = parametres.get("id");
-if (parametres.get("etape") === "verification") etat.etape = ETAPES.length - 1;
+// « ?etape=verification » ou « ?etape=3 » (lien « À compléter » de Mes CV) ouvre directement cette étape.
+const etapeDemandee = parametres.get("etape");
+if (etapeDemandee === "verification") etat.etape = ETAPES.length - 1;
+else if (/^\d+$/.test(etapeDemandee ?? "") && Number(etapeDemandee) < ETAPES.length) etat.etape = Number(etapeDemandee);
 if (id) {
 	try {
 		etat.cv = await lireCv(id);
@@ -542,10 +730,12 @@ if (id) {
 		etat.etape = 0;
 	}
 }
+etat.cv.contenu = normaliserContenu(etat.cv.contenu);
 afficherEnTete();
 afficherOutils();
 afficherPanneau();
 afficherApercu();
+
 </script>
 </body>
 </html>

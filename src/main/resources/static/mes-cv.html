@@ -30,11 +30,17 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 .carte-tete{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .carte-tete h2{margin:0;font-size:21px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
 .carte-tete .date{margin:4px 0 0;font-size:13.5px;color:#4a5f86}
-.badges{display:flex;flex-wrap:wrap;gap:8px}
-.statut-complet{background:#d9f2e8;color:#14573f}
-.statut-incomplet{background:#fdebd3;color:#8a4b08;text-decoration:underline;text-underline-offset:3px}
-.badge{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:13px;font-weight:600}
-.miniature{display:block;position:relative;height:300px;overflow:hidden;border-radius:14px;border:1px solid #dbe6f7;background:#eef3fb}
+.actions-page{display:flex;flex-wrap:wrap;gap:10px}
+.actions-page .bouton{min-height:50px}
+.progression{display:flex;flex-direction:column;gap:8px}
+.progression-tete{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-size:14.5px}
+.progression-tete span{color:#4a5f86}
+.barre{height:8px;border-radius:999px;background:#e3edfc;overflow:hidden}
+.barre span{display:block;height:100%;border-radius:inherit;background:#2a64cc}
+.etat-complet{display:flex;align-items:center;gap:8px;margin:0;font-size:14.5px;font-weight:600;color:#14573f}
+.etat-incomplet{margin:0;font-size:14px;line-height:1.5;color:#4a5f86}
+.etat-incomplet a{color:#1d4fa8;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.miniature{display:block;position:relative;height:300px;overflow:hidden;border-radius:14px;border:1px solid #dbe6f7;background:#fff}
 .miniature:hover{opacity:1;border-color:#9dbbea}
 .miniature-page{position:absolute;top:0;left:0;width:794px;transform-origin:top left;pointer-events:none}
 .miniature:after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff)}
@@ -48,9 +54,21 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 .menu-liste button:hover{background:#f1f6fd}
 .menu-liste .danger{color:#a02738}
 .carte-nouveau{align-items:center;justify-content:center;text-align:center;box-sizing:border-box;border:2px dashed #9dbbea;background:rgba(255,255,255,.55);box-shadow:none}
-.carte-nouveau p{margin:0;max-width:250px;font-size:14.5px;color:#4a5f86}
-.plus{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#e3edfc}
-.vide{padding:40px;border-radius:24px;background:#fff;text-align:center;color:#4a5f86}
+.carte-nouveau p{margin:0;max-width:260px;font-size:14.5px;color:#4a5f86}
+.carte-nouveau .actions-page{justify-content:center}
+.carte-nouveau .actions-page .bouton{min-height:44px}
+.bouton-bleu{border-color:#2a64cc;background:#2a64cc;color:#fff}
+.accueil{display:flex;flex-direction:column;gap:24px;padding:36px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
+.accueil h2{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:34px;line-height:1.1}
+.accueil>div>p{margin:8px 0 0;font-size:16px;color:#4a5f86}
+.choix{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.choix-carte{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:24px;border-radius:18px;border:1.5px solid #d3e1f6;background:#f8fbff}
+.choix-carte h3{margin:0;font-size:19px;font-weight:700}
+.choix-carte p{margin:0 0 6px;font-size:14.5px;color:#4a5f86}
+.choix-carte .bouton{margin-top:auto}
+.icone{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:#e3edfc;color:#1d4fa8}
+.depot{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(15,42,92,.55);color:#fff;font-size:22px;font-weight:700;pointer-events:none}
+.depot span{padding:28px 40px;border:3px dashed #fff;border-radius:24px}
 .notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
 @media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:44px}}
 </style>
@@ -100,20 +118,23 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 <h1>Mes CV</h1>
 <p>Créez plusieurs versions de votre CV, choisissez leur mise en page et téléchargez-les en PDF.</p>
 </div>
-<a class="bouton bouton-principal" href="creer-cv.html">+ Créer un CV</a>
+<div class="actions-page" data-actions-page hidden><button type="button" class="bouton" data-importer>Importer un CV</button><a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
+<input type="file" accept=".pdf,.docx" data-fichier hidden>
 </div>
 
-<div class="filtres" role="group" aria-label="Filtrer par langue" data-filtres></div>
+<div class="filtres" role="group" aria-label="Filtrer par langue" data-filtres hidden></div>
 
 <div class="grille" data-grille></div>
 
 </main>
 <div class="notification" role="status" data-notification hidden></div>
+<div class="depot" data-depot hidden><span>Déposez votre CV (PDF ou DOCX)</span></div>
 
 </div>
 <script type="module">
 import { listerCv, supprimerCv, dupliquerCv, telechargerPdf } from "./cv-api.js";
-import { MODELES, POLICES, afficherCv, evaluerCv, echapper } from "./cv-rendu.js";
+import { MODELES, POLICES, ETAPES, afficherCv, sectionRemplie, normaliserContenu, echapper } from "./cv-rendu.js";
+import { brancherImport } from "./cv-import.js";
 
 const grille = document.querySelector("[data-grille]");
 const zoneFiltres = document.querySelector("[data-filtres]");
@@ -121,6 +142,11 @@ const notification = document.querySelector("[data-notification]");
 let cvs = [];
 let filtre = "TOUS";
 let minuteur;
+
+const SECTIONS = ETAPES.slice(0, -1); // toutes les étapes sauf « Vérification »
+const ICONE_OK = `<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>`;
+const ICONE_CREER = `<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></svg>`;
+const ICONE_IMPORTER = `<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>`;
 
 const formatDate = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 
@@ -131,18 +157,30 @@ function notifier(message) {
 	minuteur = setTimeout(() => { notification.hidden = true; }, 4500);
 }
 
+// Sections remplies (même règle que la barre d'étapes de « Créer un CV ») ; chaque section manquante ouvre son étape.
+function progression(cv, lienModifier) {
+	const contenu = normaliserContenu(cv.contenu);
+	const manquantes = SECTIONS.map((nom, etape) => ({ nom, etape })).filter(s => !sectionRemplie(contenu, s.etape));
+	const remplies = SECTIONS.length - manquantes.length;
+	const experiences = contenu.experiences.filter(e => e.poste?.trim()).length;
+	const competences = contenu.competences.reduce((n, g) => n + g.elements.length, 0);
+	const etat = manquantes.length
+		? `<p class="etat-incomplet">À compléter : ${manquantes.map(s => `<a href="${lienModifier}&etape=${s.etape}">${s.nom}</a>`).join(", ")}</p>`
+		: `<p class="etat-complet">${ICONE_OK}CV complet</p>`;
+	return `<div class="progression">
+<div class="progression-tete"><strong>${remplies}/${SECTIONS.length} sections remplies</strong><span>${experiences} exp. · ${competences} compétence${competences > 1 ? "s" : ""}</span></div>
+<div class="barre" role="progressbar" aria-label="Sections remplies" aria-valuemin="0" aria-valuemax="${SECTIONS.length}" aria-valuenow="${remplies}"><span style="width:${Math.round(remplies / SECTIONS.length * 100)}%"></span></div>
+${etat}</div>`;
+}
+
 function carte(cv) {
-	const { aCompleter } = evaluerCv(cv.contenu);
 	const modele = MODELES[cv.modele]?.nom ?? cv.modele;
 	const police = POLICES[cv.police]?.nom ?? cv.police;
 	const lienModifier = `creer-cv.html?id=${cv.id}`;
 	const titre = echapper(cv.titre);
-	const statut = aCompleter.length
-		? `<a class="badge statut-incomplet" href="${lienModifier}&etape=verification" title="Voir ce qu'il reste à compléter">À compléter (${aCompleter.length})</a>`
-		: `<span class="badge statut-complet">Complet</span>`;
 	return `<article class="carte" data-id="${cv.id}">
 <div class="carte-tete">
-<div style="min-width:0"><h2>${titre}</h2><p class="date">Modifié le ${formatDate.format(new Date(cv.dateModification))}</p><p class="date" style="margin-top:2px">${echapper(modele)} · ${echapper(police)}</p></div>
+<div style="min-width:0"><h2>${titre}</h2><p class="date">Modifié le ${formatDate.format(new Date(cv.dateModification))}</p><p class="date" style="margin-top:2px">${echapper(modele)} · ${echapper(police)} · ${cv.langue === "EN" ? "Anglais" : "Français"}</p></div>
 <div class="menu">
 <button type="button" class="bouton-menu" aria-haspopup="true" aria-expanded="false" aria-label="Autres actions pour ${titre}" data-action="menu">&#8943;</button>
 <div class="menu-liste" hidden>
@@ -151,22 +189,37 @@ function carte(cv) {
 </div>
 </div>
 </div>
-<div class="badges">${statut}<span class="badge">${cv.langue === "EN" ? "Anglais" : "Français"}</span></div>
 <a class="miniature" href="${lienModifier}" aria-label="Ouvrir le CV ${titre}"><div class="miniature-page" aria-hidden="true"><article></article></div></a>
+${progression(cv, lienModifier)}
 <div class="carte-actions">
 <a class="bouton" href="${lienModifier}">Modifier</a>
-<button type="button" class="bouton" data-action="pdf">Télécharger en PDF</button>
+<button type="button" class="bouton" data-action="pdf">Télécharger le PDF</button>
 </div>
 </article>`;
 }
 
+// Dernière carte de la grille : ajouter une autre version du CV.
 function carteNouveau() {
 	return `<div class="carte carte-nouveau">
-<span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1d4fa8" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
-<h2 style="margin:0;font-size:19px;font-weight:700">Créer un nouveau CV</h2>
-<p>Un formulaire guidé en six étapes, avec l'aperçu en direct et le choix du modèle et de la police.</p>
-<a class="bouton" style="background:#2a64cc;border-color:#2a64cc;color:#fff" href="creer-cv.html">Commencer</a>
+<span class="icone">${ICONE_CREER}</span>
+<h2 style="margin:0;font-size:19px;font-weight:700">Ajouter un CV</h2>
+<p>Une autre version, par exemple en anglais ou pour un autre poste.</p>
+<div class="actions-page"><a class="bouton bouton-bleu" href="creer-cv.html">Créer</a><button type="button" class="bouton" data-importer>Importer</button></div>
 </div>`;
+}
+
+// Écran d'accueil quand il n'y a encore aucun CV : les deux façons de commencer.
+function accueil() {
+	return `<section class="accueil" style="grid-column:1/-1">
+<div><h2>Vous n'avez pas encore de CV</h2><p>Partez de zéro avec le formulaire guidé, ou importez le CV que vous avez déjà.</p></div>
+<div class="choix">
+<div class="choix-carte"><span class="icone">${ICONE_CREER}</span><h3>Créer un CV</h3>
+<p>Un formulaire guidé en ${SECTIONS.length + 1} étapes, avec l'aperçu en direct, trois modèles et cinq polices.</p>
+<a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
+<div class="choix-carte"><span class="icone">${ICONE_IMPORTER}</span><h3>Importer un CV</h3>
+<p>Un fichier PDF ou DOCX de 5 Mo maximum. Vous pouvez aussi le glisser sur la page.</p>
+<button type="button" class="bouton" data-importer>Importer un CV</button></div>
+</div></section>`;
 }
 
 function ajusterMiniatures() {
@@ -182,8 +235,11 @@ function afficher() {
 		`<button type="button" data-filtre="${valeur}" aria-pressed="${valeur === filtre}">${libelle} (${compte(valeur)})</button>`).join("");
 
 	const visibles = cvs.filter(cv => filtre === "TOUS" || cv.langue === filtre);
+	// Sans CV, l'écran d'accueil remplace les boutons du haut et les filtres.
+	zoneFiltres.hidden = !cvs.length;
+	document.querySelector("[data-actions-page]").hidden = !cvs.length;
 	if (!cvs.length) {
-		grille.innerHTML = `<div class="vide" style="grid-column:1/-1">Vous n'avez pas encore de CV.</div>` + carteNouveau();
+		grille.innerHTML = accueil();
 		return;
 	}
 	grille.innerHTML = visibles.map(carte).join("") + carteNouveau();
@@ -262,6 +318,8 @@ document.addEventListener("click", evenement => {
 if ("ResizeObserver" in window) new ResizeObserver(ajusterMiniatures).observe(grille);
 else window.addEventListener("resize", ajusterMiniatures);
 document.fonts?.ready.then(ajusterMiniatures);
+
+brancherImport({ champ: document.querySelector("[data-fichier]"), depot: document.querySelector("[data-depot]"), notifier });
 
 charger();
 </script>

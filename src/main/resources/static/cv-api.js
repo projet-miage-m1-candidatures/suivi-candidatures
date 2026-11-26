@@ -16,11 +16,17 @@ export function nouveauCv() {
 		modele: "CLASSIQUE",
 		police: "SOURCE_SERIF_4",
 		contenu: {
-			identite: { nom: "", titre: "", ville: "", email: "", telephone: "", lien: "", profil: "" },
+			identite: { prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", permis: [], liens: [] },
+			profil: "",
+			competences: [],
+			savoirEtre: [],
+			centresInteret: [],
 			experiences: [],
 			formations: [],
-			competences: [],
+			projets: [],
 			langues: [],
+			certifications: [],
+			disponibilite: { immediate: false, date: "" },
 		},
 	};
 }
