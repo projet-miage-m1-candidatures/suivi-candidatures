@@ -99,10 +99,12 @@ export function periode({ debut, fin, enCours }, langue = "FR", ouverte = false)
 }
 
 // Lien cliquable : seules les adresses web sont acceptées ; « github.com/x » devient « https://github.com/x ».
+// Un autre schéma (javascript:, mailto:…) ne donne pas de lien, comme dans le PDF (CvHtml.adresseWeb).
 export function adresseWeb(valeur) {
 	const texte = String(valeur ?? "").trim();
 	if (!texte) return "";
-	return /^https?:\/\//i.test(texte) ? texte : `https://${texte}`;
+	if (/^https?:\/\//i.test(texte)) return texte;
+	return /^[a-z][a-z0-9+.-]*:/i.test(texte) ? "" : `https://${texte}`;
 }
 
 export function nomComplet(identite) {
@@ -125,7 +127,7 @@ function rendreContenu(cv) {
 
 	const contact = [
 		...[id.ville, id.email, id.telephone].filter(rempli).map(echapper),
-		...id.liens.filter(l => rempli(l.url)).map(l => lien(echapper(l.url.trim()), l.url)),
+		...id.liens.filter(l => adresseWeb(l.url)).map(l => lien(echapper(l.url.trim()), l.url)),
 	].join(" · ");
 	const complements = [
 		id.permis.length ? `${t.permis} ${id.permis.map(echapper).join(", ")}` : "",
@@ -198,7 +200,7 @@ export function evaluerCv(contenuBrut) {
 
 	ajouter(15, rempli(id.prenom) && rempli(id.nom) && rempli(id.titre) && rempli(id.email), "Complétez l'identité : prénom, nom, poste visé et e-mail.", 0);
 	ajouter(10, rempli(c.profil), "Ajoutez un résumé de deux ou trois lignes en haut du CV.", 0);
-	ajouter(10, nbCompetences >= 5, "Listez au moins cinq compétences techniques, regroupées par thème.", 1);
+	ajouter(10, nbCompetences >= 3, "Listez au moins trois compétences techniques.", 1);
 	ajouter(15, experiences.length > 0, "Ajoutez au moins une expérience (stage, emploi, alternance).", 2);
 	// Une expérience est détaillée avec une description ou au moins deux réalisations.
 	const peuDetaillee = experiences.find(e => !rempli(e.description) && e.realisations.filter(rempli).length < 2);

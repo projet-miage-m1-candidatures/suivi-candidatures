@@ -6,16 +6,36 @@
 </head>
 <body>
 <article th:class="${classeCv}" th:style="${styleCv}" th:lang="${langue}">
-	<header class="cv-tete"><h1 class="cv-nom"><th:block th:if="${nom != null}" th:text="${nom}"></th:block><span class="cv-vide" th:if="${nom == null}" th:text="${anglais ? 'Your name' : 'Votre nom'}"></span></h1><p class="cv-titre" th:if="${posteVise != null}" th:text="${posteVise}"></p><p class="cv-contact" th:if="${!contact.isEmpty()}" th:text="${contact}"></p></header>
+	<header class="cv-tete"><h1 class="cv-nom"><th:block th:if="${nom != null}" th:text="${nom}"></th:block><span class="cv-vide" th:if="${nom == null}" th:text="${anglais ? 'Your name' : 'Votre nom'}"></span></h1><p class="cv-titre" th:if="${posteVise != null}" th:text="${posteVise}"></p>
+		<p class="cv-contact" th:if="${!contact.isEmpty()}"><th:block th:each="item, position : ${contact}"><th:block th:if="${!position.first}"> · </th:block><a th:if="${item.url != null}" th:href="${item.url}" target="_blank" rel="noopener" th:text="${item.texte}"></a><th:block th:if="${item.url == null}" th:text="${item.texte}"></th:block></th:block></p>
+		<p class="cv-contact" th:if="${!complements.isEmpty()}" th:text="${complements}"></p>
+	</header>
 	<section class="cv-section" th:if="${profil != null}">
 		<h2 th:text="${anglais ? 'Profile' : 'Profil'}"></h2><div class="cv-corps"><p th:text="${profil}"></p></div>
+	</section>
+	<section class="cv-section" th:if="${!competences.isEmpty() || !savoirEtre.isEmpty()}">
+		<h2 th:text="${anglais ? 'Skills' : 'Compétences'}"></h2>
+		<div class="cv-corps">
+			<p th:each="groupe : ${competences}"><strong th:if="${groupe.nom != null}" th:text="|${groupe.nom} :|"></strong><th:block th:text="${(groupe.nom == null ? '' : ' ') + groupe.elements}"></th:block></p>
+			<p th:if="${!savoirEtre.isEmpty()}"><strong th:text="${anglais ? 'Soft skills :' : 'Savoir-être :'}"></strong><th:block th:text="| ${savoirEtre}|"></th:block></p>
+		</div>
 	</section>
 	<section class="cv-section" th:if="${!experiences.isEmpty()}">
 		<h2 th:text="${anglais ? 'Experience' : 'Expériences'}"></h2>
 		<div class="cv-corps">
 			<div class="cv-item" th:each="experience : ${experiences}">
 				<p><span class="cv-date" th:if="${!experience.periode.isEmpty()}" th:text="${experience.periode}"></span><strong th:text="${experience.poste}"></strong><th:block th:if="${experience.entreprise != null}" th:text="| · ${experience.entreprise}|"></th:block><span class="cv-sous" th:if="${experience.lieu != null}" th:text="| · ${experience.lieu}|"></span></p>
+				<p class="cv-description" th:if="${experience.description != null}" th:text="${experience.description}"></p>
 				<ul th:if="${!experience.realisations.isEmpty()}"><li th:each="realisation : ${experience.realisations}" th:text="${realisation}"></li></ul>
+			</div>
+		</div>
+	</section>
+	<section class="cv-section" th:if="${!projets.isEmpty()}">
+		<h2 th:text="${anglais ? 'Projects' : 'Projets'}"></h2>
+		<div class="cv-corps">
+			<div class="cv-item" th:each="projet : ${projets}">
+				<p><strong><a th:if="${projet.url != null}" th:href="${projet.url}" target="_blank" rel="noopener" th:text="${projet.titre}"></a><th:block th:if="${projet.url == null}" th:text="${projet.titre}"></th:block></strong></p>
+				<p class="cv-description" th:if="${projet.description != null}" th:text="${projet.description}"></p>
 			</div>
 		</div>
 	</section>
@@ -23,18 +43,26 @@
 		<h2 th:text="${anglais ? 'Education' : 'Formation'}"></h2>
 		<div class="cv-corps">
 			<div class="cv-item" th:each="formation : ${formations}">
-				<p><span class="cv-date" th:if="${!formation.periode.isEmpty()}" th:text="${formation.periode}"></span><strong th:text="${formation.diplome}"></strong><th:block th:if="${formation.ecole != null}" th:text="| · ${formation.ecole}|"></th:block></p>
+				<p><span class="cv-date" th:if="${!formation.periode.isEmpty()}" th:text="${formation.periode}"></span><strong th:text="${formation.diplome}"></strong><th:block th:if="${formation.etablissement != null}" th:text="| · ${formation.etablissement}|"></th:block></p>
+				<p class="cv-sous" th:if="${formation.mention != null}"
+				   th:with="libelle=${anglais ? 'Honours' : 'Mention'}" th:text="|${libelle} ${formation.mention}|"></p>
+				<p class="cv-description" th:if="${formation.description != null}" th:text="${formation.description}"></p>
 			</div>
 		</div>
 	</section>
-	<section class="cv-section" th:if="${!competences.isEmpty()}">
-		<h2 th:text="${anglais ? 'Skills' : 'Compétences'}"></h2>
+	<section class="cv-section" th:if="${!certifications.isEmpty()}">
+		<h2>Certifications</h2>
 		<div class="cv-corps">
-			<p th:each="groupe : ${competences}"><strong th:if="${groupe.nom != null}" th:text="|${groupe.nom} :|"></strong><th:block th:text="${(groupe.nom == null ? '' : ' ') + groupe.elements}"></th:block></p>
+			<div class="cv-item" th:each="certification : ${certifications}">
+				<p><span class="cv-date" th:if="${!certification.date.isEmpty()}" th:text="${certification.date}"></span><strong><a th:if="${certification.url != null}" th:href="${certification.url}" target="_blank" rel="noopener" th:text="${certification.nom}"></a><th:block th:if="${certification.url == null}" th:text="${certification.nom}"></th:block></strong><th:block th:if="${certification.organisme != null}" th:text="| · ${certification.organisme}|"></th:block></p>
+			</div>
 		</div>
 	</section>
 	<section class="cv-section" th:if="${!langues.isEmpty()}">
 		<h2 th:text="${anglais ? 'Languages' : 'Langues'}"></h2><div class="cv-corps"><p th:text="${langues}"></p></div>
+	</section>
+	<section class="cv-section" th:if="${!interets.isEmpty()}">
+		<h2 th:if="${anglais}">Interests</h2><h2 th:unless="${anglais}">Centres d'intérêt</h2><div class="cv-corps"><p th:text="${interets}"></p></div>
 	</section>
 </article>
 </body>

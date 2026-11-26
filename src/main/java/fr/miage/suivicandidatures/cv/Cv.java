@@ -3,6 +3,7 @@ package fr.miage.suivicandidatures.cv;
 import java.time.Instant;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -42,6 +43,7 @@ public class Cv {
 	private PoliceCv police;
 
 	@JdbcTypeCode(SqlTypes.JSON)
+	@Convert(converter = ContenuCvJson.class)
 	@Column(nullable = false)
 	private ContenuCv contenu;
 

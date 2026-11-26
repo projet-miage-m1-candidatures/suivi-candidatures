@@ -24,6 +24,8 @@ import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +39,8 @@ class CvControllerTests {
 	private static final String API_CV = "/api/v1/cv";
 	private static final String API_AUTH = "/api/v1/auth";
 	private static final ContenuCv.Identite IDENTITE = new ContenuCv.Identite(
-			"Alex Moreau", "Data engineer", "Paris", "alex@example.test", "06 00 00 00 00",
-			"github.com/alex", "J'écris des pipelines de données.");
+			"Alex", "Moreau", "Data engineer", "Paris", "alex@example.test", "06 00 00 00 00",
+			List.of("B", "BE"), List.of(new ContenuCv.Lien("GitHub", "github.com/alex")));
 
 	private final List<Navigateur> navigateurs = new ArrayList<>();
 	private final List<String> emails = new ArrayList<>();
@@ -102,7 +104,8 @@ class CvControllerTests {
 		demande.put("dateCreation", "2000-01-01T00:00:00Z");
 		demande.put("titre", "CV réécrit");
 		demande.put("langue", "EN");
-		JsonNode contenu = json.valueToTree(new ContenuCv(IDENTITE, List.of(), List.of(), List.of(), List.of()));
+		JsonNode contenu = json.valueToTree(new ContenuCv(IDENTITE, "", List.of(), List.of(), List.of(), List.of(),
+				List.of(), List.of(), List.of(), List.of(), new ContenuCv.Disponibilite(false, "")));
 		demande.set("contenu", contenu);
 		HttpResponse<String> miseAJour = candidat.envoyerCv("PUT", "/" + id, demande);
 		assertThat(miseAJour.statusCode()).isEqualTo(200);
@@ -186,14 +189,14 @@ class CvControllerTests {
 	void telechargeLeCvEnPdfAvecUnNomDeFichierAscii() throws Exception {
 		Navigateur candidat = connecter();
 		ObjectNode demande = json.valueToTree(exemple("CV à télécharger"));
-		((ObjectNode) demande.path("contenu").path("identite")).put("nom", "Élodie Dupont");
+		((ObjectNode) demande.path("contenu").path("identite")).put("prenom", "Élodie").put("nom", "Dupré");
 		long id = creerCv(candidat, demande).path("id").asLong();
 
 		HttpResponse<byte[]> reponse = candidat.lirePdf(id);
 		assertThat(reponse.statusCode()).isEqualTo(200);
 		assertThat(reponse.headers().firstValue("Content-Type")).contains("application/pdf");
 		assertThat(reponse.headers().firstValue("Content-Disposition"))
-				.contains("attachment; filename=\"CV-Elodie-Dupont.pdf\"");
+				.contains("attachment; filename=\"CV-Elodie-Dupre.pdf\"");
 		assertThat(reponse.body()).startsWith("%PDF".getBytes(StandardCharsets.US_ASCII));
 	}
 
@@ -214,6 +217,9 @@ class CvControllerTests {
 		ObjectNode sansNom = json.valueToTree(exemple("CV sans nom"));
 		((ObjectNode) sansNom.path("contenu").path("identite")).remove("nom");
 		assertThat(probleme(candidat.envoyerCv("POST", "", sansNom), 400)).isEqualTo("Le nom est obligatoire.");
+		ObjectNode sansPrenom = json.valueToTree(exemple("CV sans prénom"));
+		((ObjectNode) sansPrenom.path("contenu").path("identite")).put("prenom", "   ");
+		assertThat(probleme(candidat.envoyerCv("POST", "", sansPrenom), 400)).isEqualTo("Le prénom est obligatoire.");
 
 		ObjectNode champsAbsents = sansNom.deepCopy();
 		champsAbsents.remove(List.of("langue", "modele", "titre"));
@@ -235,6 +241,91 @@ class CvControllerTests {
 		assertThat(probleme(candidat.envoyerCv("POST", "", modeleInvalide), 400)).contains("modèle");
 		assertThat(probleme(candidat.envoyerCv("GET", "/invalide", null), 400)).contains("identifiant du CV");
 		assertThat(listerCv(candidat)).isEmpty();
+	}
+
+	@Test
+	void valideLesDatesEtLesPermisSurLesEcritures() throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode demande = json.valueToTree(exemple("CV invalide"));
+		ObjectNode contenu = (ObjectNode) demande.path("contenu");
+		((ObjectNode) contenu.path("identite")).putArray("permis").add("ZZ");
+		ArrayNode experiences = (ArrayNode) contenu.path("experiences");
+		ObjectNode premiereExperience = (ObjectNode) experiences.path(0);
+		premiereExperience.put("poste", "Stagiaire data").put("debut", "04/2026").put("fin", "Été 2026");
+		experiences.add(premiereExperience.deepCopy().put("poste", "").put("debut", "").put("fin", "2026-13"));
+		((ObjectNode) contenu.path("formations").path(0)).put("debut", "Septembre");
+		((ObjectNode) contenu.path("certifications").path(0)).put("date", "2026-05-01");
+		((ObjectNode) contenu.path("disponibilite")).put("date", "2026-02-30");
+		String detail = probleme(candidat.envoyerCv("POST", "", demande), 400);
+		assertThat(detail).contains("Le code du permis de conduire est invalide.",
+				"Expérience \"Stagiaire data\" : la date de début \"04/2026\" n'est pas valide. Choisissez un mois et une année.",
+				"Expérience \"Stagiaire data\" : la date de fin \"Été 2026\" n'est pas valide. Choisissez un mois et une année.",
+				"Expérience n°2 : la date de fin \"2026-13\" n'est pas valide. Choisissez un mois et une année.",
+				"Formation \"Master MIAGE\" : la date de début \"Septembre\" n'est pas valide. Choisissez un mois et une année.",
+				"Certification \"SQL\" : la date \"2026-05-01\" n'est pas valide. Choisissez un mois et une année.",
+				"La date de disponibilité doit être une date valide au format AAAA-MM-JJ.");
+		assertThat(listerCv(candidat)).isEmpty();
+
+		long id = creerCv(candidat, exemple("CV valide")).path("id").asLong();
+		assertThat(probleme(candidat.envoyerCv("PUT", "/" + id, demande), 400)).isEqualTo(detail);
+	}
+
+	@Test
+	void relitUnAncienCvSansModifierSonJsonb() throws Exception {
+		Navigateur candidat = connecter();
+		Long candidatId = utilisateurs.findByEmail(emails.getFirst()).orElseThrow().getId();
+		String ancien = """
+				{
+				  "identite": {"nom": "Alex Moreau", "lien": "github.com/alex", "profil": "Ancien profil"},
+				  "experiences": [{"poste": "Stage", "debut": "04/2026", "fin": "7/2026", "realisations": ["Un résultat"]}],
+				  "formations": [{"diplome": "Master MIAGE", "ecole": "Paris Nanterre", "debut": "2025", "fin": "Été 2026"}],
+				  "competences": [], "langues": []
+				}
+				""";
+		long id = jdbc.queryForObject("""
+				INSERT INTO cv (utilisateur_id, titre, langue, modele, police, contenu, date_creation, date_modification)
+				VALUES (?, 'CV historique', 'FR', 'CLASSIQUE', 'SOURCE_SERIF_4', CAST(? AS jsonb), now(), now())
+				RETURNING id
+				""", Long.class, candidatId, ancien);
+
+		JsonNode cv = lireCv(candidat, id);
+		assertThat(listerCv(candidat)).containsExactly(cv);
+		JsonNode contenu = cv.path("contenu");
+		JsonNode identite = contenu.path("identite");
+		assertThat(identite.path("nom").asString()).isEqualTo("Alex Moreau");
+		assertThat(identite.path("prenom").asString()).isEmpty();
+		assertThat(identite.path("permis").isArray()).isTrue();
+		assertThat(identite.path("liens").path(0)).isEqualTo(json.readTree("""
+				{"libelle":"Lien","url":"github.com/alex"}
+				"""));
+		assertThat(identite.has("lien") || identite.has("profil")).isFalse();
+		assertThat(contenu.path("profil").asString()).isEqualTo("Ancien profil");
+		JsonNode experience = contenu.path("experiences").path(0);
+		assertThat(experience.path("debut").asString()).isEqualTo("2026-04");
+		assertThat(experience.path("fin").asString()).isEqualTo("2026-07");
+		assertThat(experience.path("enCours").asBoolean()).isFalse();
+		assertThat(experience.path("description").asString()).isEmpty();
+		assertThat(contenu.path("formations").path(0).path("etablissement").asString()).isEqualTo("Paris Nanterre");
+		assertThat(contenu.path("formations").path(0).path("fin").asString()).isEqualTo("Été 2026");
+		assertThat(contenu.path("disponibilite")).isEqualTo(json.readTree("""
+				{"immediate":false,"date":""}
+				"""));
+		for (String champ : List.of("savoirEtre", "centresInteret", "projets", "certifications")) {
+			assertThat(contenu.path(champ).isArray()).isTrue();
+			assertThat(contenu.path(champ)).isEmpty();
+		}
+		assertThat(dupliquerCv(candidat, id).path("contenu")).isEqualTo(contenu);
+		HttpResponse<byte[]> export = candidat.lirePdf(id);
+		assertThat(export.statusCode()).isEqualTo(200);
+		try (var document = Loader.loadPDF(export.body())) {
+			assertThat(new PDFTextStripper().getText(document)).contains("Alex Moreau", "Ancien profil",
+					"avr. 2026 – juil. 2026", "2025 – Été 2026");
+		}
+		((ObjectNode) identite).put("prenom", "Alex").put("nom", "Moreau");
+		assertThat(probleme(candidat.envoyerCv("PUT", "/" + id, cv), 400)).isEqualTo(
+				"Formation \"Master MIAGE\" : la date de fin \"Été 2026\" n'est pas valide. Choisissez un mois et une année.");
+		String resteEnBase = jdbc.queryForObject("SELECT contenu::text FROM cv WHERE id = ?", String.class, id);
+		assertThat(json.readTree(resteEnBase)).isEqualTo(json.readTree(ancien));
 	}
 
 	@Test
@@ -260,12 +351,17 @@ class CvControllerTests {
 	}
 
 	private static DemandeCv exemple(String titre) {
-		ContenuCv contenu = new ContenuCv(IDENTITE,
-				List.of(new ContenuCv.Experience("Stagiaire", "Nordlys", "Paris", "04/2026", "En cours",
-						List.of("Réduit les durées de 40 %", "Automatisé le chargement"))),
-				List.of(new ContenuCv.Formation("Master MIAGE", "Paris Nanterre", "2026", "2027")),
+		ContenuCv contenu = new ContenuCv(IDENTITE, "J'écris des pipelines de données.",
 				List.of(new ContenuCv.GroupeCompetences("Langages", List.of("SQL", "Python"))),
-				List.of(new ContenuCv.Langue("Anglais", "C1")));
+				List.of("Rigueur"), List.of("Randonnée"),
+				List.of(new ContenuCv.Experience("Stagiaire", "Nordlys", "Paris", "2026-04", "", true,
+						"Maintenir les pipelines de données.",
+						List.of("Réduit les durées de 40 %", "Automatisé le chargement"))),
+				List.of(new ContenuCv.Formation("Master MIAGE", "Paris Nanterre", "Bien", "2026", "2027", false, "")),
+				List.of(new ContenuCv.Projet("Entrepôt de données", "example.test/projet", "Prototype")),
+				List.of(new ContenuCv.Langue("Anglais", "C1")),
+				List.of(new ContenuCv.Certification("SQL", "Exemple", "2026-05", "https://example.test/certification")),
+				new ContenuCv.Disponibilite(false, "2026-12-01"));
 		return new DemandeCv(titre, LangueCv.FR, ModeleCv.MODERNE, PoliceCv.LATO, contenu);
 	}
 

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.miage.suivicandidatures.commun.CandidatCourant;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -92,12 +95,50 @@ class CvController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	ProblemDetail demandeInvalide(MethodArgumentNotValidException erreur) {
 		String detail = erreur.getBindingResult().getFieldErrors().stream()
-				.map(champ -> champ.getDefaultMessage())
+				.map(CvController::messageValidation)
 				.map(message -> message.endsWith(".") ? message : message + ".")
 				.distinct()
 				.sorted()
 				.collect(Collectors.joining(" "));
 		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
+	}
+
+	private static String messageValidation(FieldError champ) {
+		if (!champ.contains(ConstraintViolation.class)) {
+			return champ.getDefaultMessage();
+		}
+		ConstraintViolation<?> violation = champ.unwrap(ConstraintViolation.class);
+		if (!(violation.getConstraintDescriptor().getAnnotation() instanceof Pattern motif)
+				|| !DatesCv.ANNEE_MOIS.equals(motif.regexp())) {
+			return champ.getDefaultMessage();
+		}
+		String element = switch (violation.getLeafBean()) {
+			case ContenuCv.Experience experience -> libelle("Expérience", experience.poste(), violation);
+			case ContenuCv.Formation formation -> libelle("Formation", formation.diplome(), violation);
+			case ContenuCv.Certification certification -> libelle("Certification", certification.nom(), violation);
+			case null, default -> null;
+		};
+		if (element == null) {
+			return champ.getDefaultMessage();
+		}
+		String date = champ.getField().endsWith(".debut") ? "date de début"
+				: champ.getField().endsWith(".fin") ? "date de fin" : "date";
+		return "%s : la %s \"%s\" n'est pas valide. Choisissez un mois et une année."
+				.formatted(element, date, violation.getInvalidValue());
+	}
+
+	private static String libelle(String type, String titre, ConstraintViolation<?> violation) {
+		String nom = ContenuCv.sansEspacesAuxBords(titre);
+		if (!nom.isEmpty()) {
+			return type + " \"" + nom + "\"";
+		}
+		for (var noeud : violation.getPropertyPath()) {
+			Integer indice = noeud.getIndex();
+			if (indice != null) {
+				return type + " n°" + (indice + 1);
+			}
+		}
+		return type;
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)

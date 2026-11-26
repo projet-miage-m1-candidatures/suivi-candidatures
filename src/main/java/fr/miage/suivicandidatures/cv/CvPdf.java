@@ -46,7 +46,7 @@ class CvPdf {
 	}
 
 	static String nomFichier(Cv cv) {
-		String nom = Normalizer.normalize(cv.getContenu().identite().nom(), Normalizer.Form.NFKD)
+		String nom = Normalizer.normalize(cv.getContenu().identite().nomComplet(), Normalizer.Form.NFKD)
 				.replaceAll("\\p{M}+", "")
 				.replace("œ", "oe").replace("Œ", "OE")
 				.replaceAll("[^a-zA-Z0-9]+", "-")
