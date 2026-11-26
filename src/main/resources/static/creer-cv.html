@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Créer un CV · Suivi Candidatures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;background:#f1f6fd}
+a{text-decoration:none;color:inherit}
+a:hover{opacity:.88}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+<script type="module" src="/authentification.js"></script>
+</head>
+<body>
+<div style="width:100%;min-height:900px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+
+<!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
+<aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
+<div aria-hidden="true" style="position:absolute;left:-90px;bottom:-60px;width:380px;height:190px;background:radial-gradient(closest-side,#fff 0%,rgba(255,255,255,.7) 45%,rgba(255,255,255,0) 100%);opacity:.35"></div>
+<a href="tableau-de-bord.html" style="position:relative;display:flex;align-items:center;gap:10px;padding:0 6px;color:#fff;font-weight:700;font-size:19px;letter-spacing:-.01em">
+<span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff">
+<svg aria-hidden="true" viewBox="0 0 120 70" style="width:22px"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#2a64cc"/><path d="M2 38 L60 46 L118 2 Z" fill="#6f9ae6"/></svg>
+</span>
+<span>Suivi Candidatures</span>
+</a>
+<nav aria-label="Menu principal" style="position:relative;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Recherche</div>
+<a href="offres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Offres</a>
+<a href="mes-candidatures.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes candidatures</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Préparer</div>
+<a href="mes-cv.html" aria-current="page" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:700;box-shadow:0 6px 18px rgba(15,42,92,.18)">Mes CV</a>
+<a href="analyser-offre.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Analyser une offre</a>
+<a href="mes-lettres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes lettres</a>
+</div>
+</nav>
+<div data-compte-candidat style="margin-top:auto;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#fff;color:#0f2a5c">
+<span data-initiales-candidat aria-hidden="true" style="display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:#ffc933;font-size:14px;font-weight:700"></span>
+<div style="min-width:0">
+<div data-nom-candidat style="font-size:14.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
+<button type="button" data-deconnexion style="padding:0;border:0;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:2px;cursor:pointer">Se déconnecter</button>
+<p data-erreur-auth role="alert" hidden style="margin:4px 0 0;color:#a02738;font-size:12.5px"></p>
+</div>
+</div>
+</aside>
+
+<!-- ===== Page : Créer un CV ===== -->
+<main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:36px 44px 56px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+
+<nav aria-label="Fil d'Ariane" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:#4a5f86">
+<a href="mes-cv.html" style="color:#4a5f86;text-decoration:underline;text-underline-offset:3px">Mes CV</a>
+<span aria-hidden="true">›</span>
+<span style="font-weight:600;color:#0f2a5c">Nouveau CV</span>
+</nav>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em;color:#0f2a5c">Créer un CV</h1>
+<p style="margin:0;max-width:600px;font-size:16.5px;color:#4a5f86">Remplissez les étapes dans l'ordre. L'aperçu se met à jour pendant que vous écrivez.</p>
+</div>
+
+<!-- Progression -->
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 8px">
+<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#2a64cc"></span><span style="font-size:13px;color:#4a5f86">1. Identité</span></li>
+<li aria-current="step" style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#2a64cc"></span><span style="font-size:13px;font-weight:700;color:#0f2a5c">2. Expériences</span></li>
+<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">3. Formation</span></li>
+<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">4. Compétences</span></li>
+<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">5. Langues</span></li>
+<li style="flex:1 1 110px;min-width:0;display:flex;flex-direction:column;gap:8px"><span aria-hidden="true" style="height:6px;border-radius:999px;background:#cfdef5"></span><span style="font-size:13px;color:#4a5f86">6. Vérification</span></li>
+</ol>
+
+<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px">
+
+<!-- Formulaire -->
+<div style="flex:3 1 440px;min-width:0;display:flex;flex-direction:column;gap:16px">
+
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;padding:16px 20px;background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(15,42,92,.06)">
+<div style="min-width:0">
+<div style="font-size:15.5px;font-weight:700">Directeur technique · SARL Vira</div>
+<div style="font-size:13.5px;color:#4a5f86">2015 – 2023 · 3 réalisations</div>
+</div>
+<button type="button" style="flex:none;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Modifier</button>
+</div>
+
+<section style="box-sizing:border-box;padding:26px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:18px">
+<div>
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:28px;line-height:1.1">Nouvelle expérience</h2>
+<div style="font-size:13.5px;color:#4a5f86">Les champs marqués d'un astérisque sont obligatoires.</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px">
+<div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<label for="poste" style="font-size:13.5px;font-weight:600">Poste *</label>
+<input id="poste" type="text" value="Data engineer (stage)" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+<div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<label for="entreprise" style="font-size:13.5px;font-weight:600">Entreprise *</label>
+<input id="entreprise" type="text" value="Projet personnel" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px">
+<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<label for="debut" style="font-size:13.5px;font-weight:600">Début *</label>
+<input id="debut" type="text" value="03 / 2025" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<label for="fin" style="font-size:13.5px;font-weight:600">Fin</label>
+<input id="fin" type="text" value="En cours" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+<div style="flex:1 1 130px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<label for="lieu" style="font-size:13.5px;font-weight:600">Lieu</label>
+<input id="lieu" type="text" value="Paris" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13.5px;font-weight:600">Réalisations</div>
+<div style="display:flex;align-items:center;gap:8px">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#9dbbea" style="flex:none"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>
+<label for="real-1" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Réalisation 1</label>
+<input id="real-1" type="text" value="Conçu un pipeline ELT YouTube → PostgreSQL orchestré avec Airflow" style="box-sizing:border-box;flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:14px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#9dbbea" style="flex:none"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>
+<label for="real-2" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Réalisation 2</label>
+<input id="real-2" type="text" value="Mis en place des tests de qualité des données" style="box-sizing:border-box;flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:14px;border:2px solid #2a64cc;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500;box-shadow:0 0 0 4px rgba(42,100,204,.16)">
+</div>
+<button type="button" style="align-self:flex-start;min-height:44px;padding:0 4px;border:0;background:transparent;color:#1d4fa8;font-size:14.5px;font-weight:700;cursor:pointer">+ Ajouter une réalisation</button>
+</div>
+
+<div style="box-sizing:border-box;padding:14px 16px;border-radius:16px;background:#e3edfc;font-size:14.5px;line-height:1.5;color:#1b2f57"><strong style="color:#1d4fa8">Conseil</strong> Commencez par un verbe d'action et ajoutez un résultat chiffré : « Mis en place 40 tests de qualité, 0 donnée en double en production ».</div>
+</section>
+
+<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<button type="button" style="min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15px;font-weight:600;cursor:pointer">← Identité</button>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<button type="button" style="min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15px;font-weight:600;cursor:pointer">Enregistrer le brouillon</button>
+<button type="button" style="display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;border:0;background:#ffc933;color:#0f2a5c;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(15,42,92,.16)">Formation →</button>
+</div>
+</div>
+</div>
+
+<!-- Aperçu PDF -->
+<aside aria-label="Aperçu du PDF" style="flex:2 1 320px;min-width:0;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px">
+<div style="font-size:14px;font-weight:600;color:#4a5f86">Aperçu du PDF</div>
+<span style="padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700">Une colonne · lisible par les logiciels de tri</span>
+</div>
+<div style="box-sizing:border-box;padding:28px 26px 36px;background:#fff;border-radius:20px;box-shadow:0 18px 50px rgba(15,42,92,.12);display:flex;flex-direction:column;gap:14px;color:#1b2f57">
+<div>
+<div style="font-size:21px;font-weight:700;color:#0f2a5c">Kyrylo NEBYLYTSIA</div>
+<div style="font-size:13.5px;font-weight:600;color:#2a64cc">Data engineer</div>
+<div style="font-size:11.5px;color:#4a5f86">Puteaux · kyrylo@exemple.fr · github.com/NebylytsiaKyrylo</div>
+</div>
+<div>
+<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">EXPÉRIENCES</div>
+<div style="margin-top:8px;font-size:12.5px;line-height:1.5">
+<div style="display:flex;justify-content:space-between;gap:8px"><strong style="color:#0f2a5c">Data engineer (stage) · Projet personnel</strong><span style="flex:none;color:#4a5f86">03/2025 – en cours</span></div>
+<ul style="margin:2px 0 0;padding-left:18px">
+<li>Conçu un pipeline ELT YouTube → PostgreSQL orchestré avec Airflow</li>
+<li style="background:#fff1b8">Mis en place des tests de qualité des données</li>
+</ul>
+</div>
+<div style="margin-top:10px;font-size:12.5px;line-height:1.5">
+<div style="display:flex;justify-content:space-between;gap:8px"><strong style="color:#0f2a5c">Directeur technique · SARL Vira</strong><span style="flex:none;color:#4a5f86">2015 – 2023</span></div>
+<ul style="margin:2px 0 0;padding-left:18px">
+<li>Conçu et administré la base PostgreSQL de l'ERP (1 000+ références)</li>
+<li>Encadré une équipe de 8 personnes</li>
+<li>Organisé la logistique de 200+ points de livraison</li>
+</ul>
+</div>
+</div>
+<div>
+<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">FORMATION</div>
+<div aria-hidden="true" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="height:6px;width:78%;border-radius:4px;background:#d3e1f6"></div><div style="height:6px;width:42%;border-radius:4px;background:#d3e1f6"></div></div>
+</div>
+<div>
+<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">COMPÉTENCES</div>
+<div aria-hidden="true" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="height:6px;width:88%;border-radius:4px;background:#d3e1f6"></div><div style="height:6px;width:56%;border-radius:4px;background:#d3e1f6"></div></div>
+</div>
+<div>
+<div style="padding-bottom:4px;border-bottom:1px solid #d3e1f6;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:#2a64cc">LANGUES</div>
+<div aria-hidden="true" style="margin-top:8px"><div style="height:6px;width:30%;border-radius:4px;background:#d3e1f6"></div></div>
+</div>
+</div>
+</aside>
+
+</div>
+</main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inscription · Suivi Candidatures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script type="module" src="/authentification.js"></script>
+<style>
+body{margin:0;min-height:100vh;box-sizing:border-box;padding:28px 24px 56px;background:linear-gradient(180deg,#2a64cc,#3672d6 54%,#d6e6fb);font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5}
+.accueil{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:#fff;color:inherit;font-weight:600;text-decoration:none}
+main{width:100%;max-width:440px;box-sizing:border-box;margin:40px auto 0;padding:clamp(24px,6vw,36px);border-radius:32px;background:#fff;box-shadow:0 30px 70px rgba(15,42,92,.28)}
+h1{margin:0 0 20px;font-family:'Instrument Serif',Georgia,serif;font-size:clamp(38px,9vw,52px);font-weight:400;line-height:1}
+form{display:grid;gap:14px}
+label{display:grid;gap:5px;font-size:14px;font-weight:600}
+input{box-sizing:border-box;width:100%;min-height:50px;padding:0 14px;border:1.5px solid #bcd3f5;border-radius:16px;background:#fff;color:inherit;font:500 16px 'Instrument Sans',system-ui,sans-serif}
+button{min-height:54px;border:0;border-radius:999px;background:#ffc933;color:inherit;font:700 16px 'Instrument Sans',system-ui,sans-serif;cursor:pointer}
+button:disabled{opacity:.7;cursor:wait}
+a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
+#regle-mot-de-passe{margin:0;color:#4a5f86;font-size:13px;font-weight:400}
+[role="alert"]{margin:0;color:#a02738;font-size:14px}
+.connexion{margin:20px 0 0;padding-top:16px;border-top:1px solid #e3edfc;text-align:center;color:#4a5f86}
+.connexion a{color:#1d4fa8;font-weight:700;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<a class="accueil" href="index.html">Retour à l’accueil</a>
+<main>
+<h1>Créer un compte</h1>
+<form method="post" action="/api/v1/auth/inscription" data-formulaire-auth="inscription">
+<label>Prénom <input name="prenom" autocomplete="given-name" required></label>
+<label>Nom <input name="nom" autocomplete="family-name" required></label>
+<label>Adresse e-mail <input name="email" type="email" autocomplete="username" required></label>
+<label>Mot de passe <input name="motDePasse" type="password" autocomplete="new-password" minlength="15" aria-describedby="regle-mot-de-passe" required></label>
+<p id="regle-mot-de-passe">15 caractères minimum.</p>
+<p data-erreur-auth role="alert" hidden></p>
+<button type="submit">Créer mon compte</button>
+</form>
+<p class="connexion">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+</main>
+</body>
+</html>

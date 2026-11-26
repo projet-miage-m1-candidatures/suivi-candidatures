@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes candidatures · Suivi Candidatures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;background:#f1f6fd}
+a{text-decoration:none;color:inherit}
+a:hover{opacity:.88}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
+button{font-family:inherit}
+input,select{font-family:inherit}
+</style>
+<script type="module" src="/authentification.js"></script>
+</head>
+<body>
+<div style="width:100%;min-height:1000px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+
+<!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
+<aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
+<div aria-hidden="true" style="position:absolute;left:-90px;bottom:-60px;width:380px;height:190px;background:radial-gradient(closest-side,#fff 0%,rgba(255,255,255,.7) 45%,rgba(255,255,255,0) 100%);opacity:.35"></div>
+<a href="tableau-de-bord.html" style="position:relative;display:flex;align-items:center;gap:10px;padding:0 6px;color:#fff;font-weight:700;font-size:19px;letter-spacing:-.01em">
+<span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff">
+<svg aria-hidden="true" viewBox="0 0 120 70" style="width:22px"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#2a64cc"/><path d="M2 38 L60 46 L118 2 Z" fill="#6f9ae6"/></svg>
+</span>
+<span>Suivi Candidatures</span>
+</a>
+<nav aria-label="Menu principal" style="position:relative;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Recherche</div>
+<a href="offres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Offres</a>
+<a href="mes-candidatures.html" aria-current="page" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:700;box-shadow:0 6px 18px rgba(15,42,92,.18)">Mes candidatures</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Préparer</div>
+<a href="mes-cv.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes CV</a>
+<a href="analyser-offre.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Analyser une offre</a>
+<a href="mes-lettres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes lettres</a>
+</div>
+</nav>
+<div data-compte-candidat style="margin-top:auto;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#fff;color:#0f2a5c">
+<span data-initiales-candidat aria-hidden="true" style="display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:#ffc933;font-size:14px;font-weight:700"></span>
+<div style="min-width:0">
+<div data-nom-candidat style="font-size:14.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
+<button type="button" data-deconnexion style="padding:0;border:0;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:2px;cursor:pointer">Se déconnecter</button>
+<p data-erreur-auth role="alert" hidden style="margin:4px 0 0;color:#a02738;font-size:12.5px"></p>
+</div>
+</div>
+</aside>
+
+<!-- ===== Page : Mes candidatures ===== -->
+<main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:40px 44px 56px;display:flex;flex-direction:column;gap:24px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:56px;line-height:1;letter-spacing:-.015em">Mes candidatures</h1>
+<p style="margin:0;max-width:620px;font-size:17px;color:#4a5f86">Suivez chaque candidature, du premier envoi à la réponse.</p>
+</div>
+
+<div role="group" aria-label="Filtrer par statut" style="display:flex;flex-wrap:wrap;gap:10px">
+<button type="button" aria-pressed="true" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #0f2a5c;background:#0f2a5c;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer">Toutes (18)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Envoyée (6)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Relancée (2)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Entretien (2)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Offre reçue (1)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Refusée (3)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Sans réponse (4)</button>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px">
+
+<!-- Liste -->
+<section aria-label="Liste des candidatures" style="flex:6 1 400px;min-width:0;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);overflow:hidden">
+<ul style="list-style:none;margin:0;padding:8px 0">
+<li>
+<a href="#" aria-current="true" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;background:#eaf2fe;box-shadow:inset 4px 0 0 #2a64cc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Développeur Java</div><div style="font-size:13.5px;color:#4a5f86">Nordlys · Puteaux</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#ece7fb;color:#4b3aa8;font-size:12.5px;font-weight:700">Entretien</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">14 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Data engineer</div><div style="font-size:13.5px;color:#4a5f86">Nova Logistique · Nanterre</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:12.5px;font-weight:700">Envoyée</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">19 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Développeur back-end</div><div style="font-size:13.5px;color:#4a5f86">Marée Logiciels · Rennes</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700">Offre reçue</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">17 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Data analyst</div><div style="font-size:13.5px;color:#4a5f86">Atelier Vega · Paris</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#ffe9bf;color:#8a5a00;font-size:12.5px;font-weight:700">Relancée</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">12 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Développeur full-stack</div><div style="font-size:13.5px;color:#4a5f86">Kobalt · Nanterre</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:12.5px;font-weight:700">Envoyée</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">8 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Ingénieur logiciel</div><div style="font-size:13.5px;color:#4a5f86">Helio · Toulouse</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#fde3e0;color:#8a2a22;font-size:12.5px;font-weight:700">Refusée</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">6 nov.</span>
+</a>
+</li>
+<li>
+<a href="#" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 24px;border-top:1px solid #e3edfc">
+<div style="flex:1 1 200px;min-width:0"><div style="font-size:15.5px;font-weight:700">Chargé de données</div><div style="font-size:13.5px;color:#4a5f86">Corail · Lille</div></div>
+<span style="padding:4px 12px;border-radius:999px;background:#e4e9f1;color:#35476b;font-size:12.5px;font-weight:700">Sans réponse</span>
+<span style="width:62px;font-size:13.5px;color:#4a5f86">28 oct.</span>
+</a>
+</li>
+</ul>
+<div style="padding:10px 24px 16px;border-top:1px solid #e3edfc;font-size:12.5px;color:#4a5f86">Données d'exemple</div>
+</section>
+
+<!-- Détail et historique -->
+<section aria-label="Détail de la candidature" style="flex:5 1 340px;min-width:0;box-sizing:border-box;padding:26px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:#ece7fb;color:#4b3aa8;font-size:12.5px;font-weight:700">Entretien</div>
+<h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1">Développeur Java</h2>
+<div style="font-size:14px;color:#4a5f86">Nordlys · Puteaux · Alternance</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:#f1f6fd">
+<div style="font-size:14px;font-weight:700">Changer le statut</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label for="nouveau-statut" style="font-size:13.5px;font-weight:600">Nouveau statut</label>
+<select id="nouveau-statut" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+<option>Offre reçue</option>
+<option>Refusée</option>
+</select>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label for="note-statut" style="font-size:13.5px;font-weight:600">Note (facultative)</label>
+<input id="note-statut" type="text" placeholder="Nom du recruteur, date, contexte…" style="box-sizing:border-box;width:100%;min-height:48px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:15px;font-weight:500">
+</div>
+<button type="button" style="min-height:48px;border-radius:999px;border:0;background:#2a64cc;color:#fff;font-size:15px;font-weight:700;cursor:pointer">Mettre à jour</button>
+</div>
+
+<div>
+<h3 style="margin:0 0 12px;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4a5f86">Historique</h3>
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+<li style="display:flex;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center"><span aria-hidden="true" style="width:12px;height:12px;margin-top:6px;border-radius:50%;background:#8f7be0"></span><span aria-hidden="true" style="flex:1;width:2px;background:#d3e1f6"></span></div>
+<div style="padding-bottom:18px"><div style="font-size:15px;font-weight:700">Entretien</div><div style="font-size:13.5px;color:#4a5f86">14 nov. 2026 · « Entretien jeudi 26 nov., 14 h »</div></div>
+</li>
+<li style="display:flex;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center"><span aria-hidden="true" style="width:12px;height:12px;margin-top:6px;border-radius:50%;background:#e0a800"></span><span aria-hidden="true" style="flex:1;width:2px;background:#d3e1f6"></span></div>
+<div style="padding-bottom:18px"><div style="font-size:15px;font-weight:700">Relancée</div><div style="font-size:13.5px;color:#4a5f86">10 nov. 2026 · Relance par e-mail</div></div>
+</li>
+<li style="display:flex;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center"><span aria-hidden="true" style="width:12px;height:12px;margin-top:6px;border-radius:50%;background:#7aa7ee"></span></div>
+<div><div style="font-size:15px;font-weight:700">Envoyée</div><div style="font-size:13.5px;color:#4a5f86">3 nov. 2026 · Candidature créée depuis l'offre</div></div>
+</li>
+</ol>
+</div>
+</section>
+
+</div>
+</main>
+
+</div>
+</body>
+</html>

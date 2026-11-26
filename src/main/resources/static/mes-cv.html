@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes CV · Suivi Candidatures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;background:#f1f6fd}
+a{text-decoration:none;color:inherit}
+a:hover{opacity:.88}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
+button{font-family:inherit}
+</style>
+<script type="module" src="/authentification.js"></script>
+</head>
+<body>
+<div style="width:100%;min-height:900px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
+
+<!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
+<aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
+<div aria-hidden="true" style="position:absolute;left:-90px;bottom:-60px;width:380px;height:190px;background:radial-gradient(closest-side,#fff 0%,rgba(255,255,255,.7) 45%,rgba(255,255,255,0) 100%);opacity:.35"></div>
+<a href="tableau-de-bord.html" style="position:relative;display:flex;align-items:center;gap:10px;padding:0 6px;color:#fff;font-weight:700;font-size:19px;letter-spacing:-.01em">
+<span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff">
+<svg aria-hidden="true" viewBox="0 0 120 70" style="width:22px"><path d="M2 38 L118 2 L82 68 L60 46 Z" fill="#2a64cc"/><path d="M2 38 L60 46 L118 2 Z" fill="#6f9ae6"/></svg>
+</span>
+<span>Suivi Candidatures</span>
+</a>
+<nav aria-label="Menu principal" style="position:relative;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Recherche</div>
+<a href="offres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Offres</a>
+<a href="mes-candidatures.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes candidatures</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="padding:0 18px 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e3edff">Préparer</div>
+<a href="mes-cv.html" aria-current="page" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:700;box-shadow:0 6px 18px rgba(15,42,92,.18)">Mes CV</a>
+<a href="analyser-offre.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Analyser une offre</a>
+<a href="mes-lettres.html" style="display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 18px;border-radius:999px;color:#fff;font-size:15.5px;font-weight:500">Mes lettres</a>
+</div>
+</nav>
+<div data-compte-candidat style="margin-top:auto;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#fff;color:#0f2a5c">
+<span data-initiales-candidat aria-hidden="true" style="display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:#ffc933;font-size:14px;font-weight:700"></span>
+<div style="min-width:0">
+<div data-nom-candidat style="font-size:14.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
+<button type="button" data-deconnexion style="padding:0;border:0;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:#1d4fa8;text-decoration:underline;text-underline-offset:2px;cursor:pointer">Se déconnecter</button>
+<p data-erreur-auth role="alert" hidden style="margin:4px 0 0;color:#a02738;font-size:12.5px"></p>
+</div>
+</div>
+</aside>
+
+<!-- ===== Page : Mes CV ===== -->
+<main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:40px 44px 56px;display:flex;flex-direction:column;gap:28px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+
+<div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px">
+<div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:56px;line-height:1;letter-spacing:-.015em;color:#0f2a5c">Mes CV</h1>
+<p style="margin:0;max-width:560px;font-size:17px;color:#4a5f86">Créez un CV, gardez plusieurs versions et vérifiez qu'il est lisible par les logiciels de tri.</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<button type="button" style="min-height:48px;padding:0 24px;border-radius:999px;border:1.5px solid #9dbbea;background:#fff;color:#0f2a5c;font-size:15.5px;font-weight:600;cursor:pointer">Importer un CV</button>
+<a href="creer-cv.html" style="display:inline-flex;align-items:center;gap:10px;min-height:48px;box-sizing:border-box;padding:0 26px;border-radius:999px;background:#ffc933;color:#0f2a5c;font-size:15.5px;font-weight:700;box-shadow:0 8px 22px rgba(15,42,92,.16)">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0f2a5c" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+<span>Créer un CV</span>
+</a>
+</div>
+</div>
+
+<div role="group" aria-label="Filtrer par langue" style="display:flex;flex-wrap:wrap;gap:10px">
+<button type="button" aria-pressed="true" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #0f2a5c;background:#0f2a5c;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer">Tous (2)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Français (2)</button>
+<button type="button" aria-pressed="false" style="min-height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14.5px;font-weight:600;cursor:pointer">Anglais (0)</button>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:20px">
+
+<!-- CV 1 -->
+<article style="flex:1 1 280px;min-width:0;max-width:460px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;border:2px solid #9dbbea;box-shadow:0 14px 40px rgba(15,42,92,.10);display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="min-width:0">
+<h2 style="margin:0;font-size:21px;font-weight:700;line-height:1.2">Data engineer</h2>
+<div style="font-size:14px;color:#4a5f86">Modifié le 18 nov. 2026</div>
+</div>
+<button type="button" aria-label="Plus d'actions pour Data engineer" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px -8px 0 0;border-radius:50%;border:0;background:transparent;color:#0f2a5c;cursor:pointer">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#0f2a5c"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="padding:4px 12px;border-radius:999px;background:#ffe08a;font-size:12.5px;font-weight:700">Principal</span>
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">FR</span>
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">Créé avec le formulaire</span>
+</div>
+<div aria-hidden="true" style="height:118px;box-sizing:border-box;padding:16px;border-radius:16px;background:#f1f6fd;border:1px solid #e3edfc;display:flex;flex-direction:column;gap:8px">
+<div style="height:7px;width:42%;border-radius:4px;background:#9dbbea"></div>
+<div style="height:6px;width:70%;border-radius:4px;background:#d3e1f6"></div>
+<div style="height:6px;width:24%;border-radius:4px;background:#bcd3f5;margin-top:6px"></div>
+<div style="height:6px;width:92%;border-radius:4px;background:#d3e1f6"></div>
+<div style="height:6px;width:78%;border-radius:4px;background:#d3e1f6"></div>
+</div>
+<div style="display:flex;align-items:center;gap:14px">
+<div role="img" aria-label="Score de 86 sur 100" style="flex:1;height:10px;border-radius:999px;background:#e3edfc;overflow:hidden"><div style="width:86%;height:100%;border-radius:999px;background:#2fa77a"></div></div>
+<div style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#14573f;white-space:nowrap">86 <span style="font-family:'Instrument Sans',system-ui,sans-serif;font-size:14px;color:#4a5f86">/ 100</span></div>
+</div>
+<p style="margin:0;font-size:14px;line-height:1.45;color:#4a5f86"><strong style="color:#0f2a5c">1 conseil</strong> · Ajoutez des résultats chiffrés à l'expérience SARL Vira</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:16px;border-top:1px solid #e3edfc">
+<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;font-size:14px;font-weight:600">Modifier</a>
+<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Exporter en PDF</button>
+<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Dupliquer</button>
+</div>
+</article>
+
+<!-- CV 2 -->
+<article style="flex:1 1 280px;min-width:0;max-width:460px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;border:2px solid #e3edfc;box-shadow:0 10px 30px rgba(15,42,92,.06);display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="min-width:0">
+<h2 style="margin:0;font-size:21px;font-weight:700;line-height:1.2">Data analyst</h2>
+<div style="font-size:14px;color:#4a5f86">Modifié le 12 nov. 2026</div>
+</div>
+<button type="button" aria-label="Plus d'actions pour Data analyst" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-8px -8px 0 0;border-radius:50%;border:0;background:transparent;color:#0f2a5c;cursor:pointer">
+<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="#0f2a5c"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">FR</span>
+<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;font-size:12.5px;font-weight:600">Créé avec le formulaire</span>
+</div>
+<div aria-hidden="true" style="height:118px;box-sizing:border-box;padding:16px;border-radius:16px;background:#f1f6fd;border:1px solid #e3edfc;display:flex;flex-direction:column;gap:8px">
+<div style="height:7px;width:42%;border-radius:4px;background:#9dbbea"></div>
+<div style="height:6px;width:70%;border-radius:4px;background:#d3e1f6"></div>
+<div style="height:6px;width:24%;border-radius:4px;background:#bcd3f5;margin-top:6px"></div>
+<div style="height:6px;width:86%;border-radius:4px;background:#d3e1f6"></div>
+<div style="height:6px;width:64%;border-radius:4px;background:#d3e1f6"></div>
+</div>
+<div style="display:flex;align-items:center;gap:14px">
+<div role="img" aria-label="Score de 61 sur 100" style="flex:1;height:10px;border-radius:999px;background:#e3edfc;overflow:hidden"><div style="width:61%;height:100%;border-radius:999px;background:#e08a00"></div></div>
+<div style="font-family:'Instrument Serif',Georgia,serif;font-size:30px;line-height:1;color:#8a5a00;white-space:nowrap">61 <span style="font-family:'Instrument Sans',system-ui,sans-serif;font-size:14px;color:#4a5f86">/ 100</span></div>
+</div>
+<p style="margin:0;font-size:14px;line-height:1.45;color:#4a5f86"><strong style="color:#0f2a5c">3 conseils</strong> · Dates incohérentes dans « Expériences », section « Compétences » manquante…</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:16px;border-top:1px solid #e3edfc">
+<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;font-size:14px;font-weight:600">Modifier</a>
+<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Exporter en PDF</button>
+<button type="button" style="min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Dupliquer</button>
+</div>
+</article>
+
+<!-- Nouveau CV -->
+<div style="flex:1 1 280px;min-width:0;max-width:460px;min-height:340px;box-sizing:border-box;padding:24px;border-radius:28px;border:2px dashed #9dbbea;background:rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center">
+<span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#dfeafb">
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1d4fa8" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+</span>
+<h2 style="margin:0;font-size:19px;font-weight:700">Créer un nouveau CV</h2>
+<p style="margin:0;max-width:240px;font-size:14.5px;line-height:1.5;color:#4a5f86">Un formulaire guidé, étape par étape : identité, expériences, formation, compétences, langues.</p>
+<a href="creer-cv.html" style="display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 24px;border-radius:999px;background:#2a64cc;color:#fff;font-size:15px;font-weight:600">Commencer</a>
+</div>
+
+</div>
+</main>
+
+</div>
+</body>
+</html>
