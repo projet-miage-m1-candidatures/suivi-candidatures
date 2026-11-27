@@ -38,8 +38,11 @@ class CvHtml {
 		contexte.setVariable("anglais", anglais);
 		contexte.setVariable("langue", anglais ? "en" : "fr");
 		contexte.setVariable("titreCv", cv.getTitre());
-		contexte.setVariable("classeCv", "cv modele-" + cv.getModele().name().toLowerCase(Locale.ROOT));
-		contexte.setVariable("styleCv", "--cv-police: " + cv.getPolice().familleCss() + ";");
+		String taille = cv.getTaille() == TailleCv.NORMALE ? "" : " taille-" + cv.getTaille().name().toLowerCase(Locale.ROOT);
+		contexte.setVariable("classeCv", "cv modele-" + cv.getModele().name().toLowerCase(Locale.ROOT) + taille);
+		contexte.setVariable("styleCv", "--cv-police: %s; --cv-titres: %s; --cv-texte: %s;"
+				.formatted(cv.getPolice().familleCss(), cv.getCouleur().titres(), cv.getCouleur().texte()));
+		contexte.setVariable("colonnes", cv.getModele() == ModeleCv.ELEGANT);
 		contexte.setVariable("css", css);
 		contexte.setVariable("nom", siRenseigne(identite.nomComplet()));
 		contexte.setVariable("posteVise", siRenseigne(identite.titre()));
@@ -87,7 +90,8 @@ class CvHtml {
 	}
 
 	private static String complements(ContenuCv contenu, boolean anglais) {
-		List<String> permis = contenu.identite().permis();
+		ContenuCv.Identite identite = contenu.identite();
+		List<String> permis = identite.permis();
 		String conduite = permis.isEmpty() ? "" : (anglais ? "Driving licence " : "Permis ") + String.join(", ", permis);
 		ContenuCv.Disponibilite disponibilite = contenu.disponibilite();
 		String disponible = "";
@@ -97,7 +101,9 @@ class CvHtml {
 			disponible = (anglais ? "Available from " : "Disponible à partir du ")
 					+ DatesCv.formaterJour(disponibilite.date(), anglais);
 		}
-		return Stream.of(conduite, disponible).filter(CvHtml::renseigne).collect(joining(" · "));
+		String mobilite = sansEspacesAuxBords(identite.mobilite());
+		String deplacement = mobilite.isEmpty() ? "" : (anglais ? "Mobility: " : "Mobilité : ") + mobilite;
+		return Stream.of(conduite, disponible, deplacement).filter(CvHtml::renseigne).collect(joining(" · "));
 	}
 
 	private static String adresseWeb(String valeur) {

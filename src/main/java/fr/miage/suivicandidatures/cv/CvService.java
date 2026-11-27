@@ -55,7 +55,7 @@ class CvService {
 	Cv dupliquer(Long candidatId, Long id) {
 		Cv source = lire(candidatId, id);
 		DemandeCv copie = new DemandeCv(titreDeCopie(source.getTitre()), source.getLangue(),
-				source.getModele(), source.getPolice(), source.getContenu());
+				source.getModele(), source.getPolice(), source.getCouleur(), source.getTaille(), source.getContenu());
 		return creer(candidatId, copie);
 	}
 

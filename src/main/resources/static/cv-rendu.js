@@ -46,7 +46,7 @@ const TEXTES = {
 		profil: "Profil", experiences: "Expériences", formations: "Formation", projets: "Projets",
 		competences: "Compétences", savoirEtre: "Savoir-être", langues: "Langues", certifications: "Certifications",
 		centresInteret: "Centres d'intérêt", nom: "Votre nom", aujourdhui: "aujourd'hui", permis: "Permis",
-		immediat: "Disponible immédiatement", aPartirDu: "Disponible à partir du", mention: "Mention",
+		immediat: "Disponible immédiatement", aPartirDu: "Disponible à partir du", mention: "Mention", mobilite: "Mobilité :",
 		mois: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
 		moisLongs: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
 	},
@@ -54,7 +54,7 @@ const TEXTES = {
 		profil: "Profile", experiences: "Experience", formations: "Education", projets: "Projects",
 		competences: "Skills", savoirEtre: "Soft skills", langues: "Languages", certifications: "Certifications",
 		centresInteret: "Interests", nom: "Your name", aujourdhui: "Present", permis: "Driving licence",
-		immediat: "Available immediately", aPartirDu: "Available from", mention: "Honours",
+		immediat: "Available immediately", aPartirDu: "Available from", mention: "Honours", mobilite: "Mobility:",
 		mois: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 		moisLongs: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 	},
@@ -70,7 +70,7 @@ const rempli = valeur => typeof valeur === "string" ? valeur.trim() !== "" : Boo
 export function normaliserContenu(contenu = {}) {
 	const ancien = contenu.identite ?? {};
 	const identite = {
-		prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", permis: [], liens: [],
+		prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", mobilite: "", permis: [], liens: [],
 		...ancien,
 	};
 	if (!Array.isArray(identite.permis)) identite.permis = [];
@@ -156,6 +156,7 @@ function rendreContenu(cv) {
 	const complements = [
 		id.permis.length ? `${t.permis} ${id.permis.map(echapper).join(", ")}` : "",
 		c.disponibilite.immediate ? t.immediat : rempli(c.disponibilite.date) ? `${t.aPartirDu} ${echapper(formaterJour(c.disponibilite.date, langue))}` : "",
+		rempli(id.mobilite) ? `${t.mobilite} ${echapper(id.mobilite.trim())}` : "",
 	].filter(Boolean).join(" · ");
 
 	const experiences = c.experiences.filter(e => rempli(e.poste) || rempli(e.entreprise)).map(e =>
@@ -251,9 +252,9 @@ export function evaluerCv(contenuBrut) {
 	const textes = experiences.flatMap(e => [e.description, ...e.realisations]).filter(rempli);
 	const nbCompetences = c.competences.reduce((n, g) => n + g.elements.length, 0);
 
-	ajouter(15, rempli(id.prenom) && rempli(id.nom) && rempli(id.titre) && rempli(id.email), "Complétez l'identité : prénom, nom, poste visé et e-mail.", 0);
+	ajouter(15, rempli(id.prenom) && rempli(id.nom) && rempli(id.titre) && rempli(id.email), "Complétez votre profil : poste visé et e-mail.", 0);
 	ajouter(10, rempli(c.profil), "Ajoutez un résumé de deux ou trois lignes en haut du CV.", 0);
-	ajouter(10, nbCompetences >= 3, "Listez au moins trois compétences techniques.", 1);
+	ajouter(10, nbCompetences >= 3, "Ajoutez au moins trois compétences techniques au total, tous thèmes confondus. Par exemple : « Langages : SQL, Python, Java ».", 1);
 	ajouter(15, experiences.length > 0, "Ajoutez au moins une expérience (stage, emploi, alternance).", 2);
 	// Une expérience est détaillée avec une description ou au moins deux réalisations.
 	const peuDetaillee = experiences.find(e => !rempli(e.description) && e.realisations.filter(rempli).length < 2);

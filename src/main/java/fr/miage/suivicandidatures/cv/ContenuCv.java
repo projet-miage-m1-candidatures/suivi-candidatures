@@ -3,6 +3,7 @@ package fr.miage.suivicandidatures.cv;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +40,7 @@ record ContenuCv(
 			@Size(max = 120) String ville,
 			@Size(max = 254) String email,
 			@Size(max = 50) String telephone,
+			@JsonInclude(JsonInclude.Include.NON_NULL) @Size(max = 160) String mobilite,
 			@NotNull @Size(max = 30) List<@NotNull @Pattern(regexp = "AM|A1|A2|A|B|BE|C1|C1E|C|CE|D1|D1E|D|DE",
 					message = "Le code du permis de conduire est invalide.") String> permis,
 			@NotNull @Size(max = 30) List<@NotNull @Valid Lien> liens) {

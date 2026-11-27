@@ -16,23 +16,14 @@ button{font-family:inherit}
 main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .fil{display:flex;flex-wrap:wrap;gap:8px;font-size:13.5px;color:#4a5f86}
 .fil a{color:#1d4fa8;text-decoration:underline;text-underline-offset:3px}
-.page-tete{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.page-tete{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
 .actions-tete{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .actions-tete .boutons{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
 .contenu-panneau{display:flex;flex-direction:column;gap:16px;min-width:0}
 .ia{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:16px;background:#fff8e0;border:1.5px solid #ffd970}
-.page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
-.page-tete p{margin:10px 0 0;max-width:600px;font-size:16.5px;color:#4a5f86}
-.etapes{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
-.etapes button{display:block;width:100%;min-width:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;line-height:1.3;color:#4a5f86;overflow:hidden}
-.etapes button:before{content:"";display:block;height:6px;margin-bottom:8px;border-radius:999px;background:#d3e1f6}
-.etapes .remplie button:before{background:#3a9a6a}
-.etapes [aria-current=step] button:before{background:#2a64cc}
-.etapes [aria-current=step] button{color:#0f2a5c;font-weight:700}
-.point{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#f0b400;vertical-align:1px}
-.remplie-point .point{background:#3a9a6a}
-.colonnes{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:28px;align-items:start}
-.panneau{display:flex;flex-direction:column;gap:16px;min-width:0;padding:26px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
+.page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:34px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
+.colonnes{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:22px;align-items:start}
+.panneau{display:flex;flex-direction:column;gap:16px;min-width:0;padding:22px 24px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
 .panneau h2{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1}
 .aide{margin:-8px 0 0;font-size:13.5px;color:#4a5f86}
 .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px}
@@ -79,11 +70,12 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .statut{font-size:13px;color:#4a5f86}
 .depot{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(15,42,92,.55);color:#fff;font-size:22px;font-weight:700;pointer-events:none}
 .depot span{padding:28px 40px;border:3px dashed #fff;border-radius:24px}
-.apercu{position:sticky;top:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.apercu{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px;min-width:0;max-height:calc(100vh - 32px);box-sizing:border-box}
+.apercu-bloc{display:flex;flex-direction:column;gap:12px;padding:16px 18px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
 .apercu-tete{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
-.apercu-tete h2{margin:0 auto 0 0;font-size:15px;font-weight:700}
+.apercu-tete h2{margin:0 auto 0 0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:26px}
 .apercu-tete .statut{min-width:7.5em;text-align:right}
-.outils{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.outils{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .reglages{display:flex;flex-wrap:wrap;gap:8px}
 .reglage{position:relative}
 .pastille{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px 0 14px;border-radius:12px;border:1.5px solid #d3dbe8;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
@@ -96,7 +88,7 @@ main.page>*{width:100%;max-width:1280px;margin-left:auto;margin-right:auto;box-s
 .menu-reglage [aria-checked=true]{background:#e3edfc;font-weight:700}
 .menu-titre{margin:0;padding:8px 12px 4px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5f86}
 .nuancier{flex:none;width:14px;height:14px;border-radius:50%}
-.puce-ats{padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700}
+.puce-ats{box-sizing:border-box;min-width:13.5em;padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700;text-align:center;white-space:nowrap;cursor:help}
 .puce-ats.attention{background:#fdf0d5;color:#7a4a00}
 select{appearance:none;-webkit-appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231d4fa8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:12px 8px;padding-right:44px!important;cursor:pointer}
 select:disabled{cursor:default;opacity:.7}
@@ -104,9 +96,9 @@ select:hover:not(:disabled){border-color:#9dbbea}
 .segments{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;border-radius:999px;border:1.5px solid #bcd3f5}
 .segments button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#4a5f86;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .segments button[aria-pressed=true]{background:#0f2a5c;color:#fff}
-.bureau{padding:16px;border-radius:20px;background:#dfe8f6;overflow:hidden}
+.bureau{flex:1 1 auto;min-height:0;overflow:auto;padding:0 6px 24px}
 .cadre-feuille{position:relative;width:100%}
-.feuille{position:absolute;top:0;left:0;width:794px;min-height:1123px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.16);transform-origin:top left}
+.feuille{position:absolute;top:0;left:0;width:794px;min-height:1123px;background:#fff;box-shadow:0 16px 40px rgba(15,42,92,.18);transform-origin:top left}
 .recap{margin:0;padding:0;list-style:none}
 .a-completer{margin:0;padding:0;list-style:none}
 .a-completer li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e3edfc;font-size:14.5px}
@@ -114,8 +106,22 @@ select:hover:not(:disabled){border-color:#9dbbea}
 .recap li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e3edfc}
 .recap span{font-size:14px;color:#4a5f86}
 .notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
-@media (max-width:1100px){.colonnes{grid-template-columns:minmax(0,1fr)}.apercu{position:static}}
-@media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:42px}.etapes button{font-size:0;line-height:0}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1100px){.colonnes{grid-template-columns:minmax(0,1fr)}.apercu{position:static;max-height:none}}
+@media (max-width:700px){main.page{padding:22px 16px 48px!important}.rangee,.rangee-langue{grid-template-columns:minmax(0,1fr)}}
+
+
+.etapes{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0;padding:6px;list-style:none;border-radius:999px;background:#fff;box-shadow:0 6px 20px rgba(15,42,92,.06)}
+.etapes li{flex:1 1 auto}
+.etapes button{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:38px;padding:0 12px;border:0;border-radius:999px;background:transparent;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:600;color:#4a5f86;text-align:center;white-space:nowrap}
+.etapes button:hover{background:#f1f6fd}
+.etapes .rond{flex:none;width:16px;height:16px;box-sizing:border-box;border-radius:50%;border:1.5px solid #b7c6de}
+.etapes .fait{flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#3a9a6a;color:#fff}
+.etapes .remplie button{color:#14573f}
+.etapes [aria-current=step] button{background:#0f2a5c;color:#fff}
+.etapes [aria-current=step] .rond{border-color:#fff}
+.etapes .compteur{flex:none;padding:0 12px 0 6px;font-size:13px;font-weight:700;color:#4a5f86}
+@media (max-width:700px){.etapes{border-radius:20px}}
+.page-tete .intro{margin:6px 0 0;font-size:15px;color:#4a5f86}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;600;700&family=Lora:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/cv-modeles.css">
@@ -156,17 +162,18 @@ select:hover:not(:disabled){border-color:#9dbbea}
 </div>
 </aside>
 
-<main class="page" style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:36px 44px 56px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
+<main class="page" style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:22px 44px 56px;display:flex;flex-direction:column;gap:16px;background:radial-gradient(520px 220px at 94% -4%,#fff 0%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#d6e6fb 0%,#f1f6fd 300px)">
 
 <nav class="fil" aria-label="Fil d'Ariane"><a href="mes-cv.html">Mes CV</a><span aria-hidden="true">›</span><span data-fil>Nouveau CV</span></nav>
 
 <div class="page-tete">
 <div style="flex:1 1 420px;min-width:0">
 <h1 data-titre-page>Créer un CV</h1>
-<p>Écrivez tout ce que vous pouvez, même sans mise en forme : à la fin, vous pourrez améliorer votre CV avec l'IA. Vous pouvez aussi importer un CV existant, ou le glisser sur la page.</p>
+<p class="intro">Remplissez les sections : l'aperçu se met à jour en direct. Vous pouvez aussi importer votre CV actuel.</p>
+
 </div>
 <div class="actions-tete">
-<div class="boutons"><button type="button" class="bouton" data-importer>Importer un CV</button></div>
+<div class="boutons"><button type="button" class="bouton" data-importer title="L'aperçu se met à jour pendant la saisie. Vous pouvez aussi importer un CV existant, ou le glisser sur la page.">Importer un CV</button></div>
 <input type="file" accept=".pdf,.docx" data-fichier hidden>
 </div>
 </div>
@@ -185,10 +192,12 @@ select:hover:not(:disabled){border-color:#9dbbea}
 </div>
 
 <aside class="apercu" aria-label="Aperçu du CV">
+<div class="apercu-bloc">
 <div class="apercu-tete"><h2>Aperçu du PDF</h2><span class="statut" data-statut></span>
 <button type="button" class="bouton" data-brouillon>Enregistrer le brouillon</button>
 <button type="button" class="bouton bouton-jaune" data-pdf>Télécharger le PDF</button></div>
 <div class="outils"><div class="reglages" data-reglages></div><span class="puce-ats" data-ats></span></div>
+</div>
 <div class="bureau"><div class="cadre-feuille" data-cadre><div class="feuille" data-feuille><article></article></div></div></div>
 </aside>
 </div>
@@ -343,6 +352,7 @@ ${champ("E-mail", "contenu.identite.email", { type: "email" })}
 <div class="champ"><span>Permis de conduire</span><div class="puces" role="group" aria-label="Permis de conduire">${permis}</div></div>
 <div class="champ"><span>Disponibilité</span>${caseACocher("Disponible immédiatement", "contenu.disponibilite.immediate")}</div>
 ${champ("Disponible à partir du", "contenu.disponibilite.date", { type: "date", desactive: d.immediate })}
+${champ("Mobilité", "contenu.identite.mobilite", { aide: "Ex. : Île-de-France, France entière, prêt à déménager" })}
 ${champ("Résumé", "contenu.profil", { type: "textarea", aide: "Deux ou trois lignes : qui vous êtes et ce que vous cherchez." })}`;
 }
 
@@ -459,8 +469,8 @@ ${ligne("Certifications", compte(c.certifications.length, "certification"), 5)}
 ${ligne("Langues", `${compte(c.langues.length, "langue")}, ${compte(c.centresInteret.length, "centre")} d'intérêt`, 6)}
 </ul>
 ${aCompleter.length
-		? `<p class="a-completer-titre">À compléter (${aCompleter.length})</p><ul class="a-completer">${aCompleter.map(p => `<li><span>${echapper(p.texte)}</span><button type="button" class="bouton bouton-petit" data-aller="${p.etape}">Compléter</button></li>`).join("")}</ul>`
-		: `<p class="conseil"><strong>Votre CV est complet.</strong></p>`}
+		? `<p class="a-completer-titre">Conseils pour améliorer votre CV (${aCompleter.length})</p><p class="aide" style="margin:0">Facultatifs : vous pouvez enregistrer et télécharger votre CV sans les suivre.</p><ul class="a-completer">${aCompleter.map(p => `<li><span>${echapper(p.texte)}</span><button type="button" class="bouton bouton-petit" data-aller="${p.etape}">Améliorer</button></li>`).join("")}</ul>`
+		: `<p class="conseil"><strong>Votre CV suit tous nos conseils.</strong></p>`}
 <div class="ia"><div style="flex:1 1 240px;min-width:0"><strong>Améliorer avec l'IA</strong><p class="aide" style="margin:4px 0 0">L'IA propose de meilleures formulations pour le résumé et les réalisations, sans inventer d'informations. Vous acceptez ou refusez chaque proposition.</p></div>
 <button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></div>`;
 }
@@ -481,17 +491,20 @@ function afficherPanneau({ focus } = {}) {
 }
 
 // Barre de progression : vert = section remplie, bleu = étape en cours, gris = vide.
+// Pastilles : coche verte = section remplie, cercle vide = à compléter, fond foncé = étape en cours.
 function afficherEtapes() {
 	const derniere = ETAPES.length - 1;
-	$("[data-etapes]").innerHTML = ETAPES.map((nom, i) => {
-		const remplie = sectionRemplie(etat.cv.contenu, i);
-		const classe = remplie && i !== etat.etape ? ' class="remplie"' : "";
+	let remplies = 0;
+	const items = ETAPES.map((nom, i) => {
+		const remplie = i < derniere && sectionRemplie(etat.cv.contenu, i);
+		if (remplie) remplies += 1;
+		const marque = i === derniere ? "" : remplie ? `<span class="fait"><svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>` : `<span class="rond" aria-hidden="true"></span>`;
+		const classe = remplie ? ' class="remplie"' : "";
 		const courante = i === etat.etape ? ' aria-current="step"' : "";
-		// Point jaune = à compléter, point vert = rempli ; pas de point sur « Vérification ».
-		const point = i < derniere ? `<span class="point" aria-hidden="true"></span>` : "";
-		const etatLu = i < derniere ? ` (${remplie ? "remplie" : "à compléter"})` : "";
-		return `<li${classe}${courante}><button type="button" data-aller="${i}"${remplie ? ' class="remplie-point"' : ""} aria-label="${i + 1}. ${nom}${etatLu}">${point}${i + 1}. ${nom}</button></li>`;
+		const titre = i === derniere ? "" : remplie ? " (remplie)" : " (à compléter)";
+		return `<li${classe}${courante}><button type="button" data-aller="${i}" title="${nom}${titre}">${marque}${nom}</button></li>`;
 	}).join("");
+	$("[data-etapes]").innerHTML = items + `<li class="compteur">${remplies}/${derniere}</li>`;
 }
 
 // ----- Barre de réglages de l'aperçu : Modèle, Couleur, Police, Taille, Langue -----
@@ -525,10 +538,10 @@ function afficherOutils() {
 <div class="menu-reglage" role="menu" aria-label="${libelle}" hidden>${optionsReglage(cle, r[cle])}</div></div>`).join("");
 	const colonnes = MODELES[r.modele].colonnes;
 	const ats = $("[data-ats]");
-	ats.textContent = colonnes ? "Deux colonnes · moins sûr pour les ATS" : "Une colonne · compatible ATS";
+	ats.textContent = colonnes ? "Moins sûr pour les ATS" : "Compatible ATS";
 	ats.title = colonnes
-		? "ATS : logiciels de tri des candidatures. Certains lisent mal deux colonnes ; préférez une colonne pour les candidatures en ligne."
-		: "ATS : logiciels de tri des candidatures. Une colonne est lue dans le bon ordre.";
+		? "Deux colonnes. ATS : logiciels de tri des candidatures. Certains lisent mal deux colonnes ; préférez une colonne pour les candidatures en ligne."
+		: "Une colonne. ATS : logiciels de tri des candidatures. Une colonne est lue dans le bon ordre.";
 	ats.classList.toggle("attention", Boolean(colonnes));
 }
 
@@ -764,7 +777,7 @@ $("[data-suivant]").addEventListener("click", async () => {
 });
 
 if ("ResizeObserver" in window) new ResizeObserver(ajusterEchelle).observe($("[data-cadre]"));
-else window.addEventListener("resize", ajusterEchelle);
+window.addEventListener("resize", ajusterEchelle);
 document.fonts?.ready.then(ajusterEchelle);
 
 // ----- Démarrage -----

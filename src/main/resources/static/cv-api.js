@@ -18,7 +18,7 @@ export function nouveauCv() {
 		couleur: "NOIR",
 		taille: "NORMALE",
 		contenu: {
-			identite: { prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", permis: [], liens: [] },
+			identite: { prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", mobilite: "", permis: [], liens: [] },
 			profil: "",
 			competences: [],
 			savoirEtre: [],

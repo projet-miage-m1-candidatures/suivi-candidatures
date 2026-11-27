@@ -42,6 +42,14 @@ public class Cv {
 	@Column(nullable = false, length = 30)
 	private PoliceCv police;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private CouleurCv couleur;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private TailleCv taille;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Convert(converter = ContenuCvJson.class)
 	@Column(nullable = false)
@@ -67,6 +75,8 @@ public class Cv {
 		langue = demande.langue();
 		modele = demande.modele();
 		police = demande.policeEffective();
+		couleur = demande.couleurEffective();
+		taille = demande.tailleEffective();
 		contenu = demande.contenu();
 		dateModification = maintenant;
 	}
@@ -89,6 +99,14 @@ public class Cv {
 
 	PoliceCv getPolice() {
 		return police;
+	}
+
+	CouleurCv getCouleur() {
+		return couleur;
+	}
+
+	TailleCv getTaille() {
+		return taille;
 	}
 
 	ContenuCv getContenu() {

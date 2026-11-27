@@ -144,7 +144,7 @@ class CvController {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	ProblemDetail corpsInvalide() {
 		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-				"Le corps doit contenir un CV JSON valide avec une langue, un modèle et une police autorisés.");
+				"Le corps doit contenir un CV JSON valide avec une langue, un modèle, une police, une couleur et une taille autorisés.");
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -157,11 +157,11 @@ class CvController {
 	}
 
 	record ReponseCv(Long id, String titre, LangueCv langue, ModeleCv modele, PoliceCv police,
-			Instant dateCreation, Instant dateModification, ContenuCv contenu) {
+			CouleurCv couleur, TailleCv taille, Instant dateCreation, Instant dateModification, ContenuCv contenu) {
 
 		static ReponseCv depuis(Cv cv) {
 			return new ReponseCv(cv.getId(), cv.getTitre(), cv.getLangue(), cv.getModele(), cv.getPolice(),
-					cv.getDateCreation(), cv.getDateModification(), cv.getContenu());
+					cv.getCouleur(), cv.getTaille(), cv.getDateCreation(), cv.getDateModification(), cv.getContenu());
 		}
 	}
 }

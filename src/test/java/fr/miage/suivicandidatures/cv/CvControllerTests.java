@@ -40,7 +40,7 @@ class CvControllerTests {
 	private static final String API_AUTH = "/api/v1/auth";
 	private static final ContenuCv.Identite IDENTITE = new ContenuCv.Identite(
 			"Alex", "Moreau", "Data engineer", "Paris", "alex@example.test", "06 00 00 00 00",
-			List.of("B", "BE"), List.of(new ContenuCv.Lien("GitHub", "github.com/alex")));
+			"Île-de-France et télétravail", List.of("B", "BE"), List.of(new ContenuCv.Lien("GitHub", "github.com/alex")));
 
 	private final List<Navigateur> navigateurs = new ArrayList<>();
 	private final List<String> emails = new ArrayList<>();
@@ -74,11 +74,13 @@ class CvControllerTests {
 		long id = cv.path("id").asLong();
 		assertThat(id).isPositive();
 		assertThat(creation.headers().firstValue("Location")).contains(API_CV + "/" + id);
-		assertThat(cv.size()).isEqualTo(8);
+		assertThat(cv.size()).isEqualTo(10);
 		assertThat(cv.path("titre").asString()).isEqualTo(demande.titre());
 		assertThat(cv.path("langue").asString()).isEqualTo("FR");
 		assertThat(cv.path("modele").asString()).isEqualTo("MODERNE");
 		assertThat(cv.path("police").asString()).isEqualTo("LATO");
+		assertThat(cv.path("couleur").asString()).isEqualTo("BORDEAUX");
+		assertThat(cv.path("taille").asString()).isEqualTo("PETITE");
 		assertThat(date(cv, "dateCreation")).isEqualTo(date(cv, "dateModification"));
 		JsonNode contenu = json.valueToTree(demande.contenu());
 		assertThat(cv.path("contenu")).isEqualTo(contenu);
@@ -87,8 +89,26 @@ class CvControllerTests {
 		String document = jdbc.queryForObject("SELECT contenu::text FROM cv WHERE id = ?", String.class, id);
 		assertThat(type).isEqualTo("jsonb");
 		assertThat(json.readTree(document)).isEqualTo(contenu);
-		assertThat(lireCv(candidat, id)).isEqualTo(cv);
+		JsonNode relu = lireCv(candidat, id);
+		assertThat(relu).isEqualTo(cv);
+		assertThat(relu.path("contenu").path("identite").path("mobilite").asString())
+				.isEqualTo("Île-de-France et télétravail");
 		assertThat(listerCv(candidat)).containsExactly(cv);
+	}
+
+	@Test
+	void accepteUnCvSansMobiliteEtLimiteLaLongueurDuChamp() throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode demande = json.valueToTree(exemple("CV sans mobilité"));
+		ObjectNode identite = (ObjectNode) demande.path("contenu").path("identite");
+		identite.remove("mobilite");
+		JsonNode cree = creerCv(candidat, demande);
+		long id = cree.path("id").asLong();
+		assertThat(lireCv(candidat, id).path("contenu").path("identite").has("mobilite")).isFalse();
+
+		identite.put("mobilite", "A".repeat(161));
+		assertThat(probleme(candidat.envoyerCv("PUT", "/" + id, demande), 400)).contains("160");
+		assertThat(lireCv(candidat, id)).isEqualTo(cree);
 	}
 
 	@Test
@@ -104,6 +124,8 @@ class CvControllerTests {
 		demande.put("dateCreation", "2000-01-01T00:00:00Z");
 		demande.put("titre", "CV réécrit");
 		demande.put("langue", "EN");
+		demande.put("couleur", "SAPIN");
+		demande.put("taille", "GRANDE");
 		JsonNode contenu = json.valueToTree(new ContenuCv(IDENTITE, "", List.of(), List.of(), List.of(), List.of(),
 				List.of(), List.of(), List.of(), List.of(), new ContenuCv.Disponibilite(false, "")));
 		demande.set("contenu", contenu);
@@ -113,6 +135,8 @@ class CvControllerTests {
 		assertThat(cv.path("id").asLong()).isEqualTo(id);
 		assertThat(cv.path("titre").asString()).isEqualTo("CV réécrit");
 		assertThat(cv.path("langue").asString()).isEqualTo("EN");
+		assertThat(cv.path("couleur").asString()).isEqualTo("SAPIN");
+		assertThat(cv.path("taille").asString()).isEqualTo("GRANDE");
 		assertThat(cv.path("contenu")).isEqualTo(contenu);
 		assertThat(date(cv, "dateCreation")).isEqualTo(date(premier, "dateCreation"));
 		assertThat(date(cv, "dateModification")).isAfter(date(second, "dateModification"));
@@ -135,7 +159,7 @@ class CvControllerTests {
 
 		assertThat(idCopie).isNotEqualTo(id);
 		assertThat(copie.path("titre").asString()).isEqualTo("Data engineer (copie)");
-		for (String champ : List.of("langue", "modele", "police", "contenu")) {
+		for (String champ : List.of("langue", "modele", "police", "couleur", "taille", "contenu")) {
 			assertThat(copie.path(champ)).isEqualTo(original.path(champ));
 		}
 		assertThat(date(copie, "dateCreation")).isAfter(date(original, "dateCreation"));
@@ -290,10 +314,14 @@ class CvControllerTests {
 
 		JsonNode cv = lireCv(candidat, id);
 		assertThat(listerCv(candidat)).containsExactly(cv);
+		assertThat(cv.path("police").asString()).isEqualTo("SOURCE_SERIF_4");
+		assertThat(cv.path("couleur").asString()).isEqualTo("NOIR");
+		assertThat(cv.path("taille").asString()).isEqualTo("NORMALE");
 		JsonNode contenu = cv.path("contenu");
 		JsonNode identite = contenu.path("identite");
 		assertThat(identite.path("nom").asString()).isEqualTo("Alex Moreau");
 		assertThat(identite.path("prenom").asString()).isEmpty();
+		assertThat(identite.has("mobilite")).isFalse();
 		assertThat(identite.path("permis").isArray()).isTrue();
 		assertThat(identite.path("liens").path(0)).isEqualTo(json.readTree("""
 				{"libelle":"Lien","url":"github.com/alex"}
@@ -318,7 +346,7 @@ class CvControllerTests {
 		HttpResponse<byte[]> export = candidat.lirePdf(id);
 		assertThat(export.statusCode()).isEqualTo(200);
 		try (var document = Loader.loadPDF(export.body())) {
-			assertThat(new PDFTextStripper().getText(document)).contains("Alex Moreau", "Ancien profil",
+			assertThat(new PDFTextStripper().getText(document)).containsIgnoringCase("Alex Moreau").contains("Ancien profil",
 					"avr. 2026 – juil. 2026", "2025 – Été 2026");
 		}
 		((ObjectNode) identite).put("prenom", "Alex").put("nom", "Moreau");
@@ -329,25 +357,33 @@ class CvControllerTests {
 	}
 
 	@Test
-	void appliqueLaPoliceParDefautDuModeleALaCreationEtALaModification() throws Exception {
+	void appliqueLesReglagesParDefautALaCreationEtALaModification() throws Exception {
 		Navigateur candidat = connecter();
-		Map<ModeleCv, PoliceCv> polices = Map.of(ModeleCv.CLASSIQUE, PoliceCv.SOURCE_SERIF_4,
-				ModeleCv.MODERNE, PoliceCv.INTER, ModeleCv.COMPACT, PoliceCv.IBM_PLEX_SANS);
-		for (var choix : polices.entrySet()) {
-			ObjectNode demande = json.valueToTree(exemple("CV sans police"));
+		Map<ModeleCv, List<String>> reglages = Map.of(
+				ModeleCv.CLASSIQUE, List.of("SOURCE_SERIF_4", "NOIR"),
+				ModeleCv.MODERNE, List.of("INTER", "BLEU"),
+				ModeleCv.COMPACT, List.of("IBM_PLEX_SANS", "NOIR"),
+				ModeleCv.ELEGANT, List.of("EB_GARAMOND", "MARINE"),
+				ModeleCv.EPURE, List.of("LATO", "ANTHRACITE"));
+		for (var choix : reglages.entrySet()) {
+			ObjectNode demande = json.valueToTree(exemple("CV avec réglages par défaut"));
 			demande.put("modele", choix.getKey().name());
-			demande.remove("police");
+			demande.remove(List.of("police", "couleur", "taille"));
 			JsonNode cv = creerCv(candidat, demande);
-			assertThat(cv.path("police").asString()).isEqualTo(choix.getValue().name());
+			assertThat(List.of(cv.path("police").asString(), cv.path("couleur").asString())).isEqualTo(choix.getValue());
+			assertThat(cv.path("taille").asString()).isEqualTo("NORMALE");
 		}
 
 		JsonNode cv = creerCv(candidat, exemple("CV avec police"));
 		long id = cv.path("id").asLong();
 		ObjectNode demande = ((ObjectNode) cv).deepCopy();
 		demande.put("modele", "COMPACT");
-		demande.remove("police");
+		demande.remove(List.of("police", "couleur", "taille"));
 		assertThat(candidat.envoyerCv("PUT", "/" + id, demande).statusCode()).isEqualTo(200);
-		assertThat(lireCv(candidat, id).path("police").asString()).isEqualTo("IBM_PLEX_SANS");
+		JsonNode relu = lireCv(candidat, id);
+		assertThat(relu.path("police").asString()).isEqualTo("IBM_PLEX_SANS");
+		assertThat(relu.path("couleur").asString()).isEqualTo("NOIR");
+		assertThat(relu.path("taille").asString()).isEqualTo("NORMALE");
 	}
 
 	private static DemandeCv exemple(String titre) {
@@ -362,7 +398,7 @@ class CvControllerTests {
 				List.of(new ContenuCv.Langue("Anglais", "C1")),
 				List.of(new ContenuCv.Certification("SQL", "Exemple", "2026-05", "https://example.test/certification")),
 				new ContenuCv.Disponibilite(false, "2026-12-01"));
-		return new DemandeCv(titre, LangueCv.FR, ModeleCv.MODERNE, PoliceCv.LATO, contenu);
+		return new DemandeCv(titre, LangueCv.FR, ModeleCv.MODERNE, PoliceCv.LATO, CouleurCv.BORDEAUX, TailleCv.PETITE, contenu);
 	}
 
 	private static Instant date(JsonNode cv, String champ) {

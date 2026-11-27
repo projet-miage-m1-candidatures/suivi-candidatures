@@ -9,9 +9,19 @@ record DemandeCv(
 		@NotNull(message = "La langue du CV est obligatoire.") LangueCv langue,
 		@NotNull(message = "Le modèle du CV est obligatoire.") ModeleCv modele,
 		PoliceCv police,
+		CouleurCv couleur,
+		TailleCv taille,
 		@NotNull @Valid ContenuCv contenu) {
 
 	PoliceCv policeEffective() {
 		return police == null ? modele.policeParDefaut() : police;
+	}
+
+	CouleurCv couleurEffective() {
+		return couleur == null ? modele.couleurParDefaut() : couleur;
+	}
+
+	TailleCv tailleEffective() {
+		return taille == null ? TailleCv.NORMALE : taille;
 	}
 }
