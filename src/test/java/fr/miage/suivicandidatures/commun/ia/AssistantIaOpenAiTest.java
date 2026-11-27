@@ -53,7 +53,7 @@ class AssistantIaOpenAiTest {
 						{
 						  "model": "gpt-6-luna",
 						  "messages": [
-						    {"role": "developer", "content": "Réponds en français."},
+						    {"role": "system", "content": "Réponds en français."},
 						    {"role": "user", "content": "Propose une question SQL."}
 						  ]
 						}

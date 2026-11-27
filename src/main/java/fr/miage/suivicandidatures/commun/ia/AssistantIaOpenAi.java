@@ -37,7 +37,7 @@ class AssistantIaOpenAi implements AssistantIa {
 		}
 
 		Requete corps = new Requete(proprietes.modele(), List.of(
-				Map.of("role", "developer", "content", consignes),
+				Map.of("role", "system", "content", consignes),
 				Map.of("role", "user", "content", demande)));
 
 		JsonNode reponse;
