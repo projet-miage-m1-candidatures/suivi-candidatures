@@ -118,8 +118,8 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 <h1>Mes CV</h1>
 <p>Créez plusieurs versions de votre CV, choisissez leur mise en page et téléchargez-les en PDF.</p>
 </div>
-<div class="actions-page" data-actions-page hidden><button type="button" class="bouton" data-importer>Importer un CV</button><a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
-<input type="file" accept=".pdf,.docx" data-fichier hidden>
+<div class="actions-page" data-actions-page hidden><button type="button" class="bouton" data-importer title="PDF, Word (DOCX), texte ou image (PNG, JPG), 5 Mo maximum. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé. Un nouveau CV est créé : vos CV existants ne sont jamais remplacés.">Importer un CV</button><a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
+<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" data-fichier hidden>
 </div>
 
 <div class="filtres" role="group" aria-label="Filtrer par langue" data-filtres hidden></div>
@@ -128,7 +128,7 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 
 </main>
 <div class="notification" role="status" data-notification hidden></div>
-<div class="depot" data-depot hidden><span>Déposez votre CV (PDF ou DOCX)</span></div>
+<div class="depot" data-depot hidden><span>Déposez votre CV (PDF, Word, texte ou image)</span></div>
 
 </div>
 <script type="module">
@@ -217,7 +217,7 @@ function accueil() {
 <p>Un formulaire guidé en ${SECTIONS.length + 1} étapes, avec l'aperçu en direct, trois modèles et cinq polices.</p>
 <a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
 <div class="choix-carte"><span class="icone">${ICONE_IMPORTER}</span><h3>Importer un CV</h3>
-<p>Un fichier PDF ou DOCX de 5 Mo maximum. Vous pouvez aussi le glisser sur la page.</p>
+<p>PDF, Word (DOCX), texte ou image (PNG, JPG), 5 Mo maximum. Vous pouvez aussi le glisser sur la page. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé.</p>
 <button type="button" class="bouton" data-importer>Importer un CV</button></div>
 </div></section>`;
 }

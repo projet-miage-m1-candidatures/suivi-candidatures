@@ -26,7 +26,8 @@ export async function appelerApi(methode, chemin, corps, { redirigerSur401 = tru
 	const method = methode.toUpperCase();
 	const headers = new Headers();
 	let body = corps;
-	if (corps !== undefined && !(corps instanceof URLSearchParams)) {
+	// Formulaire encodé ou fichier (FormData) : le navigateur choisit lui-même le Content-Type.
+	if (corps !== undefined && !(corps instanceof URLSearchParams) && !(corps instanceof FormData)) {
 		headers.set("Content-Type", "application/json");
 		body = JSON.stringify(corps);
 	}

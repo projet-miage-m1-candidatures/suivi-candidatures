@@ -52,6 +52,17 @@ test("envoie le formulaire encodé et laisse le formulaire traiter son 401", asy
 	assert.deepEqual(redirections, []);
 });
 
+test("envoie un fichier en multipart avec le jeton CSRF", async t => {
+	const { requetes } = simulerNavigateur(t, new Response(null, { status: 200 }));
+	const donnees = new FormData();
+	donnees.append("fichier", new Blob(["Alex Moreau"], { type: "text/plain" }), "cv.txt");
+	await appelerApi("POST", "/api/v1/cv/import", donnees);
+	const envoi = requetes[1];
+	assert.equal(envoi.headers.get("X-XSRF-TOKEN"), "jeton-de-test");
+	assert.match(envoi.headers.get("Content-Type"), /^multipart\/form-data; boundary=/);
+	assert.equal((await envoi.formData()).get("fichier").name, "cv.txt");
+});
+
 test("redirige vers la connexion pour un 401 sur le profil", async t => {
 	const { requetes, redirections } = simulerNavigateur(t, new Response(null, { status: 401 }));
 	const reponse = await appelerApi("GET", "/api/v1/auth/moi");

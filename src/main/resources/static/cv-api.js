@@ -57,6 +57,13 @@ export async function dupliquerCv(id) {
 	return requeteCv("POST", `/${encodeURIComponent(id)}/copie`);
 }
 
+// Analyse un fichier (PDF, DOCX, TXT, PNG, JPG) avec l'IA. Rien n'est enregistré : renvoie { langue, contenu }.
+export async function importerCv(fichier) {
+	const donnees = new FormData();
+	donnees.append("fichier", fichier);
+	return requeteCv("POST", "/import", donnees);
+}
+
 export async function telechargerPdf(id) {
 	const reponse = await appelerCv("GET", `/${encodeURIComponent(id)}/pdf`);
 	const disposition = reponse.headers.get("Content-Disposition");

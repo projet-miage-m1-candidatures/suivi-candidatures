@@ -173,8 +173,8 @@ select:hover:not(:disabled){border-color:#9dbbea}
 
 </div>
 <div class="actions-tete">
-<div class="boutons"><button type="button" class="bouton" data-importer title="L'aperçu se met à jour pendant la saisie. Vous pouvez aussi importer un CV existant, ou le glisser sur la page.">Importer un CV</button></div>
-<input type="file" accept=".pdf,.docx" data-fichier hidden>
+<div class="boutons"><button type="button" class="bouton" data-importer title="PDF, Word (DOCX), texte ou image (PNG, JPG), 5 Mo maximum. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé. Un nouveau CV est créé : vos CV existants ne sont jamais remplacés.">Importer un CV</button></div>
+<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" data-fichier hidden>
 </div>
 </div>
 
@@ -204,12 +204,12 @@ select:hover:not(:disabled){border-color:#9dbbea}
 
 </main>
 <div class="notification" role="status" data-notification hidden></div>
-<div class="depot" data-depot hidden><span>Déposez votre CV (PDF ou DOCX)</span></div>
+<div class="depot" data-depot hidden><span>Déposez votre CV (PDF, Word, texte ou image)</span></div>
 
 </div>
 <script type="module">
 import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf } from "./cv-api.js";
-import { brancherImport } from "./cv-import.js";
+import { brancherImport, reprendreCvImporte } from "./cv-import.js";
 import { MODELES, POLICES, COULEURS, TAILLES, reglages, PERMIS, ETAPES, afficherCv, evaluerCv, sectionRemplie, normaliserContenu, nomComplet, echapper, periode, formaterDate } from "./cv-rendu.js";
 
 const NIVEAUX = ["Langue maternelle", "C2", "C1", "B2", "B1", "A2", "A1"];
@@ -739,7 +739,16 @@ document.addEventListener("click", async evenement => {
 	}
 });
 
-brancherImport({ champ: $("[data-fichier]"), depot: $("[data-depot]"), notifier });
+// L'import crée un nouveau CV et ouvre sa page : on enregistre d'abord le CV ouvert pour ne rien perdre.
+async function avantImport() {
+	const saisi = etat.cv.titre.trim() || ETAPES.slice(0, -1).some((_, i) => sectionRemplie(etat.cv.contenu, i));
+	if (!etat.cv.id && !saisi) return true;
+	if (await enregistrer({ silencieux: true })) return true;
+	notifier("Le CV ouvert n'a pas pu être enregistré : complétez les champs obligatoires avant d'importer un autre CV.");
+	return false;
+}
+
+brancherImport({ champ: $("[data-fichier]"), depot: $("[data-depot]"), notifier, avantImport });
 
 document.addEventListener("click", evenement => {
 	if (!evenement.target.closest(".reglage")) fermerMenus();
@@ -788,6 +797,20 @@ const id = parametres.get("id");
 const etapeDemandee = parametres.get("etape");
 if (etapeDemandee === "verification") etat.etape = ETAPES.length - 1;
 else if (/^\d+$/.test(etapeDemandee ?? "") && Number(etapeDemandee) < ETAPES.length) etat.etape = Number(etapeDemandee);
+// Retour d'un import : « importe=1 » (enregistré comme brouillon) ou « importe=a-completer » (prénom ou nom manquant).
+const importe = parametres.get("importe");
+if (importe) {
+	parametres.delete("importe");
+	history.replaceState(null, "", `${window.location.pathname}${parametres.size ? `?${parametres}` : ""}`);
+}
+const cvImporte = importe === "a-completer" ? reprendreCvImporte() : null;
+if (cvImporte) {
+	etat.cv = cvImporte;
+	etat.etape = 0;
+	notifier("CV importé. Ajoutez votre prénom et votre nom, puis enregistrez : il n'est pas encore enregistré.");
+} else if (importe === "1") {
+	notifier("CV importé et enregistré comme brouillon. Relisez chaque section : l'IA a pu se tromper.");
+}
 if (id) {
 	try {
 		etat.cv = await lireCv(id);
