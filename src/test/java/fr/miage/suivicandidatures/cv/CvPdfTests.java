@@ -29,6 +29,7 @@ import org.apache.pdfbox.text.TextPosition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -47,6 +48,10 @@ class CvPdfTests {
 	@MethodSource("modelesEtPolices")
 	void genereUnPdfA4AvecDuTexteEtLesPolicesIntegrees(ModeleCv modele, PoliceCv police) throws IOException {
 		Cv cv = cv(modele, police, LangueCv.FR, "Profil de test", List.of(experience(0)), List.of());
+		if (modele == ModeleCv.CHRONOLOGIQUE && police == PoliceCv.GELASIO) {
+			assertThat(html.rendre(cv)).contains("<article class=\"cv modele-chronologique\"")
+					.doesNotContain("<div class=\"cv-colonnes\">");
+		}
 		byte[] resultat = pdf.generer(cv);
 		assertThat(resultat).startsWith("%PDF".getBytes(StandardCharsets.US_ASCII));
 		try (PDDocument document = Loader.loadPDF(resultat)) {
@@ -66,7 +71,7 @@ class CvPdfTests {
 			String famille = police.famille().replace(" ", "");
 			String regular = police == PoliceCv.IBM_PLEX_SANS ? famille : famille + "-Regular";
 			assertThat(fontes).contains(regular, famille + "-Bold");
-			if (modele == ModeleCv.CLASSIQUE && police.italique() != null) {
+			if ((modele == ModeleCv.CLASSIQUE || modele == ModeleCv.CHRONOLOGIQUE) && police.italique() != null) {
 				assertThat(fontes).contains(famille + "-" + police.italique());
 			}
 		}
@@ -129,6 +134,44 @@ class CvPdfTests {
 			assertThat(contientCouleur(image, "#2b2f36")).isTrue();
 			assertThat(contientCouleur(image, "#4a4f57")).isTrue();
 		}
+	}
+
+	@ParameterizedTest
+	@CsvSource({"SERRE, 'cv modele-moderne taille-petite interligne-serre'",
+			"AERE, 'cv modele-moderne taille-petite interligne-aere'",
+			"NORMAL, 'cv modele-moderne taille-petite'"})
+	void appliqueLInterligneSurLeCvDansLeHtmlDuPdf(InterligneCv interligne, String classe) {
+		ContenuCv contenu = cvComplet(LangueCv.FR).getContenu();
+		DemandeCv demande = new DemandeCv("CV de test", LangueCv.FR, ModeleCv.MODERNE, null, null,
+				TailleCv.PETITE, interligne, contenu);
+		Cv cv = new Cv(1L, demande, Instant.EPOCH);
+
+		assertThat(html.rendre(cv)).contains("<article class=\"" + classe + "\"");
+	}
+
+	@Test
+	void resserreLesEspacementsEntreLesSectionsDansLePdf() throws IOException {
+		Cv normal = cvComplet(LangueCv.FR);
+		Cv serre = new Cv(1L, new DemandeCv(normal.getTitre(), normal.getLangue(), normal.getModele(),
+				normal.getPolice(), normal.getCouleur(), normal.getTaille(), InterligneCv.SERRE, normal.getContenu()),
+				Instant.EPOCH);
+		String titre = "Certifications";
+
+		assertThat(positionTitre(pdf, normal, titre) - positionTitre(pdf, serre, titre))
+				.as("remontée de Certifications en points PDF").isGreaterThan(20f);
+
+		// Une hauteur de ligne identique permet de mesurer uniquement l'effet des espacements.
+		CvPdf pdfHauteurFixe = new CvPdf(new CvHtml(moteur()) {
+			@Override
+			String rendre(Cv cv) {
+				return super.rendre(cv).replace("</head>", """
+						<style type="text/css">.cv, .cv.interligne-serre { line-height: 1.35; }</style>
+						</head>
+						""");
+			}
+		});
+		assertThat(positionTitre(pdfHauteurFixe, normal, titre) - positionTitre(pdfHauteurFixe, serre, titre))
+				.as("remontée due aux espacements seuls, en points PDF").isGreaterThan(20f);
 	}
 
 	@ParameterizedTest
@@ -225,9 +268,9 @@ class CvPdfTests {
 
 	@Test
 	void deplaceLeTitreDeFormationQuandIlNeRestePasAssezDePlacePourLeDiplome() throws IOException {
-		List<ContenuCv.Experience> experiences = IntStream.rangeClosed(1, 7)
+		List<ContenuCv.Experience> experiences = IntStream.rangeClosed(1, 8)
 				.mapToObj(i -> new ContenuCv.Experience("Mission " + i, "Nordlys", "Paris", "2025-04", "", true, "",
-						IntStream.range(0, i == 7 ? 1 : 4).mapToObj(n -> "Réalisation " + n
+						IntStream.range(0, i == 8 ? 1 : 4).mapToObj(n -> "Réalisation " + n
 								+ ". Développement et simplification d’un traitement de données dans l’entrepôt partagé.")
 								.toList())).toList();
 		Cv cv = cv(ModeleCv.CLASSIQUE, PoliceCv.SOURCE_SERIF_4, LangueCv.EN,
@@ -236,39 +279,41 @@ class CvPdfTests {
 
 		List<String> pages = pagesPdf(cv);
 		assertThat(pages).hasSize(2);
-		assertThat(titres(pageAvec(pages, "Master MIAGE"))).contains("EDUCATION");
+		assertThat(pages.getLast()).contains("Master MIAGE");
+		assertThat(titres(pages.getLast())).contains("EDUCATION");
 	}
 
 	@Test
 	void gardeLeTitreCompactAvecLaPremiereExperienceLongue() throws IOException {
-		List<String> realisations = IntStream.range(0, 23).mapToObj(n -> "Réalisation " + n
+		List<String> realisations = IntStream.range(0, 25).mapToObj(n -> "Réalisation " + n
 				+ ". Développement et simplification d’un traitement de données dans l’entrepôt partagé.").toList();
 		ContenuCv.Experience experience = new ContenuCv.Experience("Mission longue", "Nordlys", "Paris",
 				"2025-04", "", true, "", realisations);
 		Cv cv = cv(ModeleCv.COMPACT, PoliceCv.IBM_PLEX_SANS, LangueCv.EN,
-				"Je prépare des traitements de données complexes et je propose des solutions adaptées au besoin de chaque équipe.",
+				"Je prépare des traitements de données complexes et je propose des solutions adaptées au besoin de chaque équipe. "
+						.repeat(18).stripTrailing(),
 				List.of(experience), List.of());
 		List<String> pages = pagesPdf(cv);
 		assertThat(pages).hasSize(2);
 		String page = pageAvec(pages, "Mission longue");
-		assertThat(page).contains("Réalisation 22.");
+		assertThat(page).contains("Réalisation 24.");
 		assertThat(titres(page)).contains("EXPERIENCE");
 	}
 
 	@Test
 	void conserveToutLeTexteDuneExperiencePlusHauteQuunePage() throws IOException {
 		List<String> realisations = IntStream.range(0, 25)
-				.mapToObj(i -> "Repere-" + i + "-DEBUT " + "Réalisation documentée avec plusieurs résultats. ".repeat(8)
-						+ "Repere-" + i + "-FIN")
+				.mapToObj(i -> "Repere" + i + "DEBUT " + "Réalisation documentée avec plusieurs résultats. ".repeat(8)
+						+ "Repere" + i + "FIN")
 				.toList();
 		ContenuCv.Experience experience = new ContenuCv.Experience("Projet long", "Équipe", "Paris", "", "", false, "", realisations);
 		List<String> pages = pagesPdf(cv(ModeleCv.MODERNE, PoliceCv.INTER, LangueCv.EN, "Profil de test",
 				List.of(experience), List.of()));
 		assertThat(pages).hasSizeGreaterThan(1);
-		assertThat(pageAvec(pages, "Projet long")).contains("Experience", "Repere-0-DEBUT");
+		assertThat(pageAvec(pages, "Projet long")).contains("Experience", "Repere0DEBUT");
 		String document = String.join("\n", pages);
 		for (int i = 0; i < realisations.size(); i++) {
-			assertThat(document).containsOnlyOnce("Repere-" + i + "-DEBUT").containsOnlyOnce("Repere-" + i + "-FIN");
+			assertThat(document).containsOnlyOnce("Repere" + i + "DEBUT").containsOnlyOnce("Repere" + i + "FIN");
 		}
 	}
 
@@ -297,6 +342,24 @@ class CvPdfTests {
 	private static List<String> rubriques(String gabarit) {
 		return Pattern.compile("<h2><span>([^<]+)</span></h2>").matcher(gabarit).results()
 				.map(resultat -> resultat.group(1)).toList();
+	}
+
+	private static float positionTitre(CvPdf moteurPdf, Cv cv, String titre) throws IOException {
+		try (PDDocument document = Loader.loadPDF(moteurPdf.generer(cv))) {
+			assertThat(document.getNumberOfPages()).isEqualTo(1);
+			List<Float> positions = new ArrayList<>();
+			PDFTextStripper lecteur = new PDFTextStripper() {
+				@Override
+				protected void writeString(String texte, List<TextPosition> caracteres) {
+					if (titres(texte).equals(titres(titre))) {
+						positions.add(caracteres.getFirst().getYDirAdj());
+					}
+				}
+			};
+			lecteur.getText(document);
+			assertThat(positions).as("position du titre %s sur la page", titre).hasSize(1);
+			return positions.getFirst();
+		}
 	}
 
 	private static float tailleMaximale(PDDocument document) throws IOException {
@@ -336,7 +399,7 @@ class CvPdfTests {
 				"elodie@example.test", "", null, List.of(), List.of(new ContenuCv.Lien("Site", "https://example.test/elodie")));
 		ContenuCv contenu = new ContenuCv(identite, profil, List.of(), List.of(), List.of(), experiences, formations,
 				List.of(), List.of(), List.of(), new ContenuCv.Disponibilite(false, ""));
-		return new Cv(1L, new DemandeCv("CV de test", langue, modele, police, null, null, contenu), Instant.EPOCH);
+		return new Cv(1L, new DemandeCv("CV de test", langue, modele, police, null, null, null, contenu), Instant.EPOCH);
 	}
 
 	private static Cv cvComplet(LangueCv langue) {
@@ -359,11 +422,13 @@ class CvPdfTests {
 				List.of(new ContenuCv.Certification("Certificat SQL", "Organisme", "2026-05", "http://example.test/badge"),
 						new ContenuCv.Certification("Titre sans lien", "", "", "javascript:alert(3)")),
 				new ContenuCv.Disponibilite(false, "2026-12-01"));
-		return new Cv(1L, new DemandeCv("CV de test", langue, ModeleCv.MODERNE, PoliceCv.INTER, null, null, contenu), Instant.EPOCH);
+		return new Cv(1L, new DemandeCv("CV de test", langue, ModeleCv.MODERNE, PoliceCv.INTER, null, null, null, contenu),
+				Instant.EPOCH);
 	}
 
 	private static Cv avecReglages(Cv cv, ModeleCv modele, CouleurCv couleur, TailleCv taille) {
-		return new Cv(1L, new DemandeCv(cv.getTitre(), cv.getLangue(), modele, null, couleur, taille, cv.getContenu()), Instant.EPOCH);
+		return new Cv(1L, new DemandeCv(cv.getTitre(), cv.getLangue(), modele, null, couleur, taille,
+				cv.getInterligne(), cv.getContenu()), Instant.EPOCH);
 	}
 
 	private static Stream<Arguments> modelesEtPolices() {

@@ -26,9 +26,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -40,11 +45,13 @@ class CvController {
 	private final CvService service;
 	private final CandidatCourant candidatCourant;
 	private final CvPdf pdf;
+	private final ImportCvService importCv;
 
-	CvController(CvService service, CandidatCourant candidatCourant, CvPdf pdf) {
+	CvController(CvService service, CandidatCourant candidatCourant, CvPdf pdf, ImportCvService importCv) {
 		this.service = service;
 		this.candidatCourant = candidatCourant;
 		this.pdf = pdf;
+		this.importCv = importCv;
 	}
 
 	@GetMapping
@@ -55,6 +62,22 @@ class CvController {
 	@PostMapping
 	ResponseEntity<ReponseCv> creer(@Valid @RequestBody DemandeCv demande) {
 		return reponseCreation(service.creer(candidatCourant.id(), demande));
+	}
+
+	@PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	ReponseImportCv importer(@RequestPart("fichier") MultipartFile fichier) {
+		candidatCourant.id();
+		return importCv.importer(fichier);
+	}
+
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	ProblemDetail fichierTropGros() {
+		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, FichierImportCv.MESSAGE_TAILLE_MAX);
+	}
+
+	@ExceptionHandler({MissingServletRequestPartException.class, MultipartException.class})
+	ProblemDetail fichierManquant() {
+		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Joignez un CV dans le champ « fichier ».");
 	}
 
 	@GetMapping("/{id}")
@@ -144,7 +167,8 @@ class CvController {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	ProblemDetail corpsInvalide() {
 		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-				"Le corps doit contenir un CV JSON valide avec une langue, un modèle, une police, une couleur et une taille autorisés.");
+				"Le corps doit contenir un CV JSON valide avec une langue, un modèle, une police, une couleur, "
+						+ "une taille et un interligne autorisés.");
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -157,11 +181,13 @@ class CvController {
 	}
 
 	record ReponseCv(Long id, String titre, LangueCv langue, ModeleCv modele, PoliceCv police,
-			CouleurCv couleur, TailleCv taille, Instant dateCreation, Instant dateModification, ContenuCv contenu) {
+			CouleurCv couleur, TailleCv taille, InterligneCv interligne, Instant dateCreation,
+			Instant dateModification, ContenuCv contenu) {
 
 		static ReponseCv depuis(Cv cv) {
 			return new ReponseCv(cv.getId(), cv.getTitre(), cv.getLangue(), cv.getModele(), cv.getPolice(),
-					cv.getCouleur(), cv.getTaille(), cv.getDateCreation(), cv.getDateModification(), cv.getContenu());
+					cv.getCouleur(), cv.getTaille(), cv.getInterligne(), cv.getDateCreation(), cv.getDateModification(),
+					cv.getContenu());
 		}
 	}
 }

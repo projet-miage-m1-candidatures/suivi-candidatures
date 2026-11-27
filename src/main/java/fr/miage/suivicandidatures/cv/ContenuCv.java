@@ -28,6 +28,7 @@ record ContenuCv(
 	private static final String ESPACES = "[\\p{Zs}\\t\\n\\r\\f\\x0B\\u2028\\u2029\\uFEFF]";
 	private static final java.util.regex.Pattern BORDS = java.util.regex.Pattern.compile(
 			"\\A" + ESPACES + "+|" + ESPACES + "+\\z");
+	static final String CODES_PERMIS = "AM|A1|A2|A|B|BE|C1|C1E|C|CE|D1|D1E|D|DE";
 
 	static String sansEspacesAuxBords(String texte) {
 		return texte == null ? "" : BORDS.matcher(texte).replaceAll("");
@@ -41,7 +42,7 @@ record ContenuCv(
 			@Size(max = 254) String email,
 			@Size(max = 50) String telephone,
 			@JsonInclude(JsonInclude.Include.NON_NULL) @Size(max = 160) String mobilite,
-			@NotNull @Size(max = 30) List<@NotNull @Pattern(regexp = "AM|A1|A2|A|B|BE|C1|C1E|C|CE|D1|D1E|D|DE",
+			@NotNull @Size(max = 30) List<@NotNull @Pattern(regexp = CODES_PERMIS,
 					message = "Le code du permis de conduire est invalide.") String> permis,
 			@NotNull @Size(max = 30) List<@NotNull @Valid Lien> liens) {
 

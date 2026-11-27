@@ -1,0 +1,60 @@
+/* Fenêtre « Importer votre CV » (cv-import.js), partagée par « Mes CV » et « Créer un CV ». */
+.fenetre-import {
+	box-sizing: border-box;
+	width: min(620px, calc(100vw - 32px));
+	max-height: calc(100vh - 48px);
+	padding: 30px 32px 26px;
+	border: 0;
+	border-radius: 24px;
+	background: #fff;
+	color: #0f2a5c;
+	font-family: 'Instrument Sans', system-ui, sans-serif;
+	box-shadow: 0 24px 60px rgba(15, 42, 92, .28);
+}
+.fenetre-import::backdrop { background: rgba(15, 42, 92, .45); }
+.fenetre-import h2 { margin: 0 40px 6px 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px; line-height: 1.1; }
+.intro-import { margin: 0 0 18px; font-size: 15.5px; line-height: 1.5; color: #4a5f86; }
+.fermer-import { position: absolute; top: 16px; right: 18px; width: 38px; height: 38px; border: 0; border-radius: 50%; background: transparent; color: #4a5f86; font-size: 26px; line-height: 1; cursor: pointer; }
+.fermer-import:hover { background: #f1f6fd; color: #0f2a5c; }
+
+.zone-import { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 30px 20px; border: 2px dashed #b7c9e8; border-radius: 18px; background: #f8fbff; text-align: center; font-size: 15px; color: #4a5f86; cursor: pointer; transition: background .15s, border-color .15s; }
+.zone-import:hover, .zone-import.survol { border-color: #2a64cc; background: #eef4fd; }
+.zone-import strong { font-size: 17px; color: #0f2a5c; }
+.zone-import small { margin-top: 4px; font-size: 13px; }
+.icone-import { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; margin-bottom: 4px; border-radius: 16px; background: #e3edfc; color: #1d4fa8; }
+.lien-import { padding: 0; border: 0; background: none; color: #1d4fa8; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.fichier-import { display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 1.5px solid #d3e1f6; border-radius: 18px; background: #f8fbff; }
+.entete-fichier { display: flex; align-items: center; gap: 12px; }
+.entete-fichier > span:nth-child(2) { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.entete-fichier strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+.entete-fichier small { font-size: 13px; color: #4a5f86; }
+.icone-fichier { display: flex; align-items: center; justify-content: center; flex: none; width: 42px; height: 42px; border-radius: 12px; background: #fde8e4; color: #c2412d; }
+.apercu-fichier { overflow: hidden; border-radius: 12px; border: 1px solid #e3e7ee; background: #fff; box-shadow: 0 4px 14px rgba(15, 42, 92, .08); }
+.apercu-fichier img { display: block; max-width: 100%; max-height: 320px; margin: 0 auto; object-fit: contain; }
+.page-pdf { max-height: 340px; overflow: auto; }
+.page-pdf canvas { display: block; width: 100%; height: auto; }
+.apercu-fichier pre { max-height: 220px; margin: 0; padding: 12px 14px; overflow: auto; white-space: pre-wrap; font: 13px/1.5 ui-monospace, Menlo, monospace; color: #1b1f24; }
+
+.erreur-import { margin: 12px 0 0; padding: 10px 14px; border-radius: 12px; background: #fdecee; color: #a02738; font-size: 14px; font-weight: 600; }
+.note-import { margin: 14px 0 0; font-size: 13px; color: #6b7a96; }
+.actions-import { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.bouton-import { min-height: 46px; padding: 0 22px; border: 1.5px solid #bcd3f5; border-radius: 999px; background: #fff; color: #0f2a5c; font: 600 15px 'Instrument Sans', system-ui, sans-serif; cursor: pointer; }
+.bouton-import.principal { border: 0; background: #ffc933; font-weight: 700; box-shadow: 0 8px 22px rgba(15, 42, 92, .14); }
+.bouton-import:disabled { opacity: .45; cursor: default; box-shadow: none; }
+
+/* Pendant l'analyse */
+.message-analyse { margin: 4px 0 18px; font-size: 16px; font-weight: 600; line-height: 1.5; }
+.progression-import { height: 10px; overflow: hidden; border-radius: 999px; background: #e3edfc; }
+.progression-import span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2a64cc, #5b8def); transition: width .3s ease; }
+.pourcentage-import { margin: 8px 0 14px; font-size: 14px; font-weight: 700; color: #1d4fa8; text-align: right; font-variant-numeric: tabular-nums; }
+.etapes-import { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; font-size: 15px; color: #7d8aa3; }
+.etapes-import li { display: flex; align-items: center; gap: 10px; }
+.etapes-import .faite { color: #14573f; }
+.etapes-import .en-cours { color: #0f2a5c; font-weight: 700; }
+.marque-import { display: flex; align-items: center; justify-content: center; flex: none; width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid #c4d0e3; }
+.faite .marque-import { border: 0; background: #3a9a6a; color: #fff; }
+.en-cours .marque-import { border: 2.5px solid #d3e1f6; border-top-color: #2a64cc; animation: tourne-import .8s linear infinite; }
+@keyframes tourne-import { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .en-cours .marque-import { animation: none; } .progression-import span { transition: none; } }
+@media (max-width: 520px) { .fenetre-import { padding: 24px 18px 20px; } .fenetre-import h2 { font-size: 26px; } }

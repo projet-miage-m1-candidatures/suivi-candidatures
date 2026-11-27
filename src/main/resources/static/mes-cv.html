@@ -13,6 +13,8 @@ a:hover{opacity:.88}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #0f2a5c;outline-offset:3px}
 button{font-family:inherit}
 [hidden]{display:none!important}
+/* Menu de gauche : toujours en entier à l'écran, seul le contenu de droite défile (sur mobile, il reste au-dessus). */
+@media (min-width:900px){.menu-lateral{position:sticky!important;top:0;align-self:flex-start;height:100vh;overflow-y:auto}}
 main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .page-tete{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
 .page-tete h1{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:56px;line-height:1;letter-spacing:-.015em;color:#0f2a5c}
@@ -27,9 +29,14 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 @media (max-width:1380px){.grille{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.grille{grid-template-columns:minmax(0,1fr)}}
 .carte{position:relative;display:flex;flex-direction:column;gap:14px;min-width:0;padding:22px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(15,42,92,.08)}
-.carte-tete{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.carte-tete h2{margin:0;font-size:21px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
-.carte-tete .date{margin:4px 0 0;font-size:13.5px;color:#4a5f86}
+.carte-entete{display:flex;flex-direction:column;gap:6px}
+.carte-tete{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.carte-infos{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.carte-infos p{margin:0;font-size:13.5px;line-height:1.5;color:#4a5f86}
+/* Titre sur une seule ligne, coupé par « … » s'il est trop long (titre complet au survol). */
+.carte-tete h2{min-width:0;margin:0;overflow:hidden;font-size:20px;font-weight:700;line-height:1.25;white-space:nowrap;text-overflow:ellipsis}
+.langue-cv{display:inline-block;padding:2px 10px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:12.5px;font-weight:700;letter-spacing:.02em}
+.langue-cv.en{background:#fdf0d5;color:#7a4a00}
 .actions-page{display:flex;flex-wrap:wrap;gap:10px}
 .actions-page .bouton{min-height:50px}
 .progression{display:flex;flex-direction:column;gap:8px}
@@ -47,7 +54,7 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 .lien{padding:4px 0;border:0;background:transparent;color:#1d4fa8;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .carte-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:14px;border-top:1px solid #e3edfc}
 .menu{position:relative}
-.bouton-menu{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#0f2a5c;font-size:20px;font-weight:700;line-height:1;cursor:pointer}
+.bouton-menu{flex:none;width:40px;height:40px;margin-right:-8px;border-radius:50%;border:0;background:transparent;color:#0f2a5c;font-size:20px;font-weight:700;line-height:1;cursor:pointer}
 .bouton-menu:hover{background:#f1f6fd}
 .menu-liste{position:absolute;right:0;top:44px;z-index:5;min-width:210px;padding:6px;border-radius:14px;background:#fff;box-shadow:0 12px 32px rgba(15,42,92,.18)}
 .menu-liste button{display:block;width:100%;min-height:40px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#0f2a5c;font-size:14.5px;font-weight:600;text-align:left;cursor:pointer}
@@ -72,15 +79,16 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 .notification{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:14px;background:#0f2a5c;color:#fff;font-size:14.5px;box-shadow:0 12px 32px rgba(15,42,92,.3)}
 @media (max-width:700px){main.page{padding:28px 16px 48px!important}.page-tete h1{font-size:44px}}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;600;700&family=Lora:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;600;700&family=Lora:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Gelasio:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/cv-modeles.css">
+<link rel="stylesheet" href="/cv-import.css">
 <script type="module" src="/authentification.js"></script>
 </head>
 <body>
 <div style="width:100%;min-height:100vh;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
 
 <!-- ===== Menu latéral (identique sur tous les écrans) ===== -->
-<aside style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
+<aside class="menu-lateral" style="flex:1 1 248px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:30px;padding:28px 20px;background:linear-gradient(180deg,#2a64cc 0%,#3672d6 72%,#5a8de0 100%);color:#fff">
 <div aria-hidden="true" style="position:absolute;left:-90px;bottom:-60px;width:380px;height:190px;background:radial-gradient(closest-side,#fff 0%,rgba(255,255,255,.7) 45%,rgba(255,255,255,0) 100%);opacity:.35"></div>
 <a href="tableau-de-bord.html" style="position:relative;display:flex;align-items:center;gap:10px;padding:0 6px;color:#fff;font-weight:700;font-size:19px;letter-spacing:-.01em">
 <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff">
@@ -118,8 +126,7 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 <h1>Mes CV</h1>
 <p>Créez plusieurs versions de votre CV, choisissez leur mise en page et téléchargez-les en PDF.</p>
 </div>
-<div class="actions-page" data-actions-page hidden><button type="button" class="bouton" data-importer title="PDF, Word (DOCX), texte ou image (PNG, JPG), 5 Mo maximum. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé. Un nouveau CV est créé : vos CV existants ne sont jamais remplacés.">Importer un CV</button><a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
-<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" data-fichier hidden>
+<div class="actions-page" data-actions-page hidden><button type="button" class="bouton" data-importer title="PDF, Word (DOCX), texte ou image (PNG, JPG), 10 Mo maximum. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé. Un nouveau CV est créé : vos CV existants ne sont jamais remplacés.">Importer un CV</button><a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
 </div>
 
 <div class="filtres" role="group" aria-label="Filtrer par langue" data-filtres hidden></div>
@@ -133,7 +140,7 @@ main.page>*{width:100%;max-width:1200px;margin-left:auto;margin-right:auto;box-s
 </div>
 <script type="module">
 import { listerCv, supprimerCv, dupliquerCv, telechargerPdf } from "./cv-api.js";
-import { MODELES, POLICES, ETAPES, afficherCv, sectionRemplie, normaliserContenu, echapper } from "./cv-rendu.js";
+import { MODELES, ETAPES, afficherCv, sectionRemplie, normaliserContenu, echapper } from "./cv-rendu.js";
 import { brancherImport } from "./cv-import.js";
 
 const grille = document.querySelector("[data-grille]");
@@ -162,25 +169,24 @@ function progression(cv, lienModifier) {
 	const contenu = normaliserContenu(cv.contenu);
 	const manquantes = SECTIONS.map((nom, etape) => ({ nom, etape })).filter(s => !sectionRemplie(contenu, s.etape));
 	const remplies = SECTIONS.length - manquantes.length;
-	const experiences = contenu.experiences.filter(e => e.poste?.trim()).length;
-	const competences = contenu.competences.reduce((n, g) => n + g.elements.length, 0);
+	const pourcentage = Math.round(remplies / SECTIONS.length * 100);
 	const etat = manquantes.length
 		? `<p class="etat-incomplet">À compléter : ${manquantes.map(s => `<a href="${lienModifier}&etape=${s.etape}">${s.nom}</a>`).join(", ")}</p>`
 		: `<p class="etat-complet">${ICONE_OK}CV complet</p>`;
 	return `<div class="progression">
-<div class="progression-tete"><strong>${remplies}/${SECTIONS.length} sections remplies</strong><span>${experiences} exp. · ${competences} compétence${competences > 1 ? "s" : ""}</span></div>
-<div class="barre" role="progressbar" aria-label="Sections remplies" aria-valuemin="0" aria-valuemax="${SECTIONS.length}" aria-valuenow="${remplies}"><span style="width:${Math.round(remplies / SECTIONS.length * 100)}%"></span></div>
+<div class="progression-tete"><strong>${remplies}/${SECTIONS.length} sections remplies</strong><span>${pourcentage} %</span></div>
+<div class="barre" role="progressbar" aria-label="Sections remplies" aria-valuemin="0" aria-valuemax="${SECTIONS.length}" aria-valuenow="${remplies}"><span style="width:${pourcentage}%"></span></div>
 ${etat}</div>`;
 }
 
 function carte(cv) {
 	const modele = MODELES[cv.modele]?.nom ?? cv.modele;
-	const police = POLICES[cv.police]?.nom ?? cv.police;
 	const lienModifier = `creer-cv.html?id=${cv.id}`;
 	const titre = echapper(cv.titre);
 	return `<article class="carte" data-id="${cv.id}">
+<div class="carte-entete">
 <div class="carte-tete">
-<div style="min-width:0"><h2>${titre}</h2><p class="date">Modifié le ${formatDate.format(new Date(cv.dateModification))}</p><p class="date" style="margin-top:2px">${echapper(modele)} · ${echapper(police)} · ${cv.langue === "EN" ? "Anglais" : "Français"}</p></div>
+<h2 title="${titre}">${titre}</h2>
 <div class="menu">
 <button type="button" class="bouton-menu" aria-haspopup="true" aria-expanded="false" aria-label="Autres actions pour ${titre}" data-action="menu">&#8943;</button>
 <div class="menu-liste" hidden>
@@ -188,6 +194,8 @@ function carte(cv) {
 <button type="button" class="danger" data-action="supprimer">Supprimer</button>
 </div>
 </div>
+</div>
+<div class="carte-infos"><p>Modifié le ${formatDate.format(new Date(cv.dateModification))}<br>Modèle ${echapper(modele)}</p>${cv.langue === "EN" ? '<span class="langue-cv en">Anglais</span>' : '<span class="langue-cv">Français</span>'}</div>
 </div>
 <a class="miniature" href="${lienModifier}" aria-label="Ouvrir le CV ${titre}"><div class="miniature-page" aria-hidden="true"><article></article></div></a>
 ${progression(cv, lienModifier)}
@@ -217,7 +225,7 @@ function accueil() {
 <p>Un formulaire guidé en ${SECTIONS.length + 1} étapes, avec l'aperçu en direct, trois modèles et cinq polices.</p>
 <a class="bouton bouton-principal" href="creer-cv.html">Créer un CV</a></div>
 <div class="choix-carte"><span class="icone">${ICONE_IMPORTER}</span><h3>Importer un CV</h3>
-<p>PDF, Word (DOCX), texte ou image (PNG, JPG), 5 Mo maximum. Vous pouvez aussi le glisser sur la page. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé.</p>
+<p>PDF, Word (DOCX), texte ou image (PNG, JPG), 10 Mo maximum. Vous pouvez aussi le glisser sur la page. Le contenu est analysé par l'IA d'OpenAI ; le fichier n'est pas conservé.</p>
 <button type="button" class="bouton" data-importer>Importer un CV</button></div>
 </div></section>`;
 }
@@ -319,7 +327,7 @@ if ("ResizeObserver" in window) new ResizeObserver(ajusterMiniatures).observe(gr
 else window.addEventListener("resize", ajusterMiniatures);
 document.fonts?.ready.then(ajusterMiniatures);
 
-brancherImport({ champ: document.querySelector("[data-fichier]"), depot: document.querySelector("[data-depot]"), notifier });
+brancherImport({ depot: document.querySelector("[data-depot]") });
 
 charger();
 </script>

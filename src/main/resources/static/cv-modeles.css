@@ -1,67 +1,76 @@
 /*
- * Les 5 modèles de CV (Classique, Moderne, Compact, Élégant, Épuré).
+ * Les 6 modèles de CV (Classique, Moderne, Compact, Élégant, Épuré, Chronologique).
  * Utilisés par l'aperçu, les miniatures de « Mes CV » et le gabarit PDF.
  * CSS volontairement simple (pas de flexbox ni de grid) : le convertisseur HTML -> PDF ne les comprend pas.
  * Réglages donnés par l'article :
  *   --cv-police, --cv-titres (couleur du nom et des titres), --cv-texte (couleur du texte)
- *   classes taille-petite / taille-grande (toutes les tailles internes sont en em).
+ *   classes taille-petite / taille-grande (toutes les tailles internes sont en em),
+ *   classes interligne-serre / interligne-aere (interligne normal : 1.35).
+ * L'interligne règle aussi tous les espaces verticaux (entre sections, sous les titres, entre éléments),
+ * par les variables --cv-ecart-* ci-dessous : les modèles les utilisent au lieu de valeurs fixes.
+ * Marges de la page : 40 px sur les quatre côtés, pour tous les modèles.
  */
 .cv {
 	box-sizing: border-box;
 	font-family: var(--cv-police, 'Inter', Arial, sans-serif);
 	font-size: 13.5px;
-	line-height: 1.45;
-	padding: 56px 64px;
+	line-height: 1.35;
+	padding: 40px;
 	color: var(--cv-texte, #1b1f24);
 	background: #fff;
+	--cv-ecart-section: 1.35em;      /* avant chaque section */
+	--cv-ecart-titre: .55em;         /* entre un titre de section et sa première ligne */
+	--cv-ecart-titre-filet: 1em;     /* idem pour les titres posés sur un filet (Classique, Moderne, Épuré) */
+	--cv-ecart-item: .55em;          /* entre deux expériences, formations, certifications… */
+	--cv-ecart-ligne: .15em;         /* entre deux puces, avant une description */
 }
 .cv.taille-petite { font-size: 12.5px; }
 .cv.taille-grande { font-size: 14.5px; }
+.cv.interligne-serre { line-height: 1.22; --cv-ecart-section: .9em; --cv-ecart-titre: .3em; --cv-ecart-titre-filet: .75em; --cv-ecart-item: .3em; --cv-ecart-ligne: .05em; }
+.cv.interligne-aere { line-height: 1.5; --cv-ecart-section: 1.7em; --cv-ecart-titre: .75em; --cv-ecart-titre-filet: 1.2em; --cv-ecart-item: .8em; --cv-ecart-ligne: .25em; }
 .cv p { margin: 0; }
-.cv ul { margin: .3em 0 0; padding-left: 1.35em; }
-.cv li { margin: .15em 0; }
+.cv ul { margin: 0; margin-top: var(--cv-ecart-ligne); padding-left: 1.35em; }
+.cv li { margin-top: var(--cv-ecart-ligne); margin-bottom: var(--cv-ecart-ligne); }
 .cv h1, .cv h2 { font-family: inherit; }
 .cv a { color: inherit; text-decoration: none; }
 .cv-nom { margin: 0; color: var(--cv-titres, #1b1f24); }
 .cv-titre { color: var(--cv-titres, #1b1f24); }
-.cv-section { margin-top: 1.35em; }
-.cv-section h2 { margin: 0 0 .6em; color: var(--cv-titres, #1b1f24); }
-.cv-item { margin-bottom: .75em; }
+.cv-section { margin-top: var(--cv-ecart-section); }
+.cv-section h2 { margin: 0; margin-bottom: var(--cv-ecart-titre); color: var(--cv-titres, #1b1f24); }
+.cv-item { margin-bottom: var(--cv-ecart-item); }
 .cv-date { float: right; margin-left: 1em; color: #5b616b; font-size: .92em; }
 .cv-sous { color: #5b616b; }
 .cv-contact { color: #5b616b; margin-top: .45em; font-size: .95em; }
 .cv-vide { color: #a2a9b5; }
-.cv-description { margin-top: .2em; }
+.cv-description { margin-top: var(--cv-ecart-ligne); }
 .cv:after { content: ""; display: block; clear: both; }
 
 /* Classique : nom en petites capitales entre deux filets, titres centrés entre deux pointillés. */
 .modele-classique .cv-tete { text-align: center; border-top: 3px solid #8a8f98; border-bottom: 3px double #8a8f98; padding: .9em 0 .8em; }
 .modele-classique .cv-nom { font-size: 2.2em; font-weight: 700; font-variant: small-caps; letter-spacing: .04em; }
 .modele-classique .cv-titre { font-size: 1.1em; margin-top: .15em; font-style: italic; }
-.modele-classique .cv-section h2 { font-size: 1.15em; font-weight: 700; text-align: center; border-bottom: 1px dotted #8a8f98; line-height: .1em; margin: .9em 0 1.1em; }
+.modele-classique .cv-section h2 { font-size: 1.15em; font-weight: 700; text-align: center; border-bottom: 1px dotted #8a8f98; line-height: .1em; margin-top: var(--cv-ecart-titre-filet); margin-bottom: var(--cv-ecart-titre-filet); }
 .modele-classique .cv-section h2 span { background: #fff; padding: 0 .8em; }
 
 /* Moderne : nom en gras dans la couleur du thème, titres suivis d'un filet vers la droite. */
 .modele-moderne .cv-nom { font-size: 2.45em; font-weight: 700; letter-spacing: -.01em; line-height: 1.1; }
 .modele-moderne .cv-titre { font-size: 1.2em; margin-top: .1em; }
-.modele-moderne .cv-section { margin-top: 1.6em; }
-.modele-moderne .cv-section h2 { font-size: 1.15em; font-weight: 700; border-bottom: 1.5px solid var(--cv-titres, #1b1f24); line-height: .1em; margin: 0 0 1.05em; }
+.modele-moderne .cv-section h2 { font-size: 1.15em; font-weight: 700; border-bottom: 1.5px solid var(--cv-titres, #1b1f24); line-height: .1em; margin-bottom: var(--cv-ecart-titre-filet); }
 .modele-moderne .cv-section h2 span { background: #fff; padding-right: .9em; }
 
 /* Compact : dense, titres dans la marge, pensé pour tenir sur une page. */
-.modele-compact { padding: 40px 48px; font-size: 12.5px; }
+.modele-compact { font-size: 12.5px; }
 .modele-compact.taille-petite { font-size: 11.5px; }
 .modele-compact.taille-grande { font-size: 13.5px; }
 .modele-compact .cv-tete { border-bottom: 2px solid var(--cv-titres, #1b1f24); padding-bottom: .8em; }
 .modele-compact .cv-nom { font-size: 1.9em; font-weight: 700; display: inline; }
 .modele-compact .cv-titre { display: inline; font-size: 1.1em; color: #5b616b; margin-left: .6em; }
-.modele-compact .cv-section { margin-top: .8em; padding-top: .65em; border-top: 1px solid #dde1e7; }
+.modele-compact .cv-section { margin-top: var(--cv-ecart-titre-filet); padding-top: var(--cv-ecart-item); border-top: 1px solid #dde1e7; }
 /* Pas de filet fin juste sous le filet de l'en-tête. */
 .modele-compact .cv-tete + .cv-section { border-top: 0; }
 .modele-compact .cv-section:after { content: ""; display: block; clear: both; }
 .modele-compact .cv-section h2 { float: left; width: 9.4em; font-size: .84em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin: .15em 0 0; }
 .modele-compact .cv-corps { margin-left: 10.7em; }
-.modele-compact .cv-item { margin-bottom: .55em; }
 
 /* Élégant : grand nom en capitales, deux colonnes (encadré à gauche, parcours à droite). */
 .modele-elegant .cv-nom { font-size: 2.6em; font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: .02em; }
@@ -69,29 +78,45 @@
 .modele-elegant .cv-colonnes { display: table; width: 100%; table-layout: fixed; margin-top: .6em; }
 .modele-elegant .cv-cote { display: table-cell; width: 34%; padding-right: 1.8em; vertical-align: top; }
 .modele-elegant .cv-principal { display: table-cell; vertical-align: top; padding-left: 1.8em; border-left: 1px solid #e3e6eb; }
-.modele-elegant .cv-section h2 { font-size: 1.35em; font-weight: 600; margin-bottom: .45em; }
+.modele-elegant .cv-section h2 { font-size: 1.35em; font-weight: 600; }
 .modele-elegant .cv-cote .cv-date { float: none; display: block; margin: 0; }
 
 /* Épuré : aucun filet, beaucoup d'espace, titres en petites capitales espacées. */
-.modele-epure { padding: 64px 72px; }
+.modele-epure { --cv-ecart-section: 2em; }
+.modele-epure.interligne-serre { --cv-ecart-section: 1.3em; }
+.modele-epure.interligne-aere { --cv-ecart-section: 2.4em; }
 .modele-epure .cv-nom { font-size: 2.3em; font-weight: 400; letter-spacing: .02em; }
 .modele-epure .cv-titre { font-size: 1.1em; margin-top: .2em; color: #5b616b; }
 .modele-epure .cv-contact { margin-top: .7em; }
-.modele-epure .cv-section { margin-top: 2.1em; }
-.modele-epure .cv-section h2 { font-size: .82em; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; margin-bottom: .9em; }
+.modele-epure .cv-section h2 { font-size: .82em; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; margin-bottom: var(--cv-ecart-titre-filet); }
 
-@page { size: A4; margin: 56px 0; }
-@page compact { size: A4; margin: 40px 0; }
-@page epure { size: A4; margin: 64px 0; }
+/* Chronologique : en-tête centré, un filet de couleur entre les sections, titres en capitales,
+   dates dans une colonne à gauche (flottant avec marge négative : pas de grid pour le PDF). */
+.modele-chronologique .cv-tete { text-align: center; padding-bottom: 1em; border-bottom: 1.5px solid var(--cv-titres, #1b1f24); }
+.modele-chronologique .cv-nom { font-size: 2.25em; font-weight: 700; line-height: 1.15; }
+.modele-chronologique .cv-titre { margin-top: .25em; font-size: 1.15em; font-style: italic; color: #5b616b; }
+.modele-chronologique .cv-contact { margin-top: .55em; }
+.modele-chronologique .cv-section { margin-top: var(--cv-ecart-titre-filet); padding-top: var(--cv-ecart-titre-filet); border-top: 1.5px solid var(--cv-titres, #1b1f24); }
+.modele-chronologique .cv-tete + .cv-section { margin-top: 0; border-top: 0; }
+.modele-chronologique .cv-section h2 { font-size: 1.05em; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; }
+.modele-chronologique .cv-item { padding-left: 11.5em; }
+.modele-chronologique .cv-item > p:first-child { font-weight: 700; }
+.modele-chronologique .cv-item > p:first-child .cv-sous { color: inherit; }
+.modele-chronologique .cv-date { float: left; width: 10.5em; margin: 0 0 0 -11.5em; font-size: 1em; font-weight: 400; color: #5b616b; }
+.modele-chronologique .cv-item ul { padding-left: 0; list-style: none; }
+.modele-chronologique .cv-item li { padding-left: .9em; }
+.modele-chronologique .cv-item li:before { content: "•"; display: inline-block; width: .9em; margin-left: -.9em; }
+
+/* Les variables ne sont utilisées que dans des propriétés simples (margin-top…), pas dans les raccourcis.
+   Les marges du haut et du bas sont celles de chaque page du PDF ; à gauche et à droite, celles de l'article. */
+@page { size: A4; margin: 40px 0; }
 
 @media print {
 	body { margin: 0; }
-	.cv, .modele-compact, .modele-epure { padding-top: 0; padding-bottom: 0; }
-	.modele-compact { page: compact; }
-	.modele-epure { page: epure; }
+	.cv { padding-top: 0; padding-bottom: 0; }
 	/* Réserve la place d'un titre et des premières lignes en bas de page. */
 	.cv-section { -fs-page-break-min-height: 64px; }
-	.cv-item { page-break-inside: avoid; }
+	.cv-item, .cv-corps > p { page-break-inside: avoid; }
 	.cv-section h2 { page-break-after: avoid; }
 	/* En impression, le titre reste dans le flux pour suivre le premier élément. */
 	.modele-compact .cv-section h2 { float: none; height: 0; margin: 0; position: relative; top: 2px; }

@@ -11,6 +11,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,51 @@ class AssistantIaOpenAiTest {
 
 		assertThat(assistant(CLE_FICTIVE).generer("Réponds en français.", "Propose une question SQL."))
 				.isEqualTo("À quoi sert GROUP BY ?");
+	}
+
+	@Test
+	void envoieLesImagesEnDataUriDansLeMessageUtilisateur() {
+		serveur.expect(requestTo(CHAT_COMPLETIONS))
+				.andExpect(content().json("""
+						{
+						  "model": "gpt-6-luna",
+						  "messages": [
+						    {"role": "developer", "content": "Extrais le CV."},
+						    {"role": "user", "content": [
+						      {"type": "text", "text": "<cv>"},
+						      {"type": "image_url", "image_url": {"url": "data:image/png;base64,AQID"}},
+						      {"type": "text", "text": "</cv>"}
+						    ]}
+						  ]
+						}
+						""", JsonCompareMode.STRICT))
+				.andRespond(withSuccess("""
+						{"choices":[{"message":{"content":"Alex Moreau"}}]}
+						""", MediaType.APPLICATION_JSON));
+
+		assertThat(assistant(CLE_FICTIVE).genererAvecImages("Extrais le CV.", demandeAvecImage()))
+				.isEqualTo("Alex Moreau");
+	}
+
+	@Test
+	void traduitUnRefusDesImagesEn502(CapturedOutput sortie) {
+		serveur.expect(requestTo(CHAT_COMPLETIONS))
+				.andRespond(withStatus(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body("""
+						{"error":{"type":"invalid_request_error","message":"data:image/png;base64,AQID Alex Moreau"}}
+						"""));
+
+		assertThatExceptionOfType(ResponseStatusException.class)
+				.isThrownBy(() -> assistant(CLE_FICTIVE).genererAvecImages("Extrais le CV.", demandeAvecImage()))
+				.satisfies(erreur -> {
+					assertThat(erreur.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
+					assertThat(erreur.getReason()).isEqualTo("Le modèle d'IA configuré ne sait pas lire les images.");
+				});
+		assertThat(sortie.getOut()).contains("OpenAI HTTP 400").doesNotContain("AQID", "Alex Moreau");
+	}
+
+	private static List<AssistantIa.Partie> demandeAvecImage() {
+		return List.of(new AssistantIa.Texte("<cv>"), new AssistantIa.Image("image/png", new byte[] {1, 2, 3}),
+				new AssistantIa.Texte("</cv>"));
 	}
 
 	@Test

@@ -39,7 +39,9 @@ class CvHtml {
 		contexte.setVariable("langue", anglais ? "en" : "fr");
 		contexte.setVariable("titreCv", cv.getTitre());
 		String taille = cv.getTaille() == TailleCv.NORMALE ? "" : " taille-" + cv.getTaille().name().toLowerCase(Locale.ROOT);
-		contexte.setVariable("classeCv", "cv modele-" + cv.getModele().name().toLowerCase(Locale.ROOT) + taille);
+		String interligne = cv.getInterligne() == InterligneCv.NORMAL ? ""
+				: " interligne-" + cv.getInterligne().name().toLowerCase(Locale.ROOT);
+		contexte.setVariable("classeCv", "cv modele-" + cv.getModele().name().toLowerCase(Locale.ROOT) + taille + interligne);
 		contexte.setVariable("styleCv", "--cv-police: %s; --cv-titres: %s; --cv-texte: %s;"
 				.formatted(cv.getPolice().familleCss(), cv.getCouleur().titres(), cv.getCouleur().texte()));
 		contexte.setVariable("colonnes", cv.getModele() == ModeleCv.ELEGANT);

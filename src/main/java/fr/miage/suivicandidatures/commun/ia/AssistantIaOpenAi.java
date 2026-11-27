@@ -1,5 +1,6 @@
 package fr.miage.suivicandidatures.commun.ia;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -32,6 +33,24 @@ class AssistantIaOpenAi implements AssistantIa {
 
 	@Override
 	public String generer(String consignes, String demande) {
+		return generer(consignes, demande, false);
+	}
+
+	@Override
+	public String genererAvecImages(String consignes, List<Partie> demande) {
+		List<Map<String, ?>> contenu = demande.stream().map(AssistantIaOpenAi::coderPartie).toList();
+		return generer(consignes, contenu, true);
+	}
+
+	private static Map<String, ?> coderPartie(Partie partie) {
+		return switch (partie) {
+			case Texte texte -> Map.of("type", "text", "text", texte.contenu());
+			case Image image -> Map.of("type", "image_url", "image_url", Map.of("url",
+					"data:" + image.typeMime() + ";base64," + Base64.getEncoder().encodeToString(image.octets())));
+		};
+	}
+
+	private String generer(String consignes, Object demande, boolean avecImages) {
 		if (proprietes.cle() == null || proprietes.cle().isBlank()) {
 			throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "L'assistant IA n'est pas configuré");
 		}
@@ -55,6 +74,10 @@ class AssistantIaOpenAi implements AssistantIa {
 			if (statutHttp == 429) {
 				throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
 						"Limite de l'assistant IA atteinte, réessayez plus tard");
+			}
+			if (avecImages && (statutHttp == 400 || statutHttp == 415 || statutHttp == 422)) {
+				throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
+						"Le modèle d'IA configuré ne sait pas lire les images.");
 			}
 			throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "L'assistant IA a refusé la requête");
 		} catch (RestClientException erreur) {
@@ -85,7 +108,7 @@ class AssistantIaOpenAi implements AssistantIa {
 		LOG.warn("OpenAI HTTP {}", statutHttp);
 	}
 
-	private record Requete(String model, List<Map<String, String>> messages) {
+	private record Requete(String model, List<Map<String, Object>> messages) {
 
 		@Override
 		public String toString() {

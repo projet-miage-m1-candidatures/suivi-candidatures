@@ -36,6 +36,8 @@ Un candidat doit pouvoir préparer plusieurs versions de son CV selon le poste v
 
 Le titre du CV, le prénom et le nom sont obligatoires pour enregistrer un brouillon. Les dates de période et de certification acceptent une année (`AAAA`), une année et un mois (`AAAA-MM`) ou une valeur vide. Une expérience avec un début et sans fin s’affiche jusqu’à « aujourd’hui » ou « Present ». La disponibilité est immédiate ou datée au format `AAAA-MM-JJ`.
 
+**Sauvegarde automatique.** Dès que le titre, le prénom et le nom sont renseignés, le formulaire enregistre le brouillon 1,2 seconde après la dernière modification. La première sauvegarde crée le brouillon. Les suivantes enregistrent les modifications. Le formulaire affiche le statut de la sauvegarde et, en cas d’échec, fait un nouvel essai à la prochaine modification.
+
 **Format du contenu.** En plus de ses métadonnées, chaque CV contient un document `contenu`.
 
 | Champ | Données |
@@ -49,7 +51,7 @@ Le titre du CV, le prénom et le nom sont obligatoires pour enregistrer un broui
 
 Les listes acceptent jusqu’à 30 éléments. À la lecture d’un ancien CV, le serveur remonte le profil dans `contenu`, transforme le lien unique en entrée de `liens`, renomme `ecole` en `etablissement` et convertit les dates comme `04/2026` en `2026-04`. Les autres dates en texte libre restent visibles à la lecture et dans le PDF. Il faut les mettre au nouveau format ou les effacer avant de réenregistrer le CV. Le nom enregistré est conservé et le prénom reste à renseigner.
 
-**Aperçu et réglages.** `cv-rendu.js` calcule l’aperçu pendant la saisie et utilise le même rendu pour les miniatures. Le choix du modèle applique une police et une couleur par défaut. Le candidat peut les modifier et choisir une taille petite, normale ou grande. La taille normale s’applique par défaut.
+**Aperçu et réglages.** `cv-rendu.js` calcule l’aperçu pendant la saisie et utilise le même rendu pour les miniatures. Le choix du modèle applique une police et une couleur par défaut. Le candidat peut les modifier. Le menu « Taille de police » propose une taille petite, normale ou grande, et le menu « Interligne » un interligne serré, normal ou aéré. Les deux sont normaux par défaut. L’aperçu affiche de vraies feuilles A4 séparées, sans numéro de page. Comme dans le PDF, un bloc qui ne tient pas en bas d’une page passe en haut de la suivante, et une section qui commence en bas de page passe entière (filet, titre et premier bloc). Dans l’étape Vérification, les conseils couvrent aussi la mise en page : un CV de plus d’une page (réduire la taille de police ou l’interligne) et un modèle à deux colonnes, moins bien lu par certains ATS. Toute section vide a au moins un conseil (test `src/test/js/cv-rendu.test.mjs`). À l’import, la première page d’un PDF est dessinée par PDF.js (Mozilla, licence Apache 2.0, copié dans `static/vendor/pdfjs/`).
 
 | Modèle | Police par défaut | Couleur par défaut |
 |---|---|---|
@@ -58,8 +60,9 @@ Les listes acceptent jusqu’à 30 éléments. À la lecture d’un ancien CV, l
 | Compact | IBM Plex Sans | Noir |
 | Élégant | EB Garamond | Bleu marine |
 | Épuré | Lato | Anthracite |
+| Chronologique | Gelasio | Bleu |
 
-Les neuf polices sont Carlito, Inter, IBM Plex Sans, Lato, Open Sans, Roboto, EB Garamond, Lora et Source Serif 4. Les six thèmes sont Noir, Bleu marine, Bleu, Bordeaux, Vert sapin et Anthracite. Le thème définit la couleur des titres et du texte courant.
+Les dix polices sont Carlito, Inter, IBM Plex Sans, Lato, Open Sans, Roboto, EB Garamond, Lora, Source Serif 4 et Gelasio. Les six thèmes sont Noir, Bleu marine, Bleu, Bordeaux, Vert sapin et Anthracite. Le thème définit la couleur des titres et du texte courant.
 
 **Complétude.** `sectionRemplie()` calcule la progression affichée dans « Mes CV ». Chaque section manquante ouvre directement l’étape correspondante. L’étape Vérification affiche les conseils produits par les règles de `evaluerCv()` dans `cv-rendu.js`, sans IA. Un brouillon incomplet peut être enregistré à tout moment.
 
@@ -67,8 +70,8 @@ Les neuf polices sont Carlito, Inter, IBM Plex Sans, Lato, Open Sans, Roboto, EB
 
 ### Impact sur les couches
 
-- **Base de données.** Flyway gère la table `cv` dans PostgreSQL. `couleur` et `taille` sont stockées avec le modèle et la police. La migration initialise la couleur des anciens CV selon leur modèle et la taille à Normale, en conservant la police enregistrée. Le champ `contenu` est stocké en `JSONB`, car le CV est un document lu et écrit en entier. La conversion des anciens documents se fait à la lecture.
-- **Back-end.** Le package `cv` valide et enregistre les documents, gère les copies et génère le PDF. Les opérations utilisent l’identifiant du candidat connecté fourni par `CandidatCourant.id()`. Si une demande omet la police ou la couleur, le serveur utilise celle du modèle. Si elle omet la taille, il utilise Normale. Il actualise la date de modification à chaque mise à jour.
+- **Base de données.** Flyway gère la table `cv` dans PostgreSQL. `couleur`, `taille` et `interligne` sont stockés avec le modèle et la police. Les migrations initialisent la couleur des anciens CV selon leur modèle, la taille à `NORMALE` et l’interligne à `NORMAL`. Le champ `contenu` est stocké en `JSONB`, car le CV est un document lu et écrit en entier. La conversion des anciens documents se fait à la lecture.
+- **Back-end.** Le package `cv` valide et enregistre les documents, gère les copies et génère le PDF. Les opérations utilisent l’identifiant du candidat connecté fourni par `CandidatCourant.id()`. Si une demande omet la police ou la couleur, le serveur utilise celle du modèle. Si elle omet la taille ou l’interligne, le serveur utilise `NORMALE` ou `NORMAL` pour le réglage correspondant. Il actualise la date de modification à chaque mise à jour.
 - **API REST.** `GET` et `POST /api/v1/cv` listent les CV complets et créent un CV. `GET`, `PUT` et `DELETE /api/v1/cv/{id}` lisent, remplacent et suppriment un CV. `POST /api/v1/cv/{id}/copie` en crée une copie. `GET /api/v1/cv/{id}/pdf` renvoie le PDF en pièce jointe. Le navigateur et l’API utilisent la même structure de CV. Les erreurs de l’API sont renvoyées en `ProblemDetail` avec un message lisible dans `detail`.
 - **Interface.** `mes-cv.html` et `creer-cv.html` conservent le design validé. `cv-api.js` reste leur seul accès aux données et utilise `appelerApi` pour les requêtes HTTP. `cv-rendu.js` et `cv-modeles.css` produisent l’aperçu et les miniatures.
 
@@ -77,11 +80,34 @@ Les neuf polices sont Carlito, Inter, IBM Plex Sans, Lato, Open Sans, Roboto, EB
 - [ ] Un candidat connecté peut créer un brouillon avec un titre, un prénom et un nom, puis le retrouver et le modifier. Un champ obligatoire vide donne une réponse `400` avec un message lisible.
 - [ ] « Mes CV » affiche les miniatures et les filtres de langue. Une modification fait remonter le CV en tête de liste. La duplication crée un CV indépendant avec le suffixe « (copie) ». La suppression confirmée retire le CV de la liste.
 - [ ] La liste contient uniquement les CV du candidat connecté. Toute tentative de lire, modifier, supprimer, copier ou exporter le CV d’un autre candidat renvoie `404`.
-- [ ] L’aperçu réagit à la saisie et aux changements de langue, de modèle, de police, de couleur et de taille. Chaque modèle applique ses valeurs par défaut. Les réglages choisis sont retrouvés à la réouverture du CV et dans sa copie. Les anciens CV restent consultables et exportables.
+- [ ] L’aperçu réagit à la saisie et aux changements de langue, de modèle, de police, de couleur, de taille et d’interligne. Chaque modèle applique ses valeurs par défaut. Les réglages choisis sont retrouvés à la réouverture du CV et dans sa copie. Les anciens CV restent consultables et exportables.
 - [ ] « Mes CV » affiche la progression et un lien par section manquante. Chaque conseil de Vérification permet d’accéder à la section concernée.
-- [ ] Les deux pages permettent de télécharger un fichier A4 nommé `CV-<Prénom>-<Nom>.pdf` en ASCII. Le fichier reprend le contenu, la langue, le modèle, la police, la couleur et la taille de l’aperçu. Depuis le formulaire, il contient les dernières modifications.
+- [ ] Les deux pages permettent de télécharger un fichier A4 nommé `CV-<Prénom>-<Nom>.pdf` en ASCII. Le fichier reprend le contenu, la langue, le modèle, la police, la couleur, la taille et l’interligne de l’aperçu. Depuis le formulaire, il contient les dernières modifications.
 - [ ] Sur un CV de plusieurs pages, les expériences et les formations qui tiennent sur une page restent entières. Les titres de section restent avec leur contenu.
 
 ### Limites
 
-- Les deux pages permettent de sélectionner ou de glisser un PDF ou un DOCX de 5 Mo maximum. L’extraction et le remplissage automatique à partir de ce fichier sont prévus plus tard, comme l’action « Améliorer avec l’IA ».
+- L’action « Améliorer avec l’IA » est prévue plus tard.
+
+## Importer un CV
+
+Le candidat connecté peut préremplir le formulaire en joignant son CV. Le navigateur envoie le champ
+`fichier` à `POST /api/v1/cv/import` avec le jeton CSRF. L’API renvoie la langue `FR` ou `EN` et le
+`contenu` du CV. Le navigateur crée un nouveau brouillon et ouvre l’étape Vérification. Si le prénom
+ou le nom manque, le formulaire s’ouvre avec le contenu importé et le candidat complète les champs
+manquants pour déclencher la sauvegarde automatique.
+
+| Format | Traitement |
+|---|---|
+| PDF | PDFBox extrait le texte. En dessous de 50 caractères hors espaces, les trois premières pages au maximum sont converties en PNG à 150 dpi. Un PDF protégé par mot de passe est refusé. |
+| DOCX | Le serveur extrait le texte du corps, des en-têtes et des pieds de page, y compris les tableaux et les zones de texte. La décompression est limitée à 20 Mo. |
+| TXT | Le serveur lit le fichier en UTF-8 et utilise Windows-1252 si le décodage UTF-8 échoue. |
+| PNG, JPG, JPEG | Le serveur transmet l’image d’origine. |
+
+Le fichier doit faire au plus 10 Mo et son extension doit correspondre à son contenu. Le texte extrait
+est limité à 20 000 caractères. L’application envoie le texte ou les images extraits à OpenAI via Chat
+Completions. Elle utilise le modèle configuré dans `IA_MODELE`, qui doit accepter les images pour
+les fichiers image et les PDF scannés. Le mode `faux` renvoie une erreur 503.
+
+L’API d’import traite le fichier en mémoire pendant la requête. La création du brouillon passe par une
+requête distincte. Le serveur ne conserve pas le fichier et ne journalise ni le texte du CV ni ses images.

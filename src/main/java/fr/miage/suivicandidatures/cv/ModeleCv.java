@@ -6,7 +6,8 @@ enum ModeleCv {
 	MODERNE(PoliceCv.INTER, CouleurCv.BLEU),
 	COMPACT(PoliceCv.IBM_PLEX_SANS, CouleurCv.NOIR),
 	ELEGANT(PoliceCv.EB_GARAMOND, CouleurCv.MARINE),
-	EPURE(PoliceCv.LATO, CouleurCv.ANTHRACITE);
+	EPURE(PoliceCv.LATO, CouleurCv.ANTHRACITE),
+	CHRONOLOGIQUE(PoliceCv.GELASIO, CouleurCv.BLEU);
 
 	private final PoliceCv policeParDefaut;
 	private final CouleurCv couleurParDefaut;

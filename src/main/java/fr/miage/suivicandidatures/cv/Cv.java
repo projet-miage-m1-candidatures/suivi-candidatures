@@ -50,6 +50,10 @@ public class Cv {
 	@Column(nullable = false, length = 20)
 	private TailleCv taille;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private InterligneCv interligne;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Convert(converter = ContenuCvJson.class)
 	@Column(nullable = false)
@@ -77,6 +81,7 @@ public class Cv {
 		police = demande.policeEffective();
 		couleur = demande.couleurEffective();
 		taille = demande.tailleEffective();
+		interligne = demande.interligneEffectif();
 		contenu = demande.contenu();
 		dateModification = maintenant;
 	}
@@ -107,6 +112,10 @@ public class Cv {
 
 	TailleCv getTaille() {
 		return taille;
+	}
+
+	InterligneCv getInterligne() {
+		return interligne;
 	}
 
 	ContenuCv getContenu() {

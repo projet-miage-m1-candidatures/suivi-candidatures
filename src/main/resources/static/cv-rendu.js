@@ -8,9 +8,10 @@ export const MODELES = {
 	COMPACT: { nom: "Compact", police: "IBM_PLEX_SANS", couleur: "NOIR" },
 	ELEGANT: { nom: "Élégant", police: "EB_GARAMOND", couleur: "MARINE", colonnes: true },
 	EPURE: { nom: "Épuré", police: "LATO", couleur: "ANTHRACITE" },
+	CHRONOLOGIQUE: { nom: "Chronologique", police: "GELASIO", couleur: "BLEU" },
 };
 
-// Polices libres (licence OFL), intégrées au PDF. Carlito a les mêmes largeurs que Calibri.
+// Polices libres (licence OFL), intégrées au PDF. Carlito a les mêmes largeurs que Calibri, Gelasio que Georgia.
 export const POLICES = {
 	CARLITO: { nom: "Carlito (Calibri)", css: "'Carlito', Calibri, Arial, sans-serif" },
 	INTER: { nom: "Inter", css: "'Inter', Arial, sans-serif" },
@@ -19,6 +20,7 @@ export const POLICES = {
 	OPEN_SANS: { nom: "Open Sans", css: "'Open Sans', Arial, sans-serif" },
 	ROBOTO: { nom: "Roboto", css: "'Roboto', Arial, sans-serif" },
 	EB_GARAMOND: { nom: "EB Garamond", css: "'EB Garamond', Garamond, Georgia, serif" },
+	GELASIO: { nom: "Gelasio (Georgia)", css: "'Gelasio', Georgia, serif" },
 	LORA: { nom: "Lora", css: "'Lora', Georgia, serif" },
 	SOURCE_SERIF_4: { nom: "Source Serif 4", css: "'Source Serif 4', Georgia, serif" },
 };
@@ -37,6 +39,13 @@ export const TAILLES = {
 	PETITE: { nom: "Petite" },
 	NORMALE: { nom: "Normale" },
 	GRANDE: { nom: "Grande" },
+};
+
+// Espace entre les lignes : « Serré » aide à tenir sur une page.
+export const INTERLIGNES = {
+	SERRE: { nom: "Serré" },
+	NORMAL: { nom: "Normal" },
+	AERE: { nom: "Aéré" },
 };
 
 export const PERMIS = ["AM", "A1", "A2", "A", "B", "BE", "C1", "C1E", "C", "CE", "D1", "D1E", "D", "DE"];
@@ -200,7 +209,7 @@ function corps(cv, s) {
 		+ `<div class="cv-principal">${PRINCIPAL.map(cle => s[cle]).join("")}</div></div>`;
 }
 
-// Réglages d'affichage complétés (anciens CV sans couleur ni taille : valeurs du modèle).
+// Réglages d'affichage complétés (anciens CV sans couleur, taille ou interligne : valeurs par défaut).
 export function reglages(cv) {
 	const modele = MODELES[cv.modele] ? cv.modele : "CLASSIQUE";
 	return {
@@ -208,14 +217,16 @@ export function reglages(cv) {
 		police: POLICES[cv.police] ? cv.police : MODELES[modele].police,
 		couleur: COULEURS[cv.couleur] ? cv.couleur : MODELES[modele].couleur,
 		taille: TAILLES[cv.taille] ? cv.taille : "NORMALE",
+		interligne: INTERLIGNES[cv.interligne] ? cv.interligne : "NORMAL",
 	};
 }
 
-// Remplit un élément <article> avec le CV, dans son modèle, sa couleur, sa police et sa taille.
+// Remplit un élément <article> avec le CV, dans son modèle, sa couleur, sa police, sa taille et son interligne.
 export function afficherCv(article, cv) {
 	const r = reglages(cv);
 	const taille = r.taille === "NORMALE" ? "" : ` taille-${r.taille.toLowerCase()}`;
-	article.className = `cv modele-${r.modele.toLowerCase()}${taille}`;
+	const interligne = r.interligne === "NORMAL" ? "" : ` interligne-${r.interligne.toLowerCase()}`;
+	article.className = `cv modele-${r.modele.toLowerCase()}${taille}${interligne}`;
 	article.style.setProperty("--cv-police", POLICES[r.police].css);
 	article.style.setProperty("--cv-titres", COULEURS[r.couleur].titres);
 	article.style.setProperty("--cv-texte", COULEURS[r.couleur].texte);
@@ -242,33 +253,31 @@ export function sectionRemplie(contenuBrut, etape) {
 	}
 }
 
-// Complétude du CV : des règles simples, sans IA. Chaque point à compléter renvoie à son étape du formulaire.
+// Conseils de Vérification : des règles simples, sans IA, dans l'ordre des étapes. Chaque conseil renvoie à son étape.
+// Cohérence : toute section vide (cercle vide dans la barre d'étapes) a au moins un conseil (testé dans cv-rendu.test.mjs).
 export function evaluerCv(contenuBrut) {
 	const c = normaliserContenu(contenuBrut);
-	const regles = [];
-	const ajouter = (poids, ok, conseil, etape) => regles.push({ poids, ok, conseil, etape });
 	const id = c.identite;
 	const experiences = c.experiences.filter(e => rempli(e.poste));
 	const textes = experiences.flatMap(e => [e.description, ...e.realisations]).filter(rempli);
 	const nbCompetences = c.competences.reduce((n, g) => n + g.elements.length, 0);
-
-	ajouter(15, rempli(id.prenom) && rempli(id.nom) && rempli(id.titre) && rempli(id.email), "Complétez votre profil : poste visé et e-mail.", 0);
-	ajouter(10, rempli(c.profil), "Ajoutez un résumé de deux ou trois lignes en haut du CV.", 0);
-	ajouter(10, nbCompetences >= 3, "Ajoutez au moins trois compétences techniques au total, tous thèmes confondus. Par exemple : « Langages : SQL, Python, Java ».", 1);
-	ajouter(15, experiences.length > 0, "Ajoutez au moins une expérience (stage, emploi, alternance).", 2);
 	// Une expérience est détaillée avec une description ou au moins deux réalisations.
 	const peuDetaillee = experiences.find(e => !rempli(e.description) && e.realisations.filter(rempli).length < 2);
-	ajouter(10, experiences.length > 0 && !peuDetaillee, peuDetaillee
-		? `Décrivez « ${peuDetaillee.poste.trim()} » : une description ou au moins deux réalisations.`
-		: "Décrivez chaque expérience : une description ou au moins deux réalisations.", 2);
-	ajouter(10, textes.some(r => /\d/.test(r)), "Ajoutez un résultat chiffré (pourcentage, volume, durée) dans une expérience.", 2);
-	ajouter(10, c.formations.some(f => rempli(f.diplome)), "Ajoutez votre formation.", 4);
-	ajouter(10, c.langues.some(l => rempli(l.langue)), "Indiquez au moins une langue et son niveau.", 6);
-	ajouter(10, c.disponibilite.immediate || rempli(c.disponibilite.date), "Indiquez votre disponibilité.", 0);
 
-	return {
-		score: regles.filter(r => r.ok).reduce((s, r) => s + r.poids, 0),
-		conseils: regles.filter(r => !r.ok).map(r => r.conseil),
-		aCompleter: regles.filter(r => !r.ok).map(r => ({ texte: r.conseil, etape: r.etape })),
-	};
+	const regles = [
+		[rempli(id.prenom) && rempli(id.nom) && rempli(id.titre) && rempli(id.email), "Complétez votre profil : prénom, nom, poste visé et e-mail.", 0],
+		[rempli(c.profil), "Ajoutez un résumé de deux ou trois lignes en haut du CV.", 0],
+		[c.disponibilite.immediate || rempli(c.disponibilite.date), "Indiquez votre disponibilité.", 0],
+		[nbCompetences >= 3, "Ajoutez au moins trois compétences techniques au total, tous thèmes confondus. Par exemple : « Langages : SQL, Python, Java ».", 1],
+		[experiences.length > 0, "Ajoutez au moins une expérience (stage, emploi, alternance).", 2],
+		[experiences.length === 0 || !peuDetaillee, peuDetaillee
+			? `Décrivez « ${peuDetaillee.poste.trim()} » : une description ou au moins deux réalisations.`
+			: "Décrivez chaque expérience : une description ou au moins deux réalisations.", 2],
+		[experiences.length === 0 || textes.some(r => /\d/.test(r)), "Ajoutez un résultat chiffré (pourcentage, volume, durée) dans une expérience.", 2],
+		[c.projets.some(p => rempli(p.titre)), "Ajoutez un projet (personnel, universitaire ou professionnel) : il montre concrètement ce que vous savez faire.", 3],
+		[c.formations.some(f => rempli(f.diplome)), "Ajoutez votre formation.", 4],
+		[c.certifications.some(x => rempli(x.nom)), "Ajoutez une certification si vous en avez une (cours en ligne certifiant, test de langue…).", 5],
+		[c.langues.some(l => rempli(l.langue)), "Indiquez au moins une langue et son niveau.", 6],
+	];
+	return { aCompleter: regles.filter(([ok]) => !ok).map(([, texte, etape]) => ({ texte, etape })) };
 }

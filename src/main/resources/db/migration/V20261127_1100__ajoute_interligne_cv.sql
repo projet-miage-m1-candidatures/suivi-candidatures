@@ -1,0 +1,3 @@
+ALTER TABLE cv
+    ADD COLUMN interligne VARCHAR(20) NOT NULL DEFAULT 'NORMAL'
+        CHECK (interligne IN ('SERRE', 'NORMAL', 'AERE'));

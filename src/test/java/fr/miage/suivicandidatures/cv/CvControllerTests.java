@@ -64,6 +64,36 @@ class CvControllerTests {
 	}
 
 	@Test
+	void lImportExigeUneConnexionEtUnJetonCsrf() throws Exception {
+		assertThat(navigateur().importer("Alex Moreau", true).statusCode()).isEqualTo(401);
+		assertThat(connecter().importer("Alex Moreau", false).statusCode()).isEqualTo(403);
+	}
+
+	@Test
+	void lImportRenvoieUnProblemeEnModeFauxSansCreerDeCv() throws Exception {
+		Navigateur candidat = connecter();
+		HttpResponse<String> reponse = candidat.importer("Alex Moreau", true);
+
+		assertThat(reponse.statusCode()).isEqualTo(503);
+		assertThat(reponse.headers().firstValue("Content-Type")).contains("application/problem+json");
+		assertThat(json.readTree(reponse.body()).path("detail").asString())
+				.isEqualTo("L'import d'un CV nécessite l'assistant IA (IA_FOURNISSEUR=openai).");
+		assertThat(json.readTree(candidat.envoyerCv("GET", "", null).body()).isEmpty()).isTrue();
+	}
+
+	@Test
+	void lImportAppliqueLaLimiteMultipart() throws Exception {
+		Navigateur candidat = connecter();
+		String fichier = "a".repeat(10 * 1024 * 1024);
+		assertThat(candidat.importer(fichier, true).statusCode()).isEqualTo(503); // Mode IA faux après validation du fichier.
+		HttpResponse<String> reponse = candidat.importer(fichier + "a", true);
+
+		assertThat(reponse.statusCode()).isEqualTo(400);
+		assertThat(reponse.headers().firstValue("Content-Type")).contains("application/problem+json");
+		assertThat(json.readTree(reponse.body()).path("detail").asString()).isEqualTo("Le fichier du CV ne doit pas dépasser 10 Mo.");
+	}
+
+	@Test
 	void creeEtRelitUnCvCompletStockeEnJsonb() throws Exception {
 		Navigateur candidat = connecter();
 		DemandeCv demande = exemple("Data engineer");
@@ -74,13 +104,14 @@ class CvControllerTests {
 		long id = cv.path("id").asLong();
 		assertThat(id).isPositive();
 		assertThat(creation.headers().firstValue("Location")).contains(API_CV + "/" + id);
-		assertThat(cv.size()).isEqualTo(10);
+		assertThat(cv.size()).isEqualTo(11);
 		assertThat(cv.path("titre").asString()).isEqualTo(demande.titre());
 		assertThat(cv.path("langue").asString()).isEqualTo("FR");
 		assertThat(cv.path("modele").asString()).isEqualTo("MODERNE");
 		assertThat(cv.path("police").asString()).isEqualTo("LATO");
 		assertThat(cv.path("couleur").asString()).isEqualTo("BORDEAUX");
 		assertThat(cv.path("taille").asString()).isEqualTo("PETITE");
+		assertThat(cv.path("interligne").asString()).isEqualTo("SERRE");
 		assertThat(date(cv, "dateCreation")).isEqualTo(date(cv, "dateModification"));
 		JsonNode contenu = json.valueToTree(demande.contenu());
 		assertThat(cv.path("contenu")).isEqualTo(contenu);
@@ -126,6 +157,7 @@ class CvControllerTests {
 		demande.put("langue", "EN");
 		demande.put("couleur", "SAPIN");
 		demande.put("taille", "GRANDE");
+		demande.put("interligne", "AERE");
 		JsonNode contenu = json.valueToTree(new ContenuCv(IDENTITE, "", List.of(), List.of(), List.of(), List.of(),
 				List.of(), List.of(), List.of(), List.of(), new ContenuCv.Disponibilite(false, "")));
 		demande.set("contenu", contenu);
@@ -137,6 +169,7 @@ class CvControllerTests {
 		assertThat(cv.path("langue").asString()).isEqualTo("EN");
 		assertThat(cv.path("couleur").asString()).isEqualTo("SAPIN");
 		assertThat(cv.path("taille").asString()).isEqualTo("GRANDE");
+		assertThat(cv.path("interligne").asString()).isEqualTo("AERE");
 		assertThat(cv.path("contenu")).isEqualTo(contenu);
 		assertThat(date(cv, "dateCreation")).isEqualTo(date(premier, "dateCreation"));
 		assertThat(date(cv, "dateModification")).isAfter(date(second, "dateModification"));
@@ -159,7 +192,7 @@ class CvControllerTests {
 
 		assertThat(idCopie).isNotEqualTo(id);
 		assertThat(copie.path("titre").asString()).isEqualTo("Data engineer (copie)");
-		for (String champ : List.of("langue", "modele", "police", "couleur", "taille", "contenu")) {
+		for (String champ : List.of("langue", "modele", "police", "couleur", "taille", "interligne", "contenu")) {
 			assertThat(copie.path(champ)).isEqualTo(original.path(champ));
 		}
 		assertThat(date(copie, "dateCreation")).isAfter(date(original, "dateCreation"));
@@ -210,11 +243,15 @@ class CvControllerTests {
 	}
 
 	@Test
-	void telechargeLeCvEnPdfAvecUnNomDeFichierAscii() throws Exception {
+	void telechargeLeCvChronologiqueEnPdfAvecUnNomDeFichierAscii() throws Exception {
 		Navigateur candidat = connecter();
 		ObjectNode demande = json.valueToTree(exemple("CV à télécharger"));
+		demande.put("modele", "CHRONOLOGIQUE").put("police", "GELASIO");
 		((ObjectNode) demande.path("contenu").path("identite")).put("prenom", "Élodie").put("nom", "Dupré");
-		long id = creerCv(candidat, demande).path("id").asLong();
+		JsonNode cree = creerCv(candidat, demande);
+		assertThat(cree.path("modele").asString()).isEqualTo("CHRONOLOGIQUE");
+		assertThat(cree.path("police").asString()).isEqualTo("GELASIO");
+		long id = cree.path("id").asLong();
 
 		HttpResponse<byte[]> reponse = candidat.lirePdf(id);
 		assertThat(reponse.statusCode()).isEqualTo(200);
@@ -263,8 +300,27 @@ class CvControllerTests {
 		ObjectNode modeleInvalide = json.valueToTree(exemple("CV invalide"));
 		modeleInvalide.put("modele", "INCONNU");
 		assertThat(probleme(candidat.envoyerCv("POST", "", modeleInvalide), 400)).contains("modèle");
+		ObjectNode policeInvalide = json.valueToTree(exemple("CV invalide"));
+		policeInvalide.put("modele", "CHRONOLOGIQUE").put("police", "INCONNUE");
+		assertThat(probleme(candidat.envoyerCv("POST", "", policeInvalide), 400)).contains("police");
 		assertThat(probleme(candidat.envoyerCv("GET", "/invalide", null), 400)).contains("identifiant du CV");
 		assertThat(listerCv(candidat)).isEmpty();
+	}
+
+	@Test
+	void refuseUnInterligneInvalideALaCreationEtALaModification() throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode demande = json.valueToTree(exemple("Data engineer"));
+		demande.put("interligne", "DOUBLE");
+		assertThat(probleme(candidat.envoyerCv("POST", "", demande), 400)).contains("interligne");
+		assertThat(listerCv(candidat)).isEmpty();
+
+		JsonNode original = creerCv(candidat, exemple("Data engineer"));
+		long id = original.path("id").asLong();
+		assertThat(probleme(candidat.envoyerCv("PUT", "/" + id, demande), 400)).contains("interligne");
+		demande.put("interligne", 0);
+		assertThat(probleme(candidat.envoyerCv("PUT", "/" + id, demande), 400)).contains("interligne");
+		assertThat(lireCv(candidat, id)).isEqualTo(original);
 	}
 
 	@Test
@@ -317,6 +373,7 @@ class CvControllerTests {
 		assertThat(cv.path("police").asString()).isEqualTo("SOURCE_SERIF_4");
 		assertThat(cv.path("couleur").asString()).isEqualTo("NOIR");
 		assertThat(cv.path("taille").asString()).isEqualTo("NORMALE");
+		assertThat(cv.path("interligne").asString()).isEqualTo("NORMAL");
 		JsonNode contenu = cv.path("contenu");
 		JsonNode identite = contenu.path("identite");
 		assertThat(identite.path("nom").asString()).isEqualTo("Alex Moreau");
@@ -364,26 +421,29 @@ class CvControllerTests {
 				ModeleCv.MODERNE, List.of("INTER", "BLEU"),
 				ModeleCv.COMPACT, List.of("IBM_PLEX_SANS", "NOIR"),
 				ModeleCv.ELEGANT, List.of("EB_GARAMOND", "MARINE"),
-				ModeleCv.EPURE, List.of("LATO", "ANTHRACITE"));
+				ModeleCv.EPURE, List.of("LATO", "ANTHRACITE"),
+				ModeleCv.CHRONOLOGIQUE, List.of("GELASIO", "BLEU"));
 		for (var choix : reglages.entrySet()) {
 			ObjectNode demande = json.valueToTree(exemple("CV avec réglages par défaut"));
 			demande.put("modele", choix.getKey().name());
-			demande.remove(List.of("police", "couleur", "taille"));
+			demande.remove(List.of("police", "couleur", "taille", "interligne"));
 			JsonNode cv = creerCv(candidat, demande);
 			assertThat(List.of(cv.path("police").asString(), cv.path("couleur").asString())).isEqualTo(choix.getValue());
 			assertThat(cv.path("taille").asString()).isEqualTo("NORMALE");
+			assertThat(cv.path("interligne").asString()).isEqualTo("NORMAL");
 		}
 
 		JsonNode cv = creerCv(candidat, exemple("CV avec police"));
 		long id = cv.path("id").asLong();
 		ObjectNode demande = ((ObjectNode) cv).deepCopy();
 		demande.put("modele", "COMPACT");
-		demande.remove(List.of("police", "couleur", "taille"));
+		demande.remove(List.of("police", "couleur", "taille", "interligne"));
 		assertThat(candidat.envoyerCv("PUT", "/" + id, demande).statusCode()).isEqualTo(200);
 		JsonNode relu = lireCv(candidat, id);
 		assertThat(relu.path("police").asString()).isEqualTo("IBM_PLEX_SANS");
 		assertThat(relu.path("couleur").asString()).isEqualTo("NOIR");
 		assertThat(relu.path("taille").asString()).isEqualTo("NORMALE");
+		assertThat(relu.path("interligne").asString()).isEqualTo("NORMAL");
 	}
 
 	private static DemandeCv exemple(String titre) {
@@ -398,7 +458,8 @@ class CvControllerTests {
 				List.of(new ContenuCv.Langue("Anglais", "C1")),
 				List.of(new ContenuCv.Certification("SQL", "Exemple", "2026-05", "https://example.test/certification")),
 				new ContenuCv.Disponibilite(false, "2026-12-01"));
-		return new DemandeCv(titre, LangueCv.FR, ModeleCv.MODERNE, PoliceCv.LATO, CouleurCv.BORDEAUX, TailleCv.PETITE, contenu);
+		return new DemandeCv(titre, LangueCv.FR, ModeleCv.MODERNE, PoliceCv.LATO, CouleurCv.BORDEAUX, TailleCv.PETITE,
+				InterligneCv.SERRE, contenu);
 	}
 
 	private static Instant date(JsonNode cv, String champ) {
@@ -473,6 +534,20 @@ class CvControllerTests {
 
 		HttpResponse<String> envoyerCv(String methode, String route, Object corps) throws Exception {
 			return envoyer(methode, API_CV + route, "application/json", corps == null ? null : json.writeValueAsString(corps));
+		}
+
+		HttpResponse<String> importer(String fichier, boolean avecCsrf) throws Exception {
+			String separateur = UUID.randomUUID().toString();
+			String corps = "--" + separateur + "\r\n"
+					+ "Content-Disposition: form-data; name=\"fichier\"; filename=\"cv.txt\"\r\n"
+					+ "Content-Type: text/plain\r\n\r\n" + fichier + "\r\n--" + separateur + "--\r\n";
+			HttpRequest.Builder requete = requete(API_CV + "/import")
+					.header("Content-Type", "multipart/form-data; boundary=" + separateur)
+					.POST(HttpRequest.BodyPublishers.ofString(corps));
+			if (avecCsrf) {
+				requete.header("X-XSRF-TOKEN", obtenirJetonCsrf());
+			}
+			return client.send(requete.build(), HttpResponse.BodyHandlers.ofString());
 		}
 
 		HttpResponse<String> envoyer(String methode, String route, String type, String corps) throws Exception {

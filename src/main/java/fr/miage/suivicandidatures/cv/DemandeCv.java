@@ -11,6 +11,7 @@ record DemandeCv(
 		PoliceCv police,
 		CouleurCv couleur,
 		TailleCv taille,
+		InterligneCv interligne,
 		@NotNull @Valid ContenuCv contenu) {
 
 	PoliceCv policeEffective() {
@@ -23,5 +24,9 @@ record DemandeCv(
 
 	TailleCv tailleEffective() {
 		return taille == null ? TailleCv.NORMALE : taille;
+	}
+
+	InterligneCv interligneEffectif() {
+		return interligne == null ? InterligneCv.NORMAL : interligne;
 	}
 }

@@ -10,7 +10,8 @@ enum PoliceCv {
 	CARLITO("Carlito", "carlito", "Carlito", "Calibri, Arial, sans-serif", "Italic"),
 	OPEN_SANS("Open Sans", "open-sans", "OpenSans", "Arial, sans-serif", "Italic"),
 	ROBOTO("Roboto", "roboto", "Roboto", "Arial, sans-serif", "Italic"),
-	EB_GARAMOND("EB Garamond", "eb-garamond", "EBGaramond", "Garamond, Georgia, serif", "Italic");
+	EB_GARAMOND("EB Garamond", "eb-garamond", "EBGaramond", "Garamond, Georgia, serif", "Italic"),
+	GELASIO("Gelasio", "gelasio", "Gelasio", "Georgia, serif", "Italic");
 
 	private final String famille;
 	private final String dossier;

@@ -17,6 +17,7 @@ export function nouveauCv() {
 		police: "SOURCE_SERIF_4",
 		couleur: "NOIR",
 		taille: "NORMALE",
+		interligne: "NORMAL",
 		contenu: {
 			identite: { prenom: "", nom: "", titre: "", ville: "", email: "", telephone: "", mobilite: "", permis: [], liens: [] },
 			profil: "",
