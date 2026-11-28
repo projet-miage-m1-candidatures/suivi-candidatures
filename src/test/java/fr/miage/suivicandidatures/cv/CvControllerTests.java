@@ -1,6 +1,11 @@
 package fr.miage.suivicandidatures.cv;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.net.CookieManager;
 import java.net.HttpCookie;
@@ -19,6 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import fr.miage.suivicandidatures.commun.UtilisateurRepository;
+import fr.miage.suivicandidatures.commun.ia.AssistantIa;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
@@ -28,10 +34,14 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CvControllerTests {
@@ -57,10 +67,191 @@ class CvControllerTests {
 	@Autowired
 	private JdbcTemplate jdbc;
 
+	@MockitoSpyBean(name = "assistantIaFaux")
+	private AssistantIa assistant;
+
 	@AfterEach
 	void nettoyer() {
 		navigateurs.forEach(Navigateur::close);
 		emails.forEach(email -> utilisateurs.findByEmail(email).ifPresent(utilisateurs::delete));
+	}
+
+	@Test
+	void filtreLesPropositionsEtControleLesNombresSansModifierLeCv() throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode demande = json.valueToTree(exemple("CV à relire"));
+		ObjectNode contenu = (ObjectNode) demande.path("contenu");
+		contenu.put("profil", "  J'écris des pipelines.  ");
+		((ObjectNode) contenu.path("experiences").path(0)).put("description", "Traiter 1\u202f000 dossiers.");
+		JsonNode cv = creerCv(candidat, demande);
+		long id = cv.path("id").asLong();
+
+		repondreAvecIa("""
+				{"propositions":[
+				  {"chemin":"identite.nom","avant":"Moreau","apres":"Autre nom"},
+				  {"chemin":"contenu.profil","avant":"  J'écris des pipelines.  ","apres":"Développer des pipelines."},
+				  {"chemin":"experiences.99.description","avant":"","apres":"Développer des pipelines."},
+				  {"chemin":"competences.01.groupe","avant":"","apres":"Mieux nommer le groupe."},
+				  {"chemin":"profil","avant":"J'écris des pipelines.","apres":"Écrire des pipelines."},
+				  {"chemin":"profil","avant":"  J'écris des pipelines.  ","apres":"  J'écris des pipelines.  "},
+				  {"chemin":"profil","avant":"  J'écris des pipelines.  ","apres":" "},
+				  {"chemin":"competences.0.elements","avant":"SQL,Python","apres":"Python, SQL"},
+				  {"chemin":"competences.0.elements","avant":"SQL, Python","apres":"Python, SQL","raison":"Lisibilité"},
+				  {"chemin":"profil","avant":"  J'écris des pipelines.  ",
+				   "apres":"Traiter 1000 dossiers avec un gain de 95,5 % sur 2 500 flux.",
+				   "raison":"Commence par un verbe."},
+				  {"chemin":"experiences.0.realisations.0","avant":"Réduit les durées de 40 %",
+				   "apres":"Réduire les durées de 40 %."}
+				]}
+				""");
+
+		HttpResponse<String> reponse = candidat.envoyerCv("POST", "/" + id + "/ameliorations", null);
+		assertThat(reponse.statusCode()).isEqualTo(200);
+		assertThat(json.readTree(reponse.body())).isEqualTo(json.readTree("""
+				{"propositions":[
+				  {"chemin":"competences.0.elements","avant":"SQL, Python","apres":"Python, SQL","raison":"Lisibilité"},
+				  {"chemin":"profil","avant":"  J'écris des pipelines.  ",
+				   "apres":"Traiter 1000 dossiers avec un gain de [nombre] % sur [nombre] flux.",
+				   "raison":"Commence par un verbe."},
+				  {"chemin":"experiences.0.realisations.0","avant":"Réduit les durées de 40 %",
+				   "apres":"Réduire les durées de 40 %.","raison":""}
+				]}
+				"""));
+		assertThat(lireCv(candidat, id)).isEqualTo(cv);
+	}
+
+	@Test
+	void limiteLaRelectureAuxQuinzePremieresPropositionsValides() throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		ArrayNode propositions = json.createArrayNode();
+		propositions.addObject().put("chemin", "identite.email").put("avant", "alex@example.test")
+				.put("apres", "Aucun changement autorisé.");
+		for (char lettre = 'A'; lettre <= 'Q'; lettre++) {
+			propositions.addObject().put("chemin", "profil").put("avant", "J'écris des pipelines de données.")
+					.put("apres", "Développer le pipeline " + lettre + ".");
+		}
+		repondreAvecIa(json.createObjectNode().set("propositions", propositions).toString());
+
+		HttpResponse<String> reponse = candidat.envoyerCv("POST", "/" + id + "/ameliorations", null);
+		assertThat(reponse.statusCode()).isEqualTo(200);
+		JsonNode retenues = json.readTree(reponse.body()).path("propositions");
+		assertThat(retenues.size()).isEqualTo(15);
+		assertThat(retenues.path(0).path("apres").stringValue()).isEqualTo("Développer le pipeline A.");
+		assertThat(retenues.path(14).path("apres").stringValue()).isEqualTo("Développer le pipeline O.");
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"PLUS_COURT, plus courte, Traiter 700 flux., Traiter [nombre] flux.",
+			"AUTRE_VERSION, formulation différente, Fiabiliser 1 000 dossiers., Fiabiliser 1 000 dossiers.",
+			"SANS_CHIFFRE, sans marqueur, Process records daily., Process records daily."
+	})
+	void reformuleSelonLaConsigne(String consigne, String instruction, String texteIa, String attendu) throws Exception {
+		Navigateur candidat = connecter();
+		ObjectNode cv = json.valueToTree(exemple("CV à relire"));
+		cv.put("langue", "EN");
+		((ObjectNode) cv.path("contenu")).put("profil", "I process 1000 records.");
+		long id = creerCv(candidat, cv).path("id").asLong();
+		String raison = consigne.equals("SANS_CHIFFRE") ? "Mieux ciblé [nombre] % 901" : "Plus direct";
+		repondreAvecIa(json.writeValueAsString(Map.of("apres", texteIa, "raison", raison)));
+
+		HttpResponse<String> reponse = candidat.envoyerCv("POST", "/" + id + "/ameliorations/reformuler",
+				Map.of("chemin", "profil", "avant", "I process 1000 records.",
+						"apres", "Process [nombre] records.", "consigne", consigne));
+		assertThat(reponse.statusCode()).isEqualTo(200);
+		JsonNode reformulation = json.readTree(reponse.body());
+		assertThat(reformulation.size()).isEqualTo(2);
+		assertThat(reformulation.path("apres").stringValue()).isEqualTo(attendu);
+		assertThat(reformulation.path("raison").stringValue()).isEqualTo(raison);
+		verify(assistant).generer(contains(instruction), contains("\"langue\":\"EN\""));
+	}
+
+	@Test
+	void refuseLesReformulationsDontLeCheminOuLeTexteActuelNeCorrespondPas() throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		String route = "/" + id + "/ameliorations/reformuler";
+
+		for (String chemin : List.of("identite.nom", "experiences.99.description", "profil")) {
+			assertThat(probleme(candidat.envoyerCv("POST", route,
+					demandeReformulation(chemin, "Texte périmé")), 400)).contains("introuvable ou son texte a changé");
+		}
+		verifyNoInteractions(assistant);
+	}
+
+	@Test
+	void refuseLaRelectureEtLaReformulationSurUnCvDUnAutreCandidat() throws Exception {
+		Navigateur proprietaire = connecter();
+		Navigateur autre = connecter();
+		long id = creerCv(proprietaire, exemple("CV privé")).path("id").asLong();
+		String route = "/" + id + "/ameliorations";
+
+		assertThat(probleme(autre.envoyerCv("POST", route, null), 404)).isEqualTo("Ce CV n'existe pas.");
+		assertThat(probleme(autre.envoyerCv("POST", route + "/reformuler",
+				demandeReformulation("profil", "J'écris des pipelines de données.")), 404)).isEqualTo("Ce CV n'existe pas.");
+		verifyNoInteractions(assistant);
+	}
+
+	@Test
+	void renvoie502QuandLaReponseIaEstIllisible() throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		String route = "/" + id + "/ameliorations";
+		repondreAvecIa("Réponse sans JSON");
+		String detail = "L'IA a renvoyé une réponse illisible. Réessayez.";
+
+		assertThat(probleme(candidat.envoyerCv("POST", route, null), 502)).isEqualTo(detail);
+		assertThat(probleme(candidat.envoyerCv("POST", route + "/reformuler",
+				demandeReformulation("profil", "J'écris des pipelines de données.")), 502)).isEqualTo(detail);
+	}
+
+	@Test
+	void refuseUneReformulationVide() throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		repondreAvecIa("""
+				{"apres":" ","raison":"Plus direct."}
+				""");
+
+		String detail = probleme(candidat.envoyerCv("POST", "/" + id + "/ameliorations/reformuler",
+				Map.of("chemin", "profil", "avant", "J'écris des pipelines de données.",
+						"apres", "Traiter [nombre] flux.", "consigne", "SANS_CHIFFRE")), 502);
+		assertThat(detail).isEqualTo("L'IA n'a pas proposé de reformulation exploitable. Réessayez.");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"Charger chaque jour [nombre] lignes.", "Charger chaque jour 999 lignes."})
+	void refuseUneVersionSansChiffreQuiContientUnNombreACompleter(String texteIa) throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		repondreAvecIa(json.writeValueAsString(Map.of("apres", texteIa, "raison", "Plus direct.")));
+
+		String detail = probleme(candidat.envoyerCv("POST", "/" + id + "/ameliorations/reformuler",
+				Map.of("chemin", "profil", "avant", "J'écris des pipelines de données.",
+						"apres", "Traiter [nombre] flux.", "consigne", "SANS_CHIFFRE")), 502);
+		assertThat(detail).isEqualTo("L'IA n'a pas pu proposer de version sans chiffre. Réessayez.");
+	}
+
+	@Test
+	void exigeLeJetonCsrfPourLaRelectureEtLaReformulation() throws Exception {
+		Navigateur candidat = connecter();
+		long id = creerCv(candidat, exemple("CV à relire")).path("id").asLong();
+		String route = "/" + id + "/ameliorations";
+		assertThat(candidat.envoyer("POST", API_CV + route, "application/json", null, false).statusCode()).isEqualTo(403);
+		String corps = json.writeValueAsString(demandeReformulation("profil", "J'écris des pipelines de données."));
+		assertThat(candidat.envoyer("POST", API_CV + route + "/reformuler", "application/json", corps, false).statusCode())
+				.isEqualTo(403);
+		verifyNoInteractions(assistant);
+	}
+
+	private void repondreAvecIa(String reponse) {
+		doReturn(reponse).when(assistant).generer(anyString(), anyString());
+	}
+
+	private static Map<String, String> demandeReformulation(String chemin, String avant) {
+		return Map.of("chemin", chemin, "avant", avant, "apres", "Développer des pipelines.",
+				"consigne", "AUTRE_VERSION");
 	}
 
 	@Test
@@ -551,12 +742,16 @@ class CvControllerTests {
 		}
 
 		HttpResponse<String> envoyer(String methode, String route, String type, String corps) throws Exception {
+			return envoyer(methode, route, type, corps, !methode.equals("GET"));
+		}
+
+		HttpResponse<String> envoyer(String methode, String route, String type, String corps, boolean avecCsrf) throws Exception {
 			HttpRequest.Builder requete = requete(route).method(methode, corps == null
 					? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(corps));
 			if (corps != null) {
 				requete.header("Content-Type", type);
 			}
-			if (!methode.equals("GET")) {
+			if (avecCsrf) {
 				requete.header("X-XSRF-TOKEN", obtenirJetonCsrf());
 			}
 			return client.send(requete.build(), HttpResponse.BodyHandlers.ofString());

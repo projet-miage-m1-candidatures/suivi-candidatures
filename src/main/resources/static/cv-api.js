@@ -65,6 +65,16 @@ export async function importerCv(fichier) {
 	return requeteCv("POST", "/import", donnees);
 }
 
+// Relecture par l'IA : propositions { chemin, avant, apres, raison } sur le CV enregistré. Rien n'est modifié côté serveur.
+export async function proposerAmeliorations(id) {
+	return requeteCv("POST", `/${encodeURIComponent(id)}/ameliorations`);
+}
+
+// Nouvelle version d'une proposition. consigne : PLUS_COURT, AUTRE_VERSION ou SANS_CHIFFRE.
+export async function reformulerProposition(id, { chemin, avant, apres }, consigne) {
+	return requeteCv("POST", `/${encodeURIComponent(id)}/ameliorations/reformuler`, { chemin, avant, apres, consigne });
+}
+
 export async function telechargerPdf(id) {
 	const reponse = await appelerCv("GET", `/${encodeURIComponent(id)}/pdf`);
 	const disposition = reponse.headers.get("Content-Disposition");

@@ -85,10 +85,6 @@ Les dix polices sont Carlito, Inter, IBM Plex Sans, Lato, Open Sans, Roboto, EB 
 - [ ] Les deux pages permettent de télécharger un fichier A4 nommé `CV-<Prénom>-<Nom>.pdf` en ASCII. Le fichier reprend le contenu, la langue, le modèle, la police, la couleur, la taille et l’interligne de l’aperçu. Depuis le formulaire, il contient les dernières modifications.
 - [ ] Sur un CV de plusieurs pages, les expériences et les formations qui tiennent sur une page restent entières. Les titres de section restent avec leur contenu.
 
-### Limites
-
-- L’action « Améliorer avec l’IA » est prévue plus tard.
-
 ## Importer un CV
 
 Le candidat connecté peut préremplir le formulaire en joignant son CV. Le navigateur envoie le champ
@@ -111,3 +107,23 @@ les fichiers image et les PDF scannés. Le mode `faux` renvoie une erreur 503.
 
 L’API d’import traite le fichier en mémoire pendant la requête. La création du brouillon passe par une
 requête distincte. Le serveur ne conserve pas le fichier et ne journalise ni le texte du CV ni ses images.
+
+## Améliorer le CV avec l’IA
+
+Le candidat lance la relecture depuis le formulaire. Le navigateur enregistre d’abord le CV, puis
+`POST /api/v1/cv/{id}/ameliorations` demande à l’assistant IA de relire cette version dans sa langue.
+La route exige une session et un jeton CSRF. Elle renvoie jusqu’à 15 propositions avec le champ
+concerné, son texte actuel, le texte proposé et une raison courte. Le candidat les examine section
+par section. Les choix acceptés suivent la sauvegarde habituelle du formulaire.
+
+Le serveur vérifie que le champ peut être modifié et que le texte actuel correspond toujours à la
+proposition. Un nombre absent du CV est remplacé par `[nombre]` pour que le candidat puisse le
+compléter. Les espaces de groupement sont ignorés lors de la comparaison, par exemple entre
+`1 000` et `1000`.
+
+`POST /api/v1/cv/{id}/ameliorations/reformuler` demande une version plus courte, une autre formulation
+ou une version sans nombre à compléter. Le serveur vérifie à nouveau le champ et le texte actuel.
+Pour la consigne « Sans chiffre », le serveur renvoie une erreur `502` si le texte proposé contient
+`[nombre]` ou un nombre absent du CV. Il transmet les reformulations valides avec leur raison telle
+que l’IA l’a rédigée. Une réponse illisible ou une reformulation vide renvoie aussi une erreur `502`.
+Les deux routes renvoient leurs résultats sans modifier le CV en base.

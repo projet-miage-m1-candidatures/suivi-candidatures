@@ -139,6 +139,46 @@ select:hover:not(:disabled){border-color:#9dbbea}
 .etapes .alerte{flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#ffc933;color:#3d2a00;font-size:12.5px;font-weight:800;line-height:1}
 @media (max-width:700px){.etapes{border-radius:20px}}
 .page-tete .intro{margin:6px 0 0;font-size:15px;color:#4a5f86}
+/* ----- Améliorer avec l'IA ----- */
+.ia h3{margin:0;font-size:17px;font-weight:700}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.etapes .etape-ia button{background:#fff8e0;color:#5a3d00}
+.etapes .etape-ia button:hover{background:#ffefb8}
+.etapes.mode-ia{border:1.5px solid #f3dfa0}
+.etapes .mode{flex:none;display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:#ffc933;font-size:13.5px;font-weight:700;white-space:nowrap}
+.etapes .compte{min-width:20px;box-sizing:border-box;padding:0 7px;border-radius:999px;background:#fff1c2;color:#5a3d00;font-size:12px;font-weight:700;line-height:18px}
+.etapes [aria-current=step] .compte{background:rgba(255,255,255,.2);color:#fff}
+.etapes .quitter{flex:none}
+.etapes .quitter button{color:#1d4fa8;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.surtitre{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a5a00}
+.ia-tete{display:flex;flex-direction:column;gap:4px}
+.proposition{display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:16px;border:1.5px solid #f0d49a;background:#fff}
+.proposition[data-choix=acceptee]{border-color:#e3edfc;background:#f3faf6}
+.proposition[data-choix=refusee],.proposition[data-choix=perimee]{border-color:#e3edfc;background:#f8f9fb}
+.proposition .lieu{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:700;color:#4a5f86}
+.proposition .lieu b{flex:none;color:#a35b00}
+.proposition[data-choix=acceptee] .lieu b{color:#14573f}
+.proposition[data-choix=refusee] .lieu b,.proposition[data-choix=perimee] .lieu b{color:#6b7a96}
+.proposition p{margin:0}
+.proposition .avant{font-size:14px;color:#6b7a96;text-decoration:line-through}
+.proposition .apres{font-size:15px;font-weight:600}
+.proposition .raison{font-size:13px;color:#4a5f86}
+.proposition .choix{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.proposition .variantes{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.trou{padding:0 4px;border-radius:6px;background:#fff1c2;color:#8a5a00}
+.chiffres{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fffaf0;font-size:13px;color:#5a3d00}
+.chiffres input{width:120px;min-height:38px;box-sizing:border-box;padding:6px 12px;border-radius:12px;border:1.5px solid #f0d49a;background:#fff;color:#0f2a5c;font-family:inherit;font-size:14.5px}
+.bouton-vert{border:0;background:#3a9a6a;color:#fff;font-weight:700}
+.bouton:disabled{opacity:.45;cursor:default}
+.bouton-ia{min-height:32px;padding:0 10px;border-radius:999px;border:1px solid #f0d49a;background:#fffaf0;color:#5a3d00;font-size:12.5px;font-weight:600;cursor:pointer}
+.bouton-ia:disabled{opacity:.5;cursor:default}
+.rien{display:flex;align-items:center;gap:10px;margin:0;padding:16px;border-radius:16px;background:#eef8f2;color:#14573f;font-size:14.5px;font-weight:600}
+.attente-ia span{width:35%;animation:relecture 1.4s ease-in-out infinite alternate}
+@keyframes relecture{from{margin-left:0}to{margin-left:65%}}
+@media (prefers-reduced-motion:reduce){.attente-ia span{width:100%;animation:none;opacity:.5}}
+/* Aperçu en mode IA : proposition à revoir (pointillés) ou acceptée (vert). Jamais dans le PDF. */
+mark.ia-attente{background:#fffaf0;color:inherit;border-bottom:2px dotted #e09a12}
+mark.ia-acceptee{background:#d6f0e1;color:inherit}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;600;700&family=Lora:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&family=Gelasio:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/cv-modeles.css">
@@ -224,7 +264,7 @@ select:hover:not(:disabled){border-color:#9dbbea}
 
 </div>
 <script type="module">
-import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf } from "./cv-api.js";
+import { nouveauCv, lireCv, creerCv, enregistrerCv, telechargerPdf, proposerAmeliorations, reformulerProposition } from "./cv-api.js";
 import { brancherImport, reprendreCvImporte } from "./cv-import.js";
 import { MODELES, POLICES, COULEURS, TAILLES, INTERLIGNES, reglages, PERMIS, ETAPES, afficherCv, evaluerCv, sectionRemplie, normaliserContenu, nomComplet, echapper, periode, formaterDate } from "./cv-rendu.js";
 
@@ -251,6 +291,7 @@ const etat = {
 	erreurs: {},
 	descriptions: new Set(), // expériences dont la zone « Description » est ouverte
 	pages: 1, // nombre de pages de l'aperçu, pour le conseil de Vérification
+	ia: null, // mode « Améliorer avec l'IA » : { chargement } puis { section, propositions }
 };
 let minuteur;
 
@@ -510,19 +551,238 @@ ${ligne("Langues", `${compte(c.langues.length, "langue")}, ${compte(c.centresInt
 ${conseils.length
 		? `<p class="aide">Facultatifs : vous pouvez télécharger votre CV sans les suivre.</p><ul class="a-completer">${conseils.map(p => `<li><span>${echapper(p.texte)}</span><button type="button" class="bouton bouton-petit" ${p.action}>${p.bouton}</button></li>`).join("")}</ul>`
 		: `<p class="tout-bon">${ICONE_OK}Votre CV suit tous nos conseils.</p>`}
-<div class="ia"><div style="flex:1 1 240px;min-width:0"><strong>Améliorer avec l'IA</strong><p class="aide" style="margin:4px 0 0">L'IA propose de meilleures formulations pour le résumé et les réalisations, sans inventer d'informations. Vous acceptez ou refusez chaque proposition.</p></div>
-<button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></div>
-</section>`;
+</section>
+<section class="ia" aria-labelledby="titre-ia"><div style="flex:1 1 240px;min-width:0"><h3 id="titre-ia">Améliorer avec l'IA</h3>
+<p class="aide" style="margin:4px 0 0">L'IA relit votre CV section par section et propose de meilleures formulations, sans inventer d'informations : un chiffre qu'elle ne connaît pas reste à compléter. Vous acceptez ou refusez chaque proposition. Le contenu du CV est envoyé à l'IA d'OpenAI.</p></div>
+<button type="button" class="bouton bouton-jaune" data-ameliorer-ia>Améliorer avec l'IA</button></section>`;
 }
 
 // Même ordre que ETAPES et que les sections du CV.
 const PANNEAUX = [panneauProfil, panneauCompetences, panneauExperiences, panneauProjets, panneauFormations, panneauCertifications, panneauLangues, panneauVerification];
 
+// ----- Améliorer avec l'IA : relecture guidée, section par section -----
+// L'IA renvoie des propositions { chemin, avant, apres, raison } ; rien n'est modifié tant qu'on n'accepte pas.
+// « chemin » part de « contenu » (ex. « experiences.0.realisations.1 ») ; une liste de compétences se lit « a, b, c ».
+
+const CHEMINS_IA = /^(profil|identite\.titre|competences\.\d+\.(groupe|elements)|experiences\.\d+\.(description|realisations\.\d+)|(projets|formations)\.\d+\.description|langues\.\d+\.langue)$/;
+const SECTION_IA = { profil: 0, identite: 0, competences: 1, experiences: 2, projets: 3, formations: 4, langues: 6 };
+const NOMBRE = /\[nombre\]/g;
+const STATUTS_IA = { attente: "À revoir", acceptee: "Acceptée", refusee: "Refusée", perimee: "Ne s'applique plus" };
+const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
+
+function texteActuel(chemin) {
+	const valeur = lire(`contenu.${chemin}`);
+	return Array.isArray(valeur) ? valeur.join(", ") : valeur;
+}
+
+function ecrireTexte(chemin, texte) {
+	const liste = Array.isArray(lire(`contenu.${chemin}`));
+	ecrire(`contenu.${chemin}`, liste ? texte.split(",").map(t => t.trim()).filter(Boolean) : texte);
+}
+
+// Où se trouve le texte dans le CV, en clair : « Stagiaire data · Nordlys », « Résumé »…
+function lieuProposition(chemin) {
+	const [cle, index, champ] = chemin.split(".");
+	const element = etat.cv.contenu[cle]?.[index];
+	const nom = valeurs => valeurs.filter(rempli).join(" · ");
+	switch (cle) {
+		case "profil": return "Résumé";
+		case "identite": return "Poste visé";
+		case "competences": return champ === "groupe" ? "Thème d'un groupe" : nom([element?.groupe]) || "Compétences";
+		case "experiences": return nom([element?.poste, element?.entreprise]) || "Expérience";
+		case "projets": return nom([element?.titre]) || "Projet";
+		case "formations": return nom([element?.diplome]) || "Formation";
+		default: return "Langue";
+	}
+}
+
+const trous = p => (p.apres.match(NOMBRE) ?? []).length;
+const chiffresComplets = p => Array.from({ length: trous(p) }, (_, k) => rempli(p.chiffres[k])).every(Boolean);
+
+function carteProposition(p) {
+	const i = etat.ia.propositions.indexOf(p);
+	const n = trous(p);
+	let actions = "";
+	if (p.statut === "attente") {
+		const occupe = p.enCours ? " disabled" : "";
+		const chiffres = n ? `<div class="chiffres"><span>L'IA ne connaît pas ce chiffre : complétez-le ou demandez une version sans chiffre.</span>
+${Array.from({ length: n }, (_, k) => `<input data-chiffre="${i}.${k}" value="${echapper(p.chiffres[k] ?? "")}" placeholder="[nombre]" aria-label="Chiffre ${n > 1 ? k + 1 : ""} à la place de [nombre]"${occupe}>`).join("")}</div>` : "";
+		const reformuler = (consigne, texte) => `<button type="button" class="bouton-ia" data-reformuler-ia="${i}" data-consigne="${consigne}"${occupe}>${texte}</button>`;
+		actions = `${chiffres}<div class="choix">
+<button type="button" class="bouton bouton-petit bouton-vert" data-accepter-ia="${i}"${p.enCours || !chiffresComplets(p) ? " disabled" : ""}>Accepter</button>
+<button type="button" class="bouton bouton-petit" data-refuser-ia="${i}"${occupe}>Refuser</button>
+<div class="variantes" role="group" aria-label="Demander une autre proposition">${n ? reformuler("SANS_CHIFFRE", "Sans chiffre") : ""}${reformuler("PLUS_COURT", "Plus court")}${reformuler("AUTRE_VERSION", "Autre version")}</div></div>
+${p.enCours ? `<p class="raison" role="status">L'IA prépare une nouvelle version…</p>` : ""}`;
+	} else if (p.statut === "perimee") {
+		actions = `<p class="raison">Ce texte a changé depuis la proposition : elle ne peut plus être appliquée.</p>`;
+	} else {
+		actions = `<button type="button" class="lien" data-annuler-ia="${i}">Annuler mon choix</button>`;
+	}
+	const apres = p.statut === "acceptee" ? echapper(p.texte) : echapper(p.apres).replace(NOMBRE, `<span class="trou">[nombre]</span>`);
+	return `<article class="proposition" data-choix="${p.statut}"${p.enCours ? ' aria-busy="true"' : ""}>
+<div class="lieu"><span>${echapper(lieuProposition(p.chemin))}</span><b>${STATUTS_IA[p.statut]}</b></div>
+<p class="avant"><span class="sr-only">Avant : </span>${echapper(p.avant)}</p>
+<p class="apres"><span class="sr-only">Proposition : </span>${apres}</p>
+${rempli(p.raison) ? `<span class="raison">${echapper(p.raison)}</span>` : ""}
+${actions}</article>`;
+}
+
+function panneauIa() {
+	const ia = etat.ia;
+	if (ia.chargement) {
+		return `<div class="ia-tete"><span class="surtitre">✦ Améliorer avec l'IA</span><h2>Relecture en cours…</h2></div>
+<p class="aide" style="margin:0">L'IA relit chaque section de votre CV. Cela prend environ 15 secondes.</p>
+<div class="barre attente-ia" role="progressbar" aria-label="Relecture en cours"><span></span></div>
+<p class="aide" style="margin:0">Rien ne sera modifié sans votre accord : vous accepterez ou refuserez chaque proposition.</p>
+<button type="button" class="bouton" style="align-self:flex-start" data-quitter-ia>Annuler</button>`;
+	}
+	const s = ia.section;
+	const derniere = ETAPES.length - 2;
+	const liste = ia.propositions.filter(p => p.section === s);
+	const acceptees = ia.propositions.filter(p => p.statut === "acceptee").length;
+	const resumeSection = liste.length
+		? `${pluriel(liste.length, "proposition")} · ${pluriel(acceptees, "acceptée")} dans tout le CV`
+		: "L'IA a relu cette section.";
+	return `<div class="ia-tete"><span class="surtitre">✦ Améliorer avec l'IA · section ${s + 1} sur ${derniere + 1}</span>
+<h2>${ETAPES[s]}</h2><span class="aide" style="margin:0">${resumeSection}</span></div>
+${liste.length ? liste.map(carteProposition).join("") : `<p class="rien">${ICONE_OK}Rien à améliorer dans cette section.</p>`}
+<div class="navigation">
+${s > 0 ? `<button type="button" class="bouton" data-ia-section="${s - 1}">← ${ETAPES[s - 1]}</button>` : ""}<span class="espace"></span>
+${s < derniere ? `<button type="button" class="bouton bouton-jaune" data-ia-section="${s + 1}">${ETAPES[s + 1]} →</button>`
+		: `<button type="button" class="bouton bouton-jaune" data-quitter-ia>Terminer la relecture</button>`}</div>`;
+}
+
+// Barre d'étapes du mode IA : propositions à revoir par section, coche verte quand il n'en reste plus.
+function etapesIa() {
+	const ia = etat.ia;
+	const sections = ia.chargement ? "" : ETAPES.slice(0, -1).map((nom, i) => {
+		const reste = ia.propositions.filter(p => p.section === i && p.statut === "attente").length;
+		const courante = i === ia.section ? ' aria-current="step"' : "";
+		const titre = reste ? `${pluriel(reste, "proposition")} à revoir` : "rien à revoir";
+		return `<li${reste ? "" : ' class="remplie"'}${courante}><button type="button" data-ia-section="${i}" title="${nom} (${titre})">${nom}${reste ? `<span class="compte">${reste}</span>` : COCHE_ETAPE}</button></li>`;
+	}).join("");
+	return `<li class="mode">✦ Mode IA</li>${sections}<li class="quitter"><button type="button" data-quitter-ia>Quitter le mode IA</button></li>`;
+}
+
+// Surligne dans l'aperçu les textes concernés : en pointillés s'ils sont à revoir, en vert s'ils sont acceptés.
+function marquerApercu() {
+	if (!etat.ia?.propositions) return;
+	const article = $("[data-feuille] article");
+	for (const p of etat.ia.propositions) {
+		const texte = p.statut === "acceptee" ? p.texte : p.statut === "attente" ? p.avant : "";
+		if (rempli(texte) && texteActuel(p.chemin) === texte) marquer(article, texte, p.statut === "acceptee" ? "ia-acceptee" : "ia-attente");
+	}
+}
+
+function marquer(racine, texte, classe) {
+	const parcours = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT);
+	for (let noeud = parcours.nextNode(); noeud; noeud = parcours.nextNode()) {
+		const debut = noeud.data.indexOf(texte);
+		if (debut < 0 || noeud.parentElement.closest("mark")) continue;
+		const plage = document.createRange();
+		plage.setStart(noeud, debut);
+		plage.setEnd(noeud, debut + texte.length);
+		const marque = document.createElement("mark");
+		marque.className = classe;
+		plage.surroundContents(marque);
+		return;
+	}
+}
+
+async function demarrerIa() {
+	if (etat.ia || !(await sauvegarderMaintenant())) return; // l'IA relit le CV enregistré
+	const demande = { chargement: true };
+	etat.ia = demande;
+	fermerMenus();
+	afficherPanneau();
+	window.scrollTo({ top: 0, behavior: "smooth" });
+	let propositions = [];
+	try {
+		({ propositions = [] } = await proposerAmeliorations(etat.cv.id));
+	} catch (erreur) {
+		if (etat.ia !== demande) return;
+		etat.ia = null;
+		afficherPanneau();
+		notifier(erreur.message || "L'IA n'a pas pu relire votre CV. Réessayez dans un instant.");
+		return;
+	}
+	if (etat.ia !== demande) return; // relecture annulée entre-temps
+	// On ne garde que ce qui correspond encore au CV affiché, dans l'ordre des sections.
+	const retenues = propositions
+		.filter(p => CHEMINS_IA.test(p?.chemin ?? "") && texteActuel(p.chemin) === p.avant && rempli(p.apres) && p.apres !== p.avant)
+		.map(p => ({ chemin: p.chemin, avant: p.avant, apres: p.apres, raison: p.raison ?? "", section: SECTION_IA[p.chemin.split(".")[0]], statut: "attente", chiffres: [] }))
+		.sort((a, b) => a.section - b.section);
+	if (!retenues.length) {
+		etat.ia = null;
+		afficherPanneau();
+		notifier("L'IA n'a rien trouvé à améliorer : votre CV est déjà bien rédigé.");
+		return;
+	}
+	etat.ia = { section: retenues[0].section, propositions: retenues };
+	afficherPanneau();
+	afficherApercu();
+}
+
+function quitterIa() {
+	const acceptees = etat.ia?.propositions?.filter(p => p.statut === "acceptee").length ?? 0;
+	etat.ia = null;
+	etat.etape = ETAPES.length - 1;
+	afficherPanneau();
+	afficherApercu();
+	if (acceptees) notifier(`${pluriel(acceptees, "proposition")} ${acceptees > 1 ? "appliquées" : "appliquée"} à votre CV, enregistré automatiquement.`);
+}
+
+// Les deux fonctions renvoient true quand le CV a changé (il faut alors l'enregistrer).
+function accepterProposition(p) {
+	if (texteActuel(p.chemin) !== p.avant) { // une autre proposition acceptée a déjà changé ce texte
+		p.statut = "perimee";
+		return false;
+	}
+	let k = 0;
+	p.texte = p.apres.replace(NOMBRE, () => p.chiffres[k++].trim());
+	p.statut = "acceptee";
+	ecrireTexte(p.chemin, p.texte);
+	return true;
+}
+
+function annulerChoix(p) {
+	if (p.statut !== "acceptee") {
+		p.statut = "attente";
+		return false;
+	}
+	if (texteActuel(p.chemin) !== p.texte) {
+		notifier("Ce texte a changé depuis : modifiez-le directement dans sa section.");
+		return false;
+	}
+	ecrireTexte(p.chemin, p.avant);
+	p.statut = "attente";
+	return true;
+}
+
+async function reformuler(p, consigne) {
+	p.enCours = true;
+	afficherPanneau();
+	try {
+		const reponse = await reformulerProposition(etat.cv.id, p, consigne);
+		if (rempli(reponse?.apres)) {
+			p.apres = reponse.apres;
+			p.raison = reponse.raison ?? p.raison;
+			p.chiffres = [];
+		}
+	} catch (erreur) {
+		notifier(erreur.message || "L'IA n'a pas pu proposer une autre version. Réessayez.");
+	} finally {
+		p.enCours = false;
+		if (etat.ia?.propositions?.includes(p)) afficherPanneau({ focus: `[data-accepter-ia="${etat.ia.propositions.indexOf(p)}"]:not([disabled]), [data-chiffre^="${etat.ia.propositions.indexOf(p)}."]` });
+	}
+}
+
 // ----- Affichage -----
 
 function afficherPanneau({ focus } = {}) {
-	$("[data-panneau]").innerHTML = PANNEAUX[etat.etape]();
+	$("[data-panneau]").innerHTML = etat.ia ? panneauIa() : PANNEAUX[etat.etape]();
 	afficherEtapes();
+	$(".panneau > .navigation").hidden = Boolean(etat.ia); // le mode IA a sa propre navigation
 	const precedent = $("[data-precedent]");
 	precedent.hidden = etat.etape === 0;
 	precedent.textContent = etat.etape > 0 ? `← ${ETAPES[etat.etape - 1]}` : "";
@@ -535,6 +795,13 @@ const COCHE_ETAPE = `<span class="fait"><svg aria-hidden="true" viewBox="0 0 16 
 // Pastilles : coche verte = section remplie, cercle vide = à compléter, fond foncé = étape en cours.
 // « Vérification » : coche verte si toutes les sections sont remplies, sinon point d'exclamation jaune.
 function afficherEtapes() {
+	const barre = $("[data-etapes]");
+	barre.classList.toggle("mode-ia", Boolean(etat.ia));
+	barre.setAttribute("aria-label", etat.ia ? "Sections relues par l'IA" : "Étapes");
+	if (etat.ia) {
+		barre.innerHTML = etapesIa();
+		return;
+	}
 	const derniere = ETAPES.length - 1;
 	const remplies = ETAPES.slice(0, derniere).map((_, i) => sectionRemplie(etat.cv.contenu, i));
 	const manquantes = remplies.filter(ok => !ok).length;
@@ -546,7 +813,7 @@ function afficherEtapes() {
 		const titre = i < derniere ? (remplie ? " (remplie)" : " (à compléter)")
 			: remplie ? " (toutes les sections sont remplies)" : ` (${manquantes} section${manquantes > 1 ? "s" : ""} à compléter)`;
 		return `<li${classe}${courante}><button type="button" data-aller="${i}" title="${nom}${titre}">${marque}${nom}</button></li>`;
-	}).join("");
+	}).join("") + `<li class="etape-ia"><button type="button" data-ameliorer-ia title="Relecture du CV par l'IA, section par section">✦ Améliorer avec l'IA</button></li>`;
 }
 
 // ----- Barre de réglages de l'aperçu : Modèle, Couleur, Police, Taille, Langue -----
@@ -605,6 +872,7 @@ function appliquerReglage(cle, valeur) {
 
 function afficherApercu() {
 	afficherCv($("[data-feuille] article"), etat.cv);
+	marquerApercu();
 	ajusterEchelle();
 }
 
@@ -657,7 +925,7 @@ function afficherPages() {
 	// Le nombre de pages alimente un conseil de Vérification : on met l'étape à jour si elle est ouverte.
 	if (pages !== etat.pages) {
 		etat.pages = pages;
-		if (etat.etape === ETAPES.length - 1) afficherPanneau();
+		if (etat.etape === ETAPES.length - 1 && !etat.ia) afficherPanneau();
 	}
 }
 
@@ -768,6 +1036,13 @@ function apresModification() {
 document.addEventListener("input", evenement => {
 	const cible = evenement.target;
 	const d = cible.dataset;
+	if (d.chiffre) {
+		const [i, k] = d.chiffre.split(".").map(Number);
+		const p = etat.ia.propositions[i];
+		p.chiffres[k] = cible.value;
+		$(`[data-accepter-ia="${i}"]`).disabled = !chiffresComplets(p);
+		return;
+	}
 	if (d.chemin && cible.type !== "checkbox") {
 		ecrire(d.chemin, cible.value);
 		if (etat.erreurs[d.chemin] && cible.value.trim()) {
@@ -863,7 +1138,24 @@ document.addEventListener("click", async evenement => {
 		menu.scrollIntoView({ block: "nearest" });
 		menu.click();
 	} else if (d.ameliorerIa !== undefined) {
-		notifier("L'amélioration par l'IA sera branchée sur le module IA commun dans une prochaine étape.");
+		demarrerIa();
+	} else if (d.iaSection) {
+		etat.ia.section = Number(d.iaSection);
+		afficherPanneau();
+	} else if (d.quitterIa !== undefined) {
+		quitterIa();
+	} else if (d.accepterIa || d.refuserIa || d.annulerIa) {
+		const i = Number(d.accepterIa ?? d.refuserIa ?? d.annulerIa);
+		const p = etat.ia.propositions[i];
+		let modifie = false;
+		if (d.accepterIa) modifie = accepterProposition(p);
+		else if (d.refuserIa) p.statut = "refusee";
+		else modifie = annulerChoix(p);
+		afficherPanneau({ focus: p.statut === "attente" ? `[data-accepter-ia="${i}"]:not([disabled]), [data-refuser-ia="${i}"]` : `[data-annuler-ia="${i}"]` });
+		afficherApercu();
+		if (modifie) planifierSauvegarde();
+	} else if (d.reformulerIa) {
+		reformuler(etat.ia.propositions[Number(d.reformulerIa)], d.consigne);
 	} else if (d.pdf !== undefined) {
 		bouton.disabled = true;
 		try {

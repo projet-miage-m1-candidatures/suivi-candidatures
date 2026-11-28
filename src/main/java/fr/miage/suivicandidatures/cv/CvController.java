@@ -46,12 +46,15 @@ class CvController {
 	private final CandidatCourant candidatCourant;
 	private final CvPdf pdf;
 	private final ImportCvService importCv;
+	private final AmeliorationsCv ameliorations;
 
-	CvController(CvService service, CandidatCourant candidatCourant, CvPdf pdf, ImportCvService importCv) {
+	CvController(CvService service, CandidatCourant candidatCourant, CvPdf pdf, ImportCvService importCv,
+			AmeliorationsCv ameliorations) {
 		this.service = service;
 		this.candidatCourant = candidatCourant;
 		this.pdf = pdf;
 		this.importCv = importCv;
+		this.ameliorations = ameliorations;
 	}
 
 	@GetMapping
@@ -83,6 +86,17 @@ class CvController {
 	@GetMapping("/{id}")
 	ReponseCv lire(@PathVariable Long id) {
 		return ReponseCv.depuis(service.lire(candidatCourant.id(), id));
+	}
+
+	@PostMapping("/{id}/ameliorations")
+	AmeliorationsCv.Propositions proposerAmeliorations(@PathVariable Long id) {
+		return ameliorations.proposer(service.lire(candidatCourant.id(), id));
+	}
+
+	@PostMapping("/{id}/ameliorations/reformuler")
+	AmeliorationsCv.Reformulation reformuler(@PathVariable Long id,
+			@Valid @RequestBody AmeliorationsCv.DemandeReformulation demande) {
+		return ameliorations.reformuler(service.lire(candidatCourant.id(), id), demande);
 	}
 
 	@GetMapping("/{id}/pdf")
