@@ -14,6 +14,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{ou
 button{font-family:inherit}
 </style>
 <script type="module" src="/authentification.js"></script>
+<script type="module" src="/tableau-de-bord.js"></script>
 </head>
 <body>
 <div style="width:100%;min-height:1000px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:stretch;background:#f1f6fd;font-family:'Instrument Sans',system-ui,sans-serif;color:#0f2a5c;line-height:1.5">
@@ -69,40 +70,22 @@ button{font-family:inherit}
 <!-- Répartition par statut -->
 <section aria-label="Candidatures par statut" style="flex:3 1 460px;min-width:0;box-sizing:border-box;padding:28px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:22px">
 <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px">
-<div style="font-family:'Instrument Serif',Georgia,serif;font-size:88px;line-height:.9">18</div>
-<div style="font-size:18px;font-weight:600">candidatures suivies</div>
+<div data-total-candidatures style="font-family:'Instrument Serif',Georgia,serif;font-size:88px;line-height:.9">0</div>
+<div data-total-libelle style="font-size:18px;font-weight:600">candidature suivie</div>
 </div>
-<div role="img" aria-label="Répartition : 6 envoyées, 2 relancées, 2 entretiens, 1 offre reçue, 3 refusées, 4 sans réponse" style="display:flex;gap:3px;height:14px;border-radius:999px;overflow:hidden">
-<div style="width:33.3%;background:#7aa7ee"></div>
-<div style="width:11.1%;background:#e0a800"></div>
-<div style="width:11.1%;background:#8f7be0"></div>
-<div style="width:5.6%;background:#2fa77a"></div>
-<div style="width:16.7%;background:#d1493f"></div>
-<div style="width:22.2%;background:#9aa8c2"></div>
-</div>
-<ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px">
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#7aa7ee"></span>Envoyée</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">6</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#e0a800"></span>Relancée</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">2</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#8f7be0"></span>Entretien</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">2</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#2fa77a"></span>Offre reçue</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">1</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#14573f"></span>Acceptée</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">0</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#d1493f"></span>Refusée</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">3</div></li>
-<li style="flex:1 1 120px;box-sizing:border-box;padding:12px 14px;border-radius:16px;background:#f1f6fd"><div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#35476b"><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#9aa8c2"></span>Sans réponse</div><div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1">4</div></li>
-</ul>
+<div data-barre-statuts role="img" aria-label="Aucune candidature" style="display:flex;gap:3px;height:14px;border-radius:999px;overflow:hidden;background:#e3edfc"></div>
+<ul data-compteurs-statuts style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px"></ul>
 </section>
 
 <!-- À faire -->
-<section aria-label="À faire cette semaine" style="flex:2 1 300px;min-width:0;box-sizing:border-box;padding:26px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:14px">
+<section aria-label="À faire" style="flex:2 1 300px;min-width:0;box-sizing:border-box;padding:26px;background:#fff;border-radius:28px;box-shadow:0 12px 40px rgba(15,42,92,.07);display:flex;flex-direction:column;gap:14px">
 <div style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:#ece7fb;color:#4b3aa8;font-size:12.5px;font-weight:700">Prochain entretien</div>
-<div style="font-family:'Instrument Serif',Georgia,serif;font-size:34px;line-height:1.05">Jeudi 26 nov., 14 h</div>
-<div style="font-size:14.5px;color:#4a5f86">Développeur Java, alternance · Nordlys · Puteaux</div>
-<a href="mes-candidatures.html" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:14.5px;font-weight:700;color:#1d4fa8;text-decoration:underline;text-underline-offset:3px">Voir la candidature</a>
+<div data-prochain-date style="font-family:'Instrument Serif',Georgia,serif;font-size:34px;line-height:1.05">Aucun entretien prévu</div>
+<div data-prochain-poste style="font-size:14.5px;color:#4a5f86;overflow-wrap:anywhere"></div>
+<a data-prochain-lien hidden href="mes-candidatures.html" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:14.5px;font-weight:700;color:#1d4fa8;text-decoration:underline;text-underline-offset:3px">Préparer l'entretien</a>
 <div style="height:1px;background:#e3edfc"></div>
-<h2 style="margin:0;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4a5f86">À relancer</h2>
-<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px">
-<div style="min-width:0"><div style="font-size:15px;font-weight:600">Développeur full-stack · Kobalt</div><div style="font-size:13.5px;color:#4a5f86">Envoyée il y a 12 jours</div></div>
-<button type="button" style="min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #bcd3f5;background:#fff;color:#0f2a5c;font-size:14px;font-weight:600;cursor:pointer">Relancer</button>
-</div>
+<h2 style="margin:0;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4a5f86">En attente de réponse</h2>
+<ul data-en-attente style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px"></ul>
 </section>
 
 </div>
@@ -113,34 +96,9 @@ button{font-family:inherit}
 <h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1">Dernières candidatures</h2>
 <a href="mes-candidatures.html" style="display:inline-flex;align-items:center;min-height:44px;font-size:14.5px;font-weight:700;color:#1d4fa8;text-decoration:underline;text-underline-offset:3px">Tout voir</a>
 </div>
-<ul style="list-style:none;margin:0;padding:0">
-<li style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 0;border-top:1px solid #e3edfc">
-<div style="flex:1 1 220px;min-width:0"><div style="font-size:15.5px;font-weight:700">Data engineer</div><div style="font-size:13.5px;color:#4a5f86">Nova Logistique · Nanterre</div></div>
-<span style="padding:4px 12px;border-radius:999px;background:#e3edfc;color:#1d4fa8;font-size:12.5px;font-weight:700">Envoyée</span>
-<span style="width:84px;font-size:13.5px;color:#4a5f86">19 nov. 2026</span>
-</li>
-<li style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 0;border-top:1px solid #e3edfc">
-<div style="flex:1 1 220px;min-width:0"><div style="font-size:15.5px;font-weight:700">Développeur back-end</div><div style="font-size:13.5px;color:#4a5f86">Marée Logiciels · Rennes</div></div>
-<span style="padding:4px 12px;border-radius:999px;background:#d9f2e8;color:#14573f;font-size:12.5px;font-weight:700">Offre reçue</span>
-<span style="width:84px;font-size:13.5px;color:#4a5f86">17 nov. 2026</span>
-</li>
-<li style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 0;border-top:1px solid #e3edfc">
-<div style="flex:1 1 220px;min-width:0"><div style="font-size:15.5px;font-weight:700">Développeur Java</div><div style="font-size:13.5px;color:#4a5f86">Nordlys · Puteaux</div></div>
-<span style="padding:4px 12px;border-radius:999px;background:#ece7fb;color:#4b3aa8;font-size:12.5px;font-weight:700">Entretien</span>
-<span style="width:84px;font-size:13.5px;color:#4a5f86">14 nov. 2026</span>
-</li>
-<li style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 0;border-top:1px solid #e3edfc">
-<div style="flex:1 1 220px;min-width:0"><div style="font-size:15.5px;font-weight:700">Data analyst</div><div style="font-size:13.5px;color:#4a5f86">Atelier Vega · Paris</div></div>
-<span style="padding:4px 12px;border-radius:999px;background:#ffe9bf;color:#8a5a00;font-size:12.5px;font-weight:700">Relancée</span>
-<span style="width:84px;font-size:13.5px;color:#4a5f86">12 nov. 2026</span>
-</li>
-<li style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 0;border-top:1px solid #e3edfc">
-<div style="flex:1 1 220px;min-width:0"><div style="font-size:15.5px;font-weight:700">Ingénieur logiciel</div><div style="font-size:13.5px;color:#4a5f86">Helio · Toulouse</div></div>
-<span style="padding:4px 12px;border-radius:999px;background:#fde3e0;color:#8a2a22;font-size:12.5px;font-weight:700">Refusée</span>
-<span style="width:84px;font-size:13.5px;color:#4a5f86">6 nov. 2026</span>
-</li>
-</ul>
-<div style="padding:10px 0 4px;font-size:12.5px;color:#4a5f86">Données d'exemple</div>
+<ul data-dernieres-candidatures style="list-style:none;margin:0;padding:0"></ul>
+<p data-aucune-candidature hidden style="margin:0;padding:14px 0;border-top:1px solid #e3edfc;font-size:14.5px;color:#4a5f86">Aucune candidature pour l'instant. <a href="mes-candidatures.html" style="font-weight:700;color:#1d4fa8;text-decoration:underline">Ajoutez la première</a>.</p>
+<p data-erreur-tableau role="alert" hidden style="margin:0;color:#a02738;font-size:14px"></p>
 </section>
 
 </main>
