@@ -74,7 +74,7 @@ class AssistantIaOpenAiTest {
 						{
 						  "model": "gpt-6-luna",
 						  "messages": [
-						    {"role": "developer", "content": "Extrais le CV."},
+						    {"role": "system", "content": "Extrais le CV."},
 						    {"role": "user", "content": [
 						      {"type": "text", "text": "<cv>"},
 						      {"type": "image_url", "image_url": {"url": "data:image/png;base64,AQID"}},
