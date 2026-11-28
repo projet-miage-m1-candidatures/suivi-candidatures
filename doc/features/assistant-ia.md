@@ -130,6 +130,19 @@ Utilise `IA_FOURNISSEUR=faux` pour revenir au mode de démonstration. Pour chang
 renseigne dans `IA_MODELE` l'identifiant d'un modèle autorisé par ton projet OpenAI et compatible
 avec Chat Completions. Le projet de l'équipe autorise uniquement `gpt-6-luna`.
 
+Le module fonctionne aussi avec un autre serveur compatible avec Chat Completions, par exemple
+Ollama en local et gratuit (`ollama pull mistral`) :
+
+```dotenv
+IA_FOURNISSEUR=openai
+IA_URL=http://localhost:11434
+IA_MODELE=mistral
+IA_CLE=ollama
+```
+
+Les consignes sont envoyées avec le rôle `system`, que comprennent OpenAI, Mistral et Ollama.
+Avec le rôle `developer`, Ollama ignore les consignes.
+
 ### Gestion des secrets
 
 | Environnement | Où est la clé | Fournisseur |
